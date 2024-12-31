@@ -136,31 +136,32 @@
                           <Component id="j_sifatSurat" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="j_urgensiSurat" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="j_tanggalSuratDiterima" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="t_tglSuratDiterima" alignment="0" max="32767" attributes="0"/>
-                              <Component id="t_urgensi" alignment="0" max="32767" attributes="0"/>
-                              <Component id="t_sifatSurat" alignment="0" max="32767" attributes="0"/>
-                              <Component id="t_tglSurat" alignment="0" min="-2" pref="138" max="-2" attributes="0"/>
-                          </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="609" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="b_kirim" min="-2" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="j_halSurat" min="-2" max="-2" attributes="0"/>
-                                      <Component id="t_hal" alignment="0" min="-2" pref="430" max="-2" attributes="0"/>
-                                      <Component id="j_isiRingkasSurat" min="-2" max="-2" attributes="0"/>
-                                      <Component id="t_isiRingkasSurat" alignment="0" min="-2" pref="430" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
+                              <Component id="b_kirim" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="t_pathFile" min="-2" pref="397" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="b_tambahFile" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="t_tglSurat" max="32767" attributes="0"/>
+                                  <Component id="t_tglSuratDiterima" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="t_urgensi" alignment="0" pref="138" max="32767" attributes="0"/>
+                                  <Component id="t_sifatSurat" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="428" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="j_halSurat" min="-2" max="-2" attributes="0"/>
+                                  <Component id="t_hal" alignment="0" min="-2" pref="430" max="-2" attributes="0"/>
+                                  <Component id="j_isiRingkasSurat" min="-2" max="-2" attributes="0"/>
+                                  <Component id="t_isiRingkasSurat" alignment="0" min="-2" pref="430" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
-                      <EmptySpace min="0" pref="185" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="228" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
@@ -215,9 +216,9 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="j_tanggalSurat" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                               <Component id="t_tglSurat" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="j_sifatSurat" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="t_sifatSurat" min="-2" max="-2" attributes="0"/>
@@ -346,8 +347,6 @@
                 <Property name="text" type="java.lang.String" value="Tanggal Surat"/>
               </Properties>
             </Component>
-            <Component class="de.wannawork.jcalendar.JCalendarComboBox" name="t_tglSurat">
-            </Component>
             <Component class="javax.swing.JLabel" name="j_sifatSurat">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Sifat Surat"/>
@@ -461,6 +460,8 @@
                 </DimensionLayout>
               </Layout>
             </Container>
+            <Component class="com.toedter.calendar.JDateChooser" name="t_tglSurat">
+            </Component>
           </SubComponents>
         </Container>
       </SubComponents>
