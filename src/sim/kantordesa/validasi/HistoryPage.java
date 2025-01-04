@@ -29,6 +29,7 @@ import java.awt.GridBagLayout;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import sim.kantordesa.mailtemplate.mailform;
 
 /**
  *
@@ -41,7 +42,6 @@ public class HistoryPage extends javax.swing.JFrame {
 
     public HistoryPage() {
         initComponents();
-        setExtendedState(MAXIMIZED_BOTH);
 
         model = new javax.swing.table.DefaultTableModel() {
             @Override
@@ -50,7 +50,7 @@ public class HistoryPage extends javax.swing.JFrame {
             }
         };
 
-        tbHistory.setModel(model); //create table 
+        tbHistory.setModel(model); //set model table 
         tbHistory.setShowGrid(true);
         tbHistory.setGridColor(Color.lightGray);
         //create table column and column header
@@ -216,14 +216,13 @@ public class HistoryPage extends javax.swing.JFrame {
             //checking condition where accepted mail will rendering download button
             boolean statusValidation = "Accept".equals(table.getValueAt(row, 5));
             boolean statusLead = "Accept".equals(table.getValueAt(row, 6));
-            Object mailComment = table.getValueAt(row, 7);
-            boolean hasMailComment = (mailComment != null && !mailComment.toString().isEmpty() && statusValidation && statusLead);
+            boolean isValidated = (statusValidation && statusLead);
 
-            downloadButton.setVisible(hasMailComment);
-            editButton.setVisible(!hasMailComment);
+            downloadButton.setVisible(isValidated);
+            editButton.setVisible(!isValidated);
 
             setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createMatteBorder(0, 1, 1, 0, Color.lightGray), // Border hitam
+                    BorderFactory.createMatteBorder(0, 1, 1, 0, Color.lightGray), // Border collor
                     BorderFactory.createEmptyBorder(5, 5, 5, 5) // Padding
             ));
 
@@ -291,9 +290,10 @@ public class HistoryPage extends javax.swing.JFrame {
 
         private void handleDownloadButtonAction() {
             System.out.println("Download Button diklik");
+            
         }
 
-        @Override //make can't edit table value
+        @Override
         public Object getCellEditorValue() {
             return "";
         }
@@ -303,11 +303,10 @@ public class HistoryPage extends javax.swing.JFrame {
                 int column) {
             boolean statusValidation = "Accept".equals(table.getValueAt(row, 5));
             boolean statusLead = "Accept".equals(table.getValueAt(row, 6));
-            Object mailComment = table.getValueAt(row, 7);
 
-            boolean hasMailComment = (mailComment != null && !mailComment.toString().isEmpty() && statusValidation && statusLead);
-            panel.downloadButton.setVisible(hasMailComment);
-            panel.editButton.setVisible(!hasMailComment);
+            boolean isValidated = (statusValidation && statusLead);
+            panel.downloadButton.setVisible(isValidated);
+            panel.editButton.setVisible(!isValidated);
 
             return panel;
         }
@@ -332,8 +331,6 @@ public class HistoryPage extends javax.swing.JFrame {
         public ButtonPanel() {
             // Use GridBagLayout for better centering control
             setLayout(new GridBagLayout());
-            // Use BoxLayout for vertical alignment
-            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
             // Create inner panel for buttons with FlowLayout
             JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
@@ -353,15 +350,12 @@ public class HistoryPage extends javax.swing.JFrame {
             add(Box.createVerticalGlue());
             // Add button panel
             add(buttonPanel);
-            // Add vertical glue for centering
-            add(Box.createVerticalGlue());
-
         }
     }
 
     //filtering history 
     private void filter(String query) {
-        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(model);
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter(model);
         tbHistory.setRowSorter(tr);
 
         RowFilter<DefaultTableModel, Object> filter = null; //no filter
@@ -587,28 +581,6 @@ public class HistoryPage extends javax.swing.JFrame {
         // TODO add your handling code here:
         setTableAction();
     }//GEN-LAST:event_refreshActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-        ValidationPages.main(null);
-        dispose();
-    }// GEN-LAST:event_jButton6ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
