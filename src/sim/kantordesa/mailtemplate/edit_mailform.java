@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import sim.kantordesa.config.AppContext;
 import sim.kantordesa.config.koneksi;
@@ -29,8 +31,8 @@ public class edit_mailform extends javax.swing.JFrame {
     }
 
     public void updateData() {
-        Integer mailform_mailTypeId = (Integer) AppContext.get("edit_mailform");
-        this.mailTypeId = mailform_mailTypeId != null ? mailform_mailTypeId : 0;
+        Integer edit_mailform_mailId = (Integer) AppContext.get("edit_mailform_mailId");
+        this.mailId = edit_mailform_mailId != null ? edit_mailform_mailId : 0;
         updateTitle(this.title);
     }
 
@@ -47,8 +49,6 @@ public class edit_mailform extends javax.swing.JFrame {
         group_warganegara = new javax.swing.ButtonGroup();
         group_jeniskelamin = new javax.swing.ButtonGroup();
         body = new javax.swing.JPanel();
-        header = new javax.swing.JPanel();
-        form_title = new javax.swing.JLabel();
         btn_next = new javax.swing.JButton();
         btn_back = new javax.swing.JButton();
         nama = new javax.swing.JLabel();
@@ -87,36 +87,10 @@ public class edit_mailform extends javax.swing.JFrame {
 
         body.setPreferredSize(new java.awt.Dimension(1300, 640));
 
-        header.setBackground(new java.awt.Color(19, 128, 97));
-        header.setPreferredSize(new java.awt.Dimension(1200, 80));
-
-        form_title.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        form_title.setForeground(new java.awt.Color(255, 255, 255));
-        form_title.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        form_title.setText("MAIL FORM");
-        form_title.setPreferredSize(new java.awt.Dimension(200, 48));
-
-        javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
-        header.setLayout(headerLayout);
-        headerLayout.setHorizontalGroup(
-            headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(headerLayout.createSequentialGroup()
-                .addGap(60, 60, 60)
-                .addComponent(form_title, javax.swing.GroupLayout.PREFERRED_SIZE, 900, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        headerLayout.setVerticalGroup(
-            headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(headerLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(form_title, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
-        );
-
         btn_next.setBackground(new java.awt.Color(19, 128, 97));
         btn_next.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btn_next.setForeground(new java.awt.Color(255, 255, 255));
-        btn_next.setText("Lanjutkan");
+        btn_next.setText("Simpan");
         btn_next.setPreferredSize(new java.awt.Dimension(120, 35));
         btn_next.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -262,20 +236,9 @@ public class edit_mailform extends javax.swing.JFrame {
         body.setLayout(bodyLayout);
         bodyLayout.setHorizontalGroup(
             bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, 1291, Short.MAX_VALUE)
             .addGroup(bodyLayout.createSequentialGroup()
                 .addGap(60, 60, 60)
                 .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(bodyLayout.createSequentialGroup()
-                        .addComponent(btn_next, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39)
-                        .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(972, 972, 972))
-                    .addGroup(bodyLayout.createSequentialGroup()
-                        .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(text_pekerjaan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pekerjaan))
-                        .addContainerGap())
                     .addGroup(bodyLayout.createSequentialGroup()
                         .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(text_tgl_lahir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -296,17 +259,15 @@ public class edit_mailform extends javax.swing.JFrame {
                                 .addComponent(wni, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(wna, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(box_agama, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(agama)))
+                            .addComponent(box_agama, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(agama))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(text_nokk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(text_noktp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(no_ktp)
-                                .addComponent(no_kk)
-                                .addComponent(keperluan))
+                            .addComponent(text_nokk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(text_noktp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(no_ktp)
+                            .addComponent(no_kk)
+                            .addComponent(keperluan)
                             .addGroup(bodyLayout.createSequentialGroup()
                                 .addComponent(daritanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
@@ -315,18 +276,25 @@ public class edit_mailform extends javax.swing.JFrame {
                                 .addComponent(sampaitanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(berlaku)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(box_goldar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(goldar)))
-                        .addGap(60, 60, 60))))
+                            .addComponent(box_goldar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(goldar))
+                        .addGap(60, 60, 60))
+                    .addGroup(bodyLayout.createSequentialGroup()
+                        .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(bodyLayout.createSequentialGroup()
+                                .addComponent(btn_next, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(39, 39, 39)
+                                .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(text_pekerjaan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pekerjaan))
+                        .addGap(731, 731, 731))))
         );
         bodyLayout.setVerticalGroup(
             bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bodyLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
                 .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(bodyLayout.createSequentialGroup()
-                        .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
                         .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(nama)
                             .addComponent(no_ktp))
@@ -393,7 +361,7 @@ public class edit_mailform extends javax.swing.JFrame {
                 .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_next, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addGap(20, 20, 20))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -404,25 +372,21 @@ public class edit_mailform extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(body, javax.swing.GroupLayout.DEFAULT_SIZE, 786, Short.MAX_VALUE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(body, javax.swing.GroupLayout.PREFERRED_SIZE, 647, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_nextActionPerformed(java.awt.event.ActionEvent evt) {
-        try (Connection conn = koneksi.getConnection()) {
-            String sql1 = "UPDATE civil_registry SET nama = ?, no_ktp = ?, no_kk = ?, tempat_tanggal_lahir = ?, "
-                    + "warga_negara = ?, agama = ?, jenis_kelamin = ?, pekerjaan = ?, alamat = ?, gol_darah = ?, usia = ? "
-                    + "WHERE no_ktp = (SELECT no_ktp FROM mail_content WHERE mail_id = ?)";
-            String sql2 = "UPDATE mail_content SET no_ktp = ?, mulai_berlaku = ?, tgl_akhir = ?, keperluan = ? WHERE mail_id = ?";
-
+    private void btn_nextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nextActionPerformed
+        Connection conn = koneksi.getConnection();
+        String sql1 = "UPDATE civil_registry SET nama = ?, no_ktp = ?, no_kk = ?, tempat_tanggal_lahir = ?, "
+                + "warga_negara = ?, agama = ?, jenis_kelamin = ?, pekerjaan = ?, alamat = ?, gol_darah = ?, usia = ? "
+                + "WHERE no_ktp = (SELECT no_ktp FROM mail_content WHERE mail_id = ?)";
+        String sql2 = "UPDATE mail_content SET no_ktp = ?, mulai_berlaku = ?, tgl_akhir = ?, keperluan = ? WHERE mail_id = ?";
             try (PreparedStatement stmt1 = conn.prepareStatement(sql1);
-                 PreparedStatement stmt2 = conn.prepareStatement(sql2)) {
+                PreparedStatement stmt2 = conn.prepareStatement(sql2)) {
                 
-                // Set values for both update and insert
                 stmt1.setString(1, text_nama.getText());
                 stmt1.setString(2, text_noktp.getText());
                 stmt1.setString(3, text_nokk.getText());
@@ -444,84 +408,76 @@ public class edit_mailform extends javax.swing.JFrame {
                 
                 stmt1.executeUpdate();
                 stmt2.executeUpdate();
+            } catch (SQLException ex) {
+            Logger.getLogger(edit_mailform.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            JOptionPane.showMessageDialog(this, mailId != 0 ? "Data berhasil diperbarui" : "Data berhasil disimpan");
-            dispose();
-            
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {
+        JOptionPane.showMessageDialog(this, mailId != 0 ? "Data berhasil diperbarui" : "Data berhasil disimpan");
         dispose();
-    }
+    }//GEN-LAST:event_btn_nextActionPerformed
+
+    private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
+        dispose();
+    }//GEN-LAST:event_btn_backActionPerformed
 
     public final void updateTitle(String title) {
         this.setTitle(title);
-        form_title.setText(title);
     }
 
     private void loadDataFromMailId() {
-        String query1 = "SELECT mc.*, mt.type_name FROM mail_content mc JOIN mail_type mt ON mc.mail_type_id = mt.mail_type_id WHERE mc.mail_id = ?";
+        Connection conn = koneksi.getConnection();
+        String query1 = "SELECT mc.*, mt.type_name FROM mail_content mc "
+                + "JOIN mail_type mt ON mc.mail_type_id = mt.mail_type_id WHERE mc.mail_id = ?";
         String query2 = "SELECT * FROM civil_registry WHERE no_ktp = (SELECT no_ktp FROM mail_content WHERE mail_id = ?)";
-
-        try (Connection c = koneksi.getConnection();
-             PreparedStatement ps = c.prepareStatement(query1);
-             PreparedStatement ps2 = c.prepareStatement(query2)) {
-
+        try (PreparedStatement ps = conn.prepareStatement(query1);
+            PreparedStatement ps2 = conn.prepareStatement(query2)) {
             ps.setInt(1, mailId);
             ps2.setInt(1, mailId);
+            ResultSet rs = ps.executeQuery();
+            ResultSet rs2 = ps2.executeQuery();
+            if (rs.next() && rs2.next()) {
+                text_nama.setText(rs2.getString("nama"));
+                text_tgl_lahir.setText(rs2.getString("tempat_tanggal_lahir"));
+                jUmur.setValue(rs2.getInt("usia"));
+                wni.setSelected("WNI".equals(rs2.getString("warga_negara")));
+                wna.setSelected("WNA".equals(rs2.getString("warga_negara")));
+                lakilaki.setSelected("Laki-laki".equals(rs2.getString("jenis_kelamin")));
+                perempuan.setSelected("Perempuan".equals(rs2.getString("jenis_kelamin")));
+                text_ttinggal.setText(rs2.getString("alamat"));
+                box_goldar.setSelectedItem(rs2.getString("gol_darah"));
+                text_noktp.setText(rs.getString("no_ktp"));
+                text_nokk.setText(rs2.getString("no_kk"));
+                text_keperluan.setText(rs.getString("keperluan"));
 
-            try (ResultSet rs = ps.executeQuery();
-                 ResultSet rs2 = ps2.executeQuery()) {
+                daritanggal.setDate(rs.getDate("mulai_berlaku"));
+                sampaitanggal.setDate(rs.getDate("tgl_akhir"));
 
-                if (rs.next() && rs2.next()) {
-                    text_nama.setText(rs2.getString("nama"));
-                    text_tgl_lahir.setText(rs2.getString("tempat_tanggal_lahir"));
-                    jUmur.setValue(rs2.getInt("usia"));
-                    wni.setSelected("WNI".equals(rs2.getString("warga_negara")));
-                    wna.setSelected("WNA".equals(rs2.getString("warga_negara")));
-                    lakilaki.setSelected("Laki-laki".equals(rs2.getString("jenis_kelamin")));
-                    perempuan.setSelected("Perempuan".equals(rs2.getString("jenis_kelamin")));
-                    text_ttinggal.setText(rs2.getString("alamat"));
-                    box_goldar.setSelectedItem(rs2.getString("gol_darah"));
-                    text_noktp.setText(rs.getString("no_ktp"));
-                    text_nokk.setText(rs2.getString("no_kk"));
-                    text_keperluan.setText(rs.getString("keperluan"));
+                box_agama.setSelectedItem(rs2.getString("agama"));
+                text_pekerjaan.setText(rs2.getString("pekerjaan"));
 
-                    daritanggal.setDate(rs.getDate("mulai_berlaku"));
-                    sampaitanggal.setDate(rs.getDate("tgl_akhir"));
+                this.mailTypeId = rs.getInt("mail_type_id");
+                this.title = rs.getString("type_name");
+                updateTitle(this.title);
 
-                    box_agama.setSelectedItem(rs2.getString("agama"));
-                    text_pekerjaan.setText(rs2.getString("pekerjaan"));
-
-                    this.mailTypeId = rs.getInt("mail_type_id");
-                    this.title = rs.getString("type_name");
-                    updateTitle(this.title);
-
-                    // Additional fields
-                    MailData.getMap().put("mail_id", String.valueOf(rs.getInt("mail_id")));
-                    MailData.getMap().put("mail_date", rs.getString("mail_date"));
-                    MailData.getMap().put("status", rs.getString("status"));
-                    MailData.getMap().put("created_at", rs.getString("created_at"));
-                    MailData.getMap().put("updated_at", rs.getString("updated_at"));
-                    MailData.getMap().put("mail_number", rs.getString("mail_number"));
-                    MailData.getMap().put("mulai_berlaku", rs.getString("mulai_berlaku"));
-                    MailData.getMap().put("tgl_akhir", rs.getString("tgl_akhir"));
-                    MailData.getMap().put("created_by", rs.getString("created_by"));
-                    MailData.getMap().put("status_validation", rs.getString("status_validation"));
-                    MailData.getMap().put("status_lead", rs.getString("status_lead"));
-                    MailData.getMap().put("updated_validation", rs.getString("updated_validation"));
-                    MailData.getMap().put("updated_lead", rs.getString("updated_lead"));
-                    MailData.getMap().put("mail_comment", rs.getString("mail_comment"));
-                }
+                // Additional fields
+                MailData.getMap().put("mail_id", String.valueOf(rs.getInt("mail_id")));
+                MailData.getMap().put("mail_date", rs.getString("mail_date"));
+                MailData.getMap().put("status", rs.getString("status"));
+                MailData.getMap().put("created_at", rs.getString("created_at"));
+                MailData.getMap().put("updated_at", rs.getString("updated_at"));
+                MailData.getMap().put("mail_number", rs.getString("mail_number"));
+                MailData.getMap().put("mulai_berlaku", rs.getString("mulai_berlaku"));
+                MailData.getMap().put("tgl_akhir", rs.getString("tgl_akhir"));
+                MailData.getMap().put("created_by", rs.getString("created_by"));
+                MailData.getMap().put("status_validation", rs.getString("status_validation"));
+                MailData.getMap().put("status_lead", rs.getString("status_lead"));
+                MailData.getMap().put("updated_validation", rs.getString("updated_validation"));
+                MailData.getMap().put("updated_lead", rs.getString("updated_lead"));
+                MailData.getMap().put("mail_comment", rs.getString("mail_comment"));
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error loading data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        }
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel agama;
@@ -532,12 +488,10 @@ public class edit_mailform extends javax.swing.JFrame {
     private javax.swing.JButton btn_back;
     private javax.swing.JButton btn_next;
     private com.toedter.calendar.JDateChooser daritanggal;
-    private javax.swing.JLabel form_title;
     private javax.swing.JLabel gender;
     private javax.swing.JLabel goldar;
     private javax.swing.ButtonGroup group_jeniskelamin;
     private javax.swing.ButtonGroup group_warganegara;
-    private javax.swing.JPanel header;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jUmur;
     private javax.swing.JLabel keperluan;
