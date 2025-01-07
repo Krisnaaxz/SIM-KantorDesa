@@ -30,6 +30,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import sim.kantordesa.mailtemplate.MailData;
+import sim.kantordesa.mailtemplate.edit_mailform;
 import sim.kantordesa.mailtemplate.mailform;
 
 /**
@@ -259,6 +260,12 @@ public class HistoryPage extends javax.swing.JFrame {
 
         private void handleEditButtonAction() {
             System.out.println("Edit Button diklik");
+            int row = table.getSelectedRow();
+            if (row != -1) {
+                String mailId = (String) table.getValueAt(row, 8);
+                edit_mailform editForm = new edit_mailform(Integer.parseInt(mailId));
+                editForm.setVisible(true);
+            }
         }
 
         private void handleDeleteButtonAction() {

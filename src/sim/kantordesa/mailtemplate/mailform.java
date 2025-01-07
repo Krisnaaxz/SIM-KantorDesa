@@ -46,7 +46,6 @@ import java.util.List;
 //import org.apache.tika.sax.BodyContentHandler;
 //import org.xml.sax.SAXException;
 //import java.io.FileInputStream;
-
 /**
  *
  * @author manii
@@ -63,7 +62,7 @@ public class mailform extends javax.swing.JFrame {
         updateTitle(title);
     }
 
-    public mailform(MailData mailData) {
+    public mailform() {
         initComponents();
     }
 
@@ -581,38 +580,38 @@ public class mailform extends javax.swing.JFrame {
         Logger.getLogger(mailform.class.getName()).log(Level.INFO, "Village Data: {0}", villageData);
         return villageData;
     }
-
-    private String replacePlaceholders(String content, Map<String, String> villageData) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String dariTanggal = daritanggal.getDate() != null ? sdf.format(daritanggal.getDate()) : "";
-        String sampaiTanggal = sampaitanggal.getDate() != null ? sdf.format(sampaitanggal.getDate()) : "";
-        
-        Map<String, String> mailData = MailData.getMap();
-        
-        System.out.println("nama : " + mailData.getOrDefault("nama", text_nama.getText() != null ? text_nama.getText() : ""));
-
-        return content.replace("[nama]", mailData.getOrDefault("nama", text_nama.getText() != null ? text_nama.getText() : ""))
-                .replace("[ttl]", mailData.getOrDefault("ttl", text_tgl_lahir.getText() != null ? text_tgl_lahir.getText() : ""))
-                .replace("[usia]", mailData.getOrDefault("umur", jUmur.getValue() != null ? jUmur.getValue().toString() : ""))
-                .replace("[warga_negara]", mailData.getOrDefault("warga_negara", wni.isSelected() ? "WNI" : "WNA"))
-                .replace("[agama]", mailData.getOrDefault("agama", box_agama.getSelectedItem() != null ? box_agama.getSelectedItem().toString() : ""))
-                .replace("[sex]", mailData.getOrDefault("sex", lakilaki.isSelected() ? "Laki-laki" : "Perempuan"))
-                .replace("[pekerjaan]", mailData.getOrDefault("pekerjaan", text_pekerjaan.getText() != null ? text_pekerjaan.getText() : ""))
-                .replace("[alamat]", mailData.getOrDefault("alamat", text_ttinggal.getText() != null ? text_ttinggal.getText() : ""))
-                .replace("[no_ktp]", mailData.getOrDefault("no_ktp", text_noktp.getText() != null ? text_noktp.getText() : ""))
-                .replace("[no_kk]", mailData.getOrDefault("no_kk", text_nokk.getText() != null ? text_nokk.getText() : ""))
-                .replace("[keperluan]", mailData.getOrDefault("keperlan", text_keperluan.getText() != null ? text_keperluan.getText() : ""))
-                .replace("[mulai_berlaku]", mailData.getOrDefault("mulai_berlaku", dariTanggal))
-                .replace("[tgl_akhir]", mailData.getOrDefault("tgl_akhir", sampaiTanggal))
-                .replace("[gol_darah]",
-                        mailData.getOrDefault("gol_darah", box_goldar.getSelectedItem() != null ? box_goldar.getSelectedItem().toString() : ""))
-                .replace("[nama_kab]", villageData.getOrDefault("nama_kab", ""))
-                .replace("[nama_kec]", villageData.getOrDefault("nama_kec", ""))
-                .replace("[nama_des]", villageData.getOrDefault("nama_des", ""))
-                .replace("[alamat_des]", villageData.getOrDefault("alamat_des", ""))
-                .replace("[kode_des]", villageData.getOrDefault("kode_des", ""));
-    }
-
+//
+//    private String replacePlaceholders(String content, Map<String, String> villageData) {
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        String dariTanggal = daritanggal.getDate() != null ? sdf.format(daritanggal.getDate()) : "";
+//        String sampaiTanggal = sampaitanggal.getDate() != null ? sdf.format(sampaitanggal.getDate()) : "";
+//        
+//        Map<String, String> mailData = MailData.getMap();
+//        
+//        System.out.println("nama : " + mailData.getOrDefault("nama", text_nama.getText() != null ? text_nama.getText() : ""));
+//
+//        return content.replace("[nama]", mailData.getOrDefault("nama", text_nama.getText() != null ? text_nama.getText() : ""))
+//                .replace("[ttl]", mailData.getOrDefault("ttl", text_tgl_lahir.getText() != null ? text_tgl_lahir.getText() : ""))
+//                .replace("[usia]", mailData.getOrDefault("umur", jUmur.getValue() != null ? jUmur.getValue().toString() : ""))
+//                .replace("[warga_negara]", mailData.getOrDefault("warga_negara", wni.isSelected() ? "WNI" : "WNA"))
+//                .replace("[agama]", mailData.getOrDefault("agama", box_agama.getSelectedItem() != null ? box_agama.getSelectedItem().toString() : ""))
+//                .replace("[sex]", mailData.getOrDefault("sex", lakilaki.isSelected() ? "Laki-laki" : "Perempuan"))
+//                .replace("[pekerjaan]", mailData.getOrDefault("pekerjaan", text_pekerjaan.getText() != null ? text_pekerjaan.getText() : ""))
+//                .replace("[alamat]", mailData.getOrDefault("alamat", text_ttinggal.getText() != null ? text_ttinggal.getText() : ""))
+//                .replace("[no_ktp]", mailData.getOrDefault("no_ktp", text_noktp.getText() != null ? text_noktp.getText() : ""))
+//                .replace("[no_kk]", mailData.getOrDefault("no_kk", text_nokk.getText() != null ? text_nokk.getText() : ""))
+//                .replace("[keperluan]", mailData.getOrDefault("keperlan", text_keperluan.getText() != null ? text_keperluan.getText() : ""))
+//                .replace("[mulai_berlaku]", mailData.getOrDefault("mulai_berlaku", dariTanggal))
+//                .replace("[tgl_akhir]", mailData.getOrDefault("tgl_akhir", sampaiTanggal))
+//                .replace("[gol_darah]",
+//                        mailData.getOrDefault("gol_darah", box_goldar.getSelectedItem() != null ? box_goldar.getSelectedItem().toString() : ""))
+//                .replace("[nama_kab]", villageData.getOrDefault("nama_kab", ""))
+//                .replace("[nama_kec]", villageData.getOrDefault("nama_kec", ""))
+//                .replace("[nama_des]", villageData.getOrDefault("nama_des", ""))
+//                .replace("[alamat_des]", villageData.getOrDefault("alamat_des", ""))
+//                .replace("[kode_des]", villageData.getOrDefault("kode_des", ""));
+//    }
+//
 //    private String loadRTFTemplate(Integer mail_type_id) {
 //        try {
 //            Connection conn = koneksi.getConnection();
@@ -647,14 +646,14 @@ public class mailform extends javax.swing.JFrame {
 //                return;
 //            }
 //            BodyContentHandler handler = new BodyContentHandler();
-////            new RTFParser().parse(new FileInputStream(rtfPath), handler, new org.apache.tika.metadata.Metadata(),
-////                    new ParseContext());
+//            new RTFParser().parse(new FileInputStream(rtfPath), handler, new org.apache.tika.metadata.Metadata(),
+//                    new ParseContext());
 
             // Ambil data desa
             Map<String, String> villageData = getVillageData();
 
             // Ambil data pemegang surat dari placeholders
-            String pemegangSurat = replacePlaceholders("[nama]", villageData);
+            String pemegangSurat = text_nama.getText() != null ? text_nama.getText() : "";
 
             // Ambil mail_id dan type_name
             String query = "SELECT mail_id, type_name FROM mail_content mc "
@@ -783,7 +782,7 @@ public class mailform extends javax.swing.JFrame {
 
                         // Pemegang Surat
                         signatureTable.addCell(new Cell()
-                                .add(new Paragraph("\nPemegang Surat\n\n\n\n\n" + pemegangSurat)
+                                .add(new Paragraph("Pemegang Surat\n\n\n\n\n" + pemegangSurat)
                                         .setTextAlignment(TextAlignment.CENTER).setFontSize(12))
                                 .setBorder(Border.NO_BORDER));
 

@@ -57,19 +57,6 @@
                   <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="btn_next" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
-                          <Component id="btn_back" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="972" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="text_pekerjaan" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="pekerjaan" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="text_tgl_lahir" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="text_nama" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -91,20 +78,16 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="wna" min="-2" pref="98" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="box_agama" alignment="0" max="-2" attributes="0"/>
-                                  <Component id="agama" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="box_agama" alignment="0" max="-2" attributes="0"/>
+                              <Component id="agama" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="text_nokk" alignment="0" max="-2" attributes="0"/>
-                                  <Component id="text_noktp" alignment="0" max="-2" attributes="0"/>
-                                  <Component id="no_ktp" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="no_kk" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="keperluan" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="text_nokk" alignment="0" max="-2" attributes="0"/>
+                              <Component id="text_noktp" alignment="0" max="-2" attributes="0"/>
+                              <Component id="no_ktp" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="no_kk" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="keperluan" min="-2" max="-2" attributes="0"/>
                               <Group type="102" attributes="0">
                                   <Component id="daritanggal" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
@@ -114,12 +97,22 @@
                               </Group>
                               <Component id="berlaku" min="-2" max="-2" attributes="0"/>
                               <Component id="jScrollPane1" min="-2" pref="500" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="box_goldar" alignment="0" max="-2" attributes="0"/>
-                                  <Component id="goldar" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="box_goldar" alignment="0" max="-2" attributes="0"/>
+                              <Component id="goldar" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Component id="btn_next" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+                                  <Component id="btn_back" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="text_pekerjaan" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="pekerjaan" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="731" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
