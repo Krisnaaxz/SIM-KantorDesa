@@ -51,20 +51,23 @@ import java.util.List;
  *
  * @author manii
  */
-public class mailform extends javax.swing.JFrame {
+public class edit_mailform extends javax.swing.JFrame {
 
     public int mailTypeId;
     public String title;
+    private int mailId = -1;
 
-    public mailform(String title, int mailTypeId) {
+    public edit_mailform(String title, int mailTypeId) {
         this.mailTypeId = mailTypeId;
         this.title = title;
         initComponents();
         updateTitle(title);
     }
 
-    public mailform(MailData mailData) {
+    public edit_mailform(int mailId) {
+        this.mailId = mailId;
         initComponents();
+        loadDataFromMailId();
     }
 
     public JPanel getContentPanel() {
@@ -92,8 +95,6 @@ public class mailform extends javax.swing.JFrame {
         group_warganegara = new javax.swing.ButtonGroup();
         group_jeniskelamin = new javax.swing.ButtonGroup();
         body = new javax.swing.JPanel();
-        header = new javax.swing.JPanel();
-        form_title = new javax.swing.JLabel();
         btn_next = new javax.swing.JButton();
         btn_back = new javax.swing.JButton();
         nama = new javax.swing.JLabel();
@@ -131,32 +132,6 @@ public class mailform extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         body.setPreferredSize(new java.awt.Dimension(1300, 640));
-
-        header.setBackground(new java.awt.Color(19, 128, 97));
-        header.setPreferredSize(new java.awt.Dimension(1200, 80));
-
-        form_title.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        form_title.setForeground(new java.awt.Color(255, 255, 255));
-        form_title.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        form_title.setText("MAIL FORM");
-        form_title.setPreferredSize(new java.awt.Dimension(200, 48));
-
-        javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
-        header.setLayout(headerLayout);
-        headerLayout.setHorizontalGroup(
-            headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(headerLayout.createSequentialGroup()
-                .addGap(60, 60, 60)
-                .addComponent(form_title, javax.swing.GroupLayout.PREFERRED_SIZE, 900, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        headerLayout.setVerticalGroup(
-            headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(headerLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(form_title, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
-        );
 
         btn_next.setBackground(new java.awt.Color(19, 128, 97));
         btn_next.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -307,20 +282,9 @@ public class mailform extends javax.swing.JFrame {
         body.setLayout(bodyLayout);
         bodyLayout.setHorizontalGroup(
             bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, 1291, Short.MAX_VALUE)
             .addGroup(bodyLayout.createSequentialGroup()
                 .addGap(60, 60, 60)
                 .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(bodyLayout.createSequentialGroup()
-                        .addComponent(btn_next, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39)
-                        .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(972, 972, 972))
-                    .addGroup(bodyLayout.createSequentialGroup()
-                        .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(text_pekerjaan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pekerjaan))
-                        .addContainerGap())
                     .addGroup(bodyLayout.createSequentialGroup()
                         .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(text_tgl_lahir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -341,17 +305,15 @@ public class mailform extends javax.swing.JFrame {
                                 .addComponent(wni, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(wna, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(box_agama, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(agama)))
+                            .addComponent(box_agama, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(agama))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(text_nokk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(text_noktp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(no_ktp)
-                                .addComponent(no_kk)
-                                .addComponent(keperluan))
+                            .addComponent(text_nokk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(text_noktp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(no_ktp)
+                            .addComponent(no_kk)
+                            .addComponent(keperluan)
                             .addGroup(bodyLayout.createSequentialGroup()
                                 .addComponent(daritanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
@@ -360,18 +322,25 @@ public class mailform extends javax.swing.JFrame {
                                 .addComponent(sampaitanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(berlaku)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(box_goldar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(goldar)))
-                        .addGap(60, 60, 60))))
+                            .addComponent(box_goldar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(goldar))
+                        .addGap(60, 60, 60))
+                    .addGroup(bodyLayout.createSequentialGroup()
+                        .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(bodyLayout.createSequentialGroup()
+                                .addComponent(btn_next, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(39, 39, 39)
+                                .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(text_pekerjaan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pekerjaan))
+                        .addGap(731, 731, 731))))
         );
         bodyLayout.setVerticalGroup(
             bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bodyLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
                 .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(bodyLayout.createSequentialGroup()
-                        .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
                         .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(nama)
                             .addComponent(no_ktp))
@@ -438,7 +407,7 @@ public class mailform extends javax.swing.JFrame {
                 .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_next, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addContainerGap(159, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -459,7 +428,6 @@ public class mailform extends javax.swing.JFrame {
 
     private void btn_nextActionPerformed(java.awt.event.ActionEvent evt) {
         Connection conn = koneksi.getConnection();
-        String title = form_title.getText();
         String ktp = text_noktp.getText().trim();
         String kk = text_nokk.getText().trim();
         String nama = text_nama.getText().trim();
@@ -515,7 +483,6 @@ public class mailform extends javax.swing.JFrame {
 
     public final void updateTitle(String title) {
         this.setTitle(title);
-        form_title.setText(title);
     }
 
     private void saveData() {
@@ -537,7 +504,7 @@ public class mailform extends javax.swing.JFrame {
             stmt1.setString(10, box_goldar.getSelectedItem().toString());
             stmt1.setString(11, jUmur.getValue().toString());
             int rowsInserted = stmt1.executeUpdate();
-            Logger.getLogger(mailform.class.getName()).log(Level.INFO, "Baris dimasukkan ke civil_registry: {0}",
+            Logger.getLogger(edit_mailform.class.getName()).log(Level.INFO, "Baris dimasukkan ke civil_registry: {0}",
                     rowsInserted);
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -549,15 +516,15 @@ public class mailform extends javax.swing.JFrame {
             stmt2.setString(3, tglAkhir);
              stmt2.setString(4, text_keperluan.getText());
             int rowsUpdated = stmt2.executeUpdate();
-            Logger.getLogger(mailform.class.getName()).log(Level.INFO, "Baris diperbarui di mail_content: {0}",
+            Logger.getLogger(edit_mailform.class.getName()).log(Level.INFO, "Baris diperbarui di mail_content: {0}",
                     rowsUpdated);
 
             JOptionPane.showMessageDialog(this, "Data berhasil disimpan dan diperbarui!", "Sukses",
                     JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException ex) {
-            Logger.getLogger(mailform.class.getName()).log(Level.SEVERE, "Kesalahan SQL: " + ex.getMessage(), ex);
+            Logger.getLogger(edit_mailform.class.getName()).log(Level.SEVERE, "Kesalahan SQL: " + ex.getMessage(), ex);
         } catch (Exception ex) {
-            Logger.getLogger(mailform.class.getName()).log(Level.SEVERE, "Kesalahan: " + ex.getMessage(), ex);
+            Logger.getLogger(edit_mailform.class.getName()).log(Level.SEVERE, "Kesalahan: " + ex.getMessage(), ex);
         }
     }
 
@@ -573,12 +540,12 @@ public class mailform extends javax.swing.JFrame {
                 villageData.put("alamat_des", rs.getString("village_loc"));
                 villageData.put("kode_des", rs.getString("village_id"));
             } else {
-                Logger.getLogger(mailform.class.getName()).log(Level.WARNING, "No data found in village_data table.");
+                Logger.getLogger(edit_mailform.class.getName()).log(Level.WARNING, "No data found in village_data table.");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(mailform.class.getName()).log(Level.SEVERE, "SQL Exception: " + ex.getMessage(), ex);
+            Logger.getLogger(edit_mailform.class.getName()).log(Level.SEVERE, "SQL Exception: " + ex.getMessage(), ex);
         }
-        Logger.getLogger(mailform.class.getName()).log(Level.INFO, "Village Data: {0}", villageData);
+        Logger.getLogger(edit_mailform.class.getName()).log(Level.INFO, "Village Data: {0}", villageData);
         return villageData;
     }
 
@@ -670,7 +637,7 @@ public class mailform extends javax.swing.JFrame {
                     fileName = mailId + "_" + typeName + ".pdf";
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(mailform.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(edit_mailform.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             // Simpan ke PDF
@@ -687,8 +654,8 @@ public class mailform extends javax.swing.JFrame {
                     // Header
                     Paragraph header = new Paragraph("PEMERINTAH " + villageData.get("nama_kab"))
                             .setFontSize(16).setTextAlignment(TextAlignment.CENTER);
-                    header.add(new Text("\n" + villageData.get("nama_kec") + "\n" + villageData.get("nama_des") + "\n"))
-                            .setFontSize(16).setTextAlignment(TextAlignment.CENTER);
+                    header.add(new Text("\n" + villageData.get("nama_kec") + "\n" + villageData.get("nama_des") + "\n")
+                            .setFontSize(16).setTextAlignment(TextAlignment.CENTER));
                     header.add(villageData.get("alamat_des"));
                     document.add(header);
 
@@ -726,6 +693,7 @@ public class mailform extends javax.swing.JFrame {
                     
                     Map<String, String> mailData = MailData.getMap();
 
+                    // Main Content
                     // Main Content
                     Paragraph mainContent = new Paragraph().addTabStops(tabStops)
                             .add(new Text("Nama\t\t\t\t\t\t\t: "
@@ -820,7 +788,7 @@ public class mailform extends javax.swing.JFrame {
 
                     document.add(signatureTable);
                 } catch (IOException ex) {
-                    Logger.getLogger(mailform.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(edit_mailform.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
                 // Update mail_content dengan mail_number dan file_path
@@ -832,7 +800,7 @@ public class mailform extends javax.swing.JFrame {
                         JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(mailform.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(edit_mailform.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -847,6 +815,71 @@ public class mailform extends javax.swing.JFrame {
         }
     }
 
+    private void loadDataFromMailId() {
+        try {
+            Connection c = koneksi.getConnection();
+            String sql = "SELECT * FROM mail_content WHERE mail_id = ?";
+            PreparedStatement ps = c.prepareStatement(sql);
+            ps.setInt(1, mailId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                text_nama.setText(rs.getString("applicant_name"));
+                text_tgl_lahir.setText(rs.getString("birth_place_date"));
+                jUmur.setValue(rs.getInt("age"));
+                
+                // Set warga negara
+                if ("WNI".equals(rs.getString("citizenship"))) {
+                    wni.setSelected(true);
+                } else {
+                    wna.setSelected(true);
+                }
+                
+                // Set gender
+                if ("Laki-laki".equals(rs.getString("gender"))) {
+                    lakilaki.setSelected(true);
+                } else {
+                    perempuan.setSelected(true);
+                }
+                
+                text_ttinggal.setText(rs.getString("address"));
+                box_goldar.setSelectedItem(rs.getString("blood_type"));
+                text_noktp.setText(rs.getString("id_number"));
+                text_nokk.setText(rs.getString("family_card_number"));
+                text_keperluan.setText(rs.getString("mail_purpose"));
+                
+                // Set dates
+                if (rs.getDate("valid_from") != null) {
+                    daritanggal.setDate(rs.getDate("valid_from"));
+                }
+                if (rs.getDate("valid_until") != null) {
+                    sampaitanggal.setDate(rs.getDate("valid_until"));
+                }
+                
+                box_agama.setSelectedItem(rs.getString("religion"));
+                text_pekerjaan.setText(rs.getString("occupation"));
+                
+                // Update title and mail type
+                this.mailTypeId = rs.getInt("mail_type_id");
+                String sql2 = "SELECT type_name FROM mail_type WHERE mail_type_id = ?";
+                PreparedStatement ps2 = c.prepareStatement(sql2);
+                ps2.setInt(1, this.mailTypeId);
+                ResultSet rs2 = ps2.executeQuery();
+                if (rs2.next()) {
+                    this.title = rs2.getString("type_name");
+                    updateTitle(this.title);
+                }
+                rs2.close();
+                ps2.close();
+            }
+            
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error loading data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel agama;
     private javax.swing.JLabel berlaku;
@@ -856,12 +889,10 @@ public class mailform extends javax.swing.JFrame {
     private javax.swing.JButton btn_back;
     private javax.swing.JButton btn_next;
     private com.toedter.calendar.JDateChooser daritanggal;
-    private javax.swing.JLabel form_title;
     private javax.swing.JLabel gender;
     private javax.swing.JLabel goldar;
     private javax.swing.ButtonGroup group_jeniskelamin;
     private javax.swing.ButtonGroup group_warganegara;
-    private javax.swing.JPanel header;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jUmur;
     private javax.swing.JLabel keperluan;
