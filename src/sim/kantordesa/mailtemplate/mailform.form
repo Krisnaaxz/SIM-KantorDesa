@@ -60,14 +60,14 @@
                           <Component id="btn_next" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
                           <Component id="btn_back" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="972" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="972" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="text_pekerjaan" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="pekerjaan" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -92,15 +92,15 @@
                                   <Component id="wna" min="-2" pref="98" max="-2" attributes="0"/>
                               </Group>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="box_agama" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="box_agama" alignment="0" max="-2" attributes="0"/>
                                   <Component id="agama" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="text_nokk" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="text_noktp" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="text_nokk" alignment="0" max="-2" attributes="0"/>
+                                  <Component id="text_noktp" alignment="0" max="-2" attributes="0"/>
                                   <Component id="no_ktp" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="no_kk" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="keperluan" min="-2" max="-2" attributes="0"/>
@@ -115,7 +115,7 @@
                               <Component id="berlaku" min="-2" max="-2" attributes="0"/>
                               <Component id="jScrollPane1" min="-2" pref="500" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="box_goldar" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="box_goldar" alignment="0" max="-2" attributes="0"/>
                                   <Component id="goldar" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -131,20 +131,21 @@
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="header" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                          <Component id="nama" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="nama" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="no_ktp" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="text_nama" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="tgl_lahir" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="text_tgl_lahir" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
-                          <Component id="no_ktp" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="text_noktp" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="no_kk" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="text_nokk" min="-2" max="-2" attributes="0"/>
@@ -159,14 +160,14 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="jUmur" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="warganegara" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="wni" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="wna" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="gender" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -176,7 +177,7 @@
                       </Group>
                       <Component id="jScrollPane1" alignment="0" min="-2" pref="190" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="goldar" min="-2" max="-2" attributes="0"/>
@@ -189,7 +190,7 @@
                           <Component id="box_agama" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="berlaku" min="-2" max="-2" attributes="0"/>
@@ -204,16 +205,16 @@
                           <Component id="text_ttinggal" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="pekerjaan" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="text_pekerjaan" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="19" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btn_next" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btn_back" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                  <EmptySpace pref="79" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -235,7 +236,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
                       <Component id="form_title" min="-2" pref="900" max="-2" attributes="0"/>
-                      <EmptySpace pref="331" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

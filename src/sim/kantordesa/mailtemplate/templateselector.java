@@ -70,6 +70,7 @@ public class templateselector extends javax.swing.JFrame {
         nama_pengaju.setText("Nama Pengaju");
 
         text_namapengaju.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        text_namapengaju.setPreferredSize(new java.awt.Dimension(640, 35));
 
         template_surat.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         template_surat.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -97,15 +98,15 @@ public class templateselector extends javax.swing.JFrame {
             bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(bodyLayout.createSequentialGroup()
-                .addGap(60, 60, 60)
+                .addContainerGap(60, Short.MAX_VALUE)
                 .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_next, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(box_template_surat, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(box_template_surat, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(template_surat)
                         .addComponent(nama_pengaju)
-                        .addComponent(text_namapengaju)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(text_namapengaju, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(100, Short.MAX_VALUE))
         );
         bodyLayout.setVerticalGroup(
             bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -114,14 +115,14 @@ public class templateselector extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addComponent(nama_pengaju)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(text_namapengaju, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(text_namapengaju, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addComponent(template_surat)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(box_template_surat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(box_template_surat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40)
                 .addComponent(btn_next, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 42, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -169,7 +170,6 @@ public class templateselector extends javax.swing.JFrame {
             saveApplicantData(conn, applicantName, mailTypeId);
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
             javax.swing.JOptionPane.showMessageDialog(this, "Gagal menyimpan data ke database!", "Error",
                     javax.swing.JOptionPane.ERROR_MESSAGE);
         }
