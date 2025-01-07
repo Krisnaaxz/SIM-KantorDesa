@@ -16,7 +16,6 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,11 +31,6 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import org.apache.tika.exception.TikaException;
-import org.apache.tika.parser.ParseContext;
-import org.apache.tika.parser.microsoft.rtf.RTFParser;
-import org.apache.tika.sax.BodyContentHandler;
-import org.xml.sax.SAXException;
 import sim.kantordesa.config.AppContext;
 import sim.kantordesa.config.koneksi;
 import sim.kantordesa.dashboard.Dashboard;
@@ -46,6 +40,12 @@ import com.itextpdf.layout.properties.TabAlignment;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+//import org.apache.tika.exception.TikaException;
+//import org.apache.tika.parser.ParseContext;
+//import org.apache.tika.parser.microsoft.rtf.RTFParser;
+//import org.apache.tika.sax.BodyContentHandler;
+//import org.xml.sax.SAXException;
+//import java.io.FileInputStream;
 
 /**
  *
@@ -613,20 +613,20 @@ public class mailform extends javax.swing.JFrame {
                 .replace("[kode_des]", villageData.getOrDefault("kode_des", ""));
     }
 
-    private String loadRTFTemplate(Integer mail_type_id) {
-        try {
-            Connection conn = koneksi.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT mail_type FROM mail_type WHERE mail_type_id = ?");
-            stmt.setInt(1, mail_type_id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getString("mail_type");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(mailform.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
+//    private String loadRTFTemplate(Integer mail_type_id) {
+//        try {
+//            Connection conn = koneksi.getConnection();
+//            PreparedStatement stmt = conn.prepareStatement("SELECT mail_type FROM mail_type WHERE mail_type_id = ?");
+//            stmt.setInt(1, mail_type_id);
+//            ResultSet rs = stmt.executeQuery();
+//            if (rs.next()) {
+//                return rs.getString("mail_type");
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(mailform.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+//    }
 
     private String generateNomorSurat(int mailTypeId) {
         int tahun = LocalDate.now().getYear();
@@ -641,14 +641,14 @@ public class mailform extends javax.swing.JFrame {
         File fileTtdSekdes = new File(ttdSekdesPath);
 
         try {
-            String rtfPath = loadRTFTemplate(mailTypeId);
-            if (rtfPath == null || rtfPath.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "RTF Template not found.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            BodyContentHandler handler = new BodyContentHandler();
-            new RTFParser().parse(new FileInputStream(rtfPath), handler, new org.apache.tika.metadata.Metadata(),
-                    new ParseContext());
+//            String rtfPath = loadRTFTemplate(mailTypeId);
+//            if (rtfPath == null || rtfPath.isEmpty()) {
+//                JOptionPane.showMessageDialog(null, "RTF Template not found.", "Error", JOptionPane.ERROR_MESSAGE);
+//                return;
+//            }
+//            BodyContentHandler handler = new BodyContentHandler();
+////            new RTFParser().parse(new FileInputStream(rtfPath), handler, new org.apache.tika.metadata.Metadata(),
+////                    new ParseContext());
 
             // Ambil data desa
             Map<String, String> villageData = getVillageData();
@@ -783,7 +783,7 @@ public class mailform extends javax.swing.JFrame {
 
                         // Pemegang Surat
                         signatureTable.addCell(new Cell()
-                                .add(new Paragraph("Pemegang Surat\n\n\n\n\n" + pemegangSurat)
+                                .add(new Paragraph("\nPemegang Surat\n\n\n\n\n" + pemegangSurat)
                                         .setTextAlignment(TextAlignment.CENTER).setFontSize(12))
                                 .setBorder(Border.NO_BORDER));
 
@@ -831,7 +831,7 @@ public class mailform extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "File PDF berhasil disimpan di: " + pdfPath, "Sukses",
                         JOptionPane.INFORMATION_MESSAGE);
             }
-        } catch (SQLException | IOException | SAXException | TikaException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(mailform.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
