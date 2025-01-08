@@ -10,14 +10,12 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.element.Cell;
-import com.itextpdf.layout.element.Div;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,11 +31,6 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import org.apache.tika.exception.TikaException;
-import org.apache.tika.parser.ParseContext;
-import org.apache.tika.parser.microsoft.rtf.RTFParser;
-import org.apache.tika.sax.BodyContentHandler;
-import org.xml.sax.SAXException;
 import sim.kantordesa.config.AppContext;
 import sim.kantordesa.config.koneksi;
 import sim.kantordesa.dashboard.Dashboard;
@@ -47,7 +40,12 @@ import com.itextpdf.layout.properties.TabAlignment;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
+//import org.apache.tika.exception.TikaException;
+//import org.apache.tika.parser.ParseContext;
+//import org.apache.tika.parser.microsoft.rtf.RTFParser;
+//import org.apache.tika.sax.BodyContentHandler;
+//import org.xml.sax.SAXException;
+//import java.io.FileInputStream;
 /**
  *
  * @author manii
@@ -87,7 +85,7 @@ public class mailform extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         group_warganegara = new javax.swing.ButtonGroup();
@@ -145,19 +143,19 @@ public class mailform extends javax.swing.JFrame {
         javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
         header.setLayout(headerLayout);
         headerLayout.setHorizontalGroup(
-                headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(headerLayout.createSequentialGroup()
-                                .addGap(60, 60, 60)
-                                .addComponent(form_title, javax.swing.GroupLayout.PREFERRED_SIZE, 900,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(331, Short.MAX_VALUE)));
+            headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(headerLayout.createSequentialGroup()
+                .addGap(60, 60, 60)
+                .addComponent(form_title, javax.swing.GroupLayout.PREFERRED_SIZE, 900, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
         headerLayout.setVerticalGroup(
-                headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(headerLayout.createSequentialGroup()
-                                .addGap(15, 15, 15)
-                                .addComponent(form_title, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(17, Short.MAX_VALUE)));
+            headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(headerLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(form_title, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
 
         btn_next.setBackground(new java.awt.Color(19, 128, 97));
         btn_next.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -288,8 +286,7 @@ public class mailform extends javax.swing.JFrame {
 
         box_agama.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         box_agama.setMaximumRowCount(6);
-        box_agama.setModel(new javax.swing.DefaultComboBoxModel<>(
-                new String[] { "Islam", "Katolik", "Protestan", "Hindu", "Buddha", "Konghucu" }));
+        box_agama.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Islam", "Katolik", "Protestan", "Hindu", "Buddha", "Konghucu" }));
         box_agama.setToolTipText("");
         box_agama.setMinimumSize(new java.awt.Dimension(64, 35));
         box_agama.setPreferredSize(new java.awt.Dimension(200, 35));
@@ -308,247 +305,153 @@ public class mailform extends javax.swing.JFrame {
         javax.swing.GroupLayout bodyLayout = new javax.swing.GroupLayout(body);
         body.setLayout(bodyLayout);
         bodyLayout.setHorizontalGroup(
-                bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, 1291, Short.MAX_VALUE)
-                        .addGroup(bodyLayout.createSequentialGroup()
-                                .addGap(60, 60, 60)
-                                .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(bodyLayout.createSequentialGroup()
-                                                .addComponent(btn_next, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(39, 39, 39)
-                                                .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(0, 972, Short.MAX_VALUE))
-                                        .addGroup(bodyLayout.createSequentialGroup()
-                                                .addGroup(bodyLayout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(text_pekerjaan,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(pekerjaan))
-                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addGroup(bodyLayout.createSequentialGroup()
-                                                .addGroup(bodyLayout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(text_tgl_lahir,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(text_nama, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(nama)
-                                                        .addComponent(tgl_lahir)
-                                                        .addComponent(text_ttinggal,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(ttinggal)
-                                                        .addComponent(warganegara)
-                                                        .addComponent(jUmur, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(umur)
-                                                        .addComponent(gender)
-                                                        .addGroup(bodyLayout.createSequentialGroup()
-                                                                .addComponent(lakilaki,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 98,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(
-                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(perempuan,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addGroup(bodyLayout.createSequentialGroup()
-                                                                .addComponent(wni,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 98,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(
-                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(wna,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 98,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addGroup(bodyLayout
-                                                                .createParallelGroup(
-                                                                        javax.swing.GroupLayout.Alignment.LEADING,
-                                                                        false)
-                                                                .addComponent(box_agama, 0,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        Short.MAX_VALUE)
-                                                                .addComponent(agama)))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addGroup(bodyLayout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addGroup(bodyLayout
-                                                                .createParallelGroup(
-                                                                        javax.swing.GroupLayout.Alignment.LEADING,
-                                                                        false)
-                                                                .addComponent(text_nokk,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        Short.MAX_VALUE)
-                                                                .addComponent(text_noktp,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        Short.MAX_VALUE)
-                                                                .addComponent(no_ktp)
-                                                                .addComponent(no_kk)
-                                                                .addComponent(keperluan))
-                                                        .addGroup(bodyLayout.createSequentialGroup()
-                                                                .addComponent(daritanggal,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(18, 18, 18)
-                                                                .addComponent(sd)
-                                                                .addGap(18, 18, 18)
-                                                                .addComponent(sampaitanggal,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addComponent(berlaku)
-                                                        .addComponent(jScrollPane1,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE, 500,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGroup(bodyLayout
-                                                                .createParallelGroup(
-                                                                        javax.swing.GroupLayout.Alignment.LEADING,
-                                                                        false)
-                                                                .addComponent(box_goldar, 0,
-                                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                        Short.MAX_VALUE)
-                                                                .addComponent(goldar)))
-                                                .addGap(60, 60, 60)))));
+            bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, 1291, Short.MAX_VALUE)
+            .addGroup(bodyLayout.createSequentialGroup()
+                .addGap(60, 60, 60)
+                .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(bodyLayout.createSequentialGroup()
+                        .addComponent(btn_next, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(972, 972, 972))
+                    .addGroup(bodyLayout.createSequentialGroup()
+                        .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(text_pekerjaan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pekerjaan))
+                        .addContainerGap())
+                    .addGroup(bodyLayout.createSequentialGroup()
+                        .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(text_tgl_lahir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(text_nama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nama)
+                            .addComponent(tgl_lahir)
+                            .addComponent(text_ttinggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ttinggal)
+                            .addComponent(warganegara)
+                            .addComponent(jUmur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(umur)
+                            .addComponent(gender)
+                            .addGroup(bodyLayout.createSequentialGroup()
+                                .addComponent(lakilaki, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(perempuan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(bodyLayout.createSequentialGroup()
+                                .addComponent(wni, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(wna, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(box_agama, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(agama)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(text_nokk, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(text_noktp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(no_ktp)
+                                .addComponent(no_kk)
+                                .addComponent(keperluan))
+                            .addGroup(bodyLayout.createSequentialGroup()
+                                .addComponent(daritanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(sd)
+                                .addGap(18, 18, 18)
+                                .addComponent(sampaitanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(berlaku)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(box_goldar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(goldar)))
+                        .addGap(60, 60, 60))))
+        );
         bodyLayout.setVerticalGroup(
-                bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(bodyLayout.createSequentialGroup()
-                                .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(bodyLayout.createSequentialGroup()
-                                                .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(41, 41, 41)
-                                                .addComponent(nama)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(text_nama, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(tgl_lahir)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(text_tgl_lahir, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(bodyLayout.createSequentialGroup()
-                                                .addComponent(no_ktp)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(text_noktp, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(no_kk)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(text_nokk, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(umur)
-                                        .addComponent(keperluan))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(bodyLayout.createSequentialGroup()
-                                                .addComponent(jUmur, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(warganegara)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(bodyLayout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(wni, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(wna, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(gender)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(bodyLayout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(lakilaki, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(perempuan, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 190,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(bodyLayout.createSequentialGroup()
-                                                .addComponent(goldar)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(box_goldar, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(bodyLayout.createSequentialGroup()
-                                                .addComponent(agama)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(box_agama, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(bodyLayout.createSequentialGroup()
-                                                .addComponent(berlaku)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(daritanggal, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(sd)
-                                        .addComponent(sampaitanggal, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(bodyLayout.createSequentialGroup()
-                                                .addComponent(ttinggal)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(text_ttinggal, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(pekerjaan)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(text_pekerjaan, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19,
-                                        Short.MAX_VALUE)
-                                .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(btn_next, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(30, 30, 30)));
+            bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(bodyLayout.createSequentialGroup()
+                .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(bodyLayout.createSequentialGroup()
+                        .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
+                        .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(nama)
+                            .addComponent(no_ktp))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(text_nama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tgl_lahir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(text_tgl_lahir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(bodyLayout.createSequentialGroup()
+                        .addComponent(text_noktp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(no_kk)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(text_nokk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(umur)
+                    .addComponent(keperluan))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(bodyLayout.createSequentialGroup()
+                        .addComponent(jUmur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(warganegara)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(wni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(wna, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(gender)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lakilaki, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(perempuan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(bodyLayout.createSequentialGroup()
+                        .addComponent(goldar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(box_goldar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(bodyLayout.createSequentialGroup()
+                        .addComponent(agama)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(box_agama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(bodyLayout.createSequentialGroup()
+                        .addComponent(berlaku)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(daritanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(sd)
+                    .addComponent(sampaitanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(bodyLayout.createSequentialGroup()
+                        .addComponent(ttinggal)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(text_ttinggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pekerjaan)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(text_pekerjaan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addGroup(bodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_next, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(79, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(body, javax.swing.GroupLayout.DEFAULT_SIZE, 1291, Short.MAX_VALUE));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(body, javax.swing.GroupLayout.DEFAULT_SIZE, 1291, Short.MAX_VALUE)
+        );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addComponent(body, javax.swing.GroupLayout.DEFAULT_SIZE, 786, Short.MAX_VALUE)
-                                .addGap(0, 0, Short.MAX_VALUE)));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(body, javax.swing.GroupLayout.DEFAULT_SIZE, 786, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -677,52 +580,52 @@ public class mailform extends javax.swing.JFrame {
         Logger.getLogger(mailform.class.getName()).log(Level.INFO, "Village Data: {0}", villageData);
         return villageData;
     }
-
-    private String replacePlaceholders(String content, Map<String, String> villageData) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String dariTanggal = daritanggal.getDate() != null ? sdf.format(daritanggal.getDate()) : "";
-        String sampaiTanggal = sampaitanggal.getDate() != null ? sdf.format(sampaitanggal.getDate()) : "";
-        
-        Map<String, String> mailData = MailData.getMap();
-        
-        System.out.println("nama : " + mailData.getOrDefault("nama", text_nama.getText() != null ? text_nama.getText() : ""));
-
-        return content.replace("[nama]", mailData.getOrDefault("nama", text_nama.getText() != null ? text_nama.getText() : ""))
-                .replace("[ttl]", mailData.getOrDefault("ttl", text_tgl_lahir.getText() != null ? text_tgl_lahir.getText() : ""))
-                .replace("[usia]", mailData.getOrDefault("umur", jUmur.getValue() != null ? jUmur.getValue().toString() : ""))
-                .replace("[warga_negara]", mailData.getOrDefault("warga_negara", wni.isSelected() ? "WNI" : "WNA"))
-                .replace("[agama]", mailData.getOrDefault("agama", box_agama.getSelectedItem() != null ? box_agama.getSelectedItem().toString() : ""))
-                .replace("[sex]", mailData.getOrDefault("sex", lakilaki.isSelected() ? "Laki-laki" : "Perempuan"))
-                .replace("[pekerjaan]", mailData.getOrDefault("pekerjaan", text_pekerjaan.getText() != null ? text_pekerjaan.getText() : ""))
-                .replace("[alamat]", mailData.getOrDefault("alamat", text_ttinggal.getText() != null ? text_ttinggal.getText() : ""))
-                .replace("[no_ktp]", mailData.getOrDefault("no_ktp", text_noktp.getText() != null ? text_noktp.getText() : ""))
-                .replace("[no_kk]", mailData.getOrDefault("no_kk", text_nokk.getText() != null ? text_nokk.getText() : ""))
-                .replace("[keperluan]", mailData.getOrDefault("keperlan", text_keperluan.getText() != null ? text_keperluan.getText() : ""))
-                .replace("[mulai_berlaku]", mailData.getOrDefault("mulai_berlaku", dariTanggal))
-                .replace("[tgl_akhir]", mailData.getOrDefault("tgl_akhir", sampaiTanggal))
-                .replace("[gol_darah]",
-                        mailData.getOrDefault("gol_darah", box_goldar.getSelectedItem() != null ? box_goldar.getSelectedItem().toString() : ""))
-                .replace("[nama_kab]", villageData.getOrDefault("nama_kab", ""))
-                .replace("[nama_kec]", villageData.getOrDefault("nama_kec", ""))
-                .replace("[nama_des]", villageData.getOrDefault("nama_des", ""))
-                .replace("[alamat_des]", villageData.getOrDefault("alamat_des", ""))
-                .replace("[kode_des]", villageData.getOrDefault("kode_des", ""));
-    }
-
-    private String loadRTFTemplate(Integer mail_type_id) {
-        try {
-            Connection conn = koneksi.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT mail_type FROM mail_type WHERE mail_type_id = ?");
-            stmt.setInt(1, mail_type_id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getString("mail_type");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(mailform.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
+//
+//    private String replacePlaceholders(String content, Map<String, String> villageData) {
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        String dariTanggal = daritanggal.getDate() != null ? sdf.format(daritanggal.getDate()) : "";
+//        String sampaiTanggal = sampaitanggal.getDate() != null ? sdf.format(sampaitanggal.getDate()) : "";
+//        
+//        Map<String, String> mailData = MailData.getMap();
+//        
+//        System.out.println("nama : " + mailData.getOrDefault("nama", text_nama.getText() != null ? text_nama.getText() : ""));
+//
+//        return content.replace("[nama]", mailData.getOrDefault("nama", text_nama.getText() != null ? text_nama.getText() : ""))
+//                .replace("[ttl]", mailData.getOrDefault("ttl", text_tgl_lahir.getText() != null ? text_tgl_lahir.getText() : ""))
+//                .replace("[usia]", mailData.getOrDefault("umur", jUmur.getValue() != null ? jUmur.getValue().toString() : ""))
+//                .replace("[warga_negara]", mailData.getOrDefault("warga_negara", wni.isSelected() ? "WNI" : "WNA"))
+//                .replace("[agama]", mailData.getOrDefault("agama", box_agama.getSelectedItem() != null ? box_agama.getSelectedItem().toString() : ""))
+//                .replace("[sex]", mailData.getOrDefault("sex", lakilaki.isSelected() ? "Laki-laki" : "Perempuan"))
+//                .replace("[pekerjaan]", mailData.getOrDefault("pekerjaan", text_pekerjaan.getText() != null ? text_pekerjaan.getText() : ""))
+//                .replace("[alamat]", mailData.getOrDefault("alamat", text_ttinggal.getText() != null ? text_ttinggal.getText() : ""))
+//                .replace("[no_ktp]", mailData.getOrDefault("no_ktp", text_noktp.getText() != null ? text_noktp.getText() : ""))
+//                .replace("[no_kk]", mailData.getOrDefault("no_kk", text_nokk.getText() != null ? text_nokk.getText() : ""))
+//                .replace("[keperluan]", mailData.getOrDefault("keperlan", text_keperluan.getText() != null ? text_keperluan.getText() : ""))
+//                .replace("[mulai_berlaku]", mailData.getOrDefault("mulai_berlaku", dariTanggal))
+//                .replace("[tgl_akhir]", mailData.getOrDefault("tgl_akhir", sampaiTanggal))
+//                .replace("[gol_darah]",
+//                        mailData.getOrDefault("gol_darah", box_goldar.getSelectedItem() != null ? box_goldar.getSelectedItem().toString() : ""))
+//                .replace("[nama_kab]", villageData.getOrDefault("nama_kab", ""))
+//                .replace("[nama_kec]", villageData.getOrDefault("nama_kec", ""))
+//                .replace("[nama_des]", villageData.getOrDefault("nama_des", ""))
+//                .replace("[alamat_des]", villageData.getOrDefault("alamat_des", ""))
+//                .replace("[kode_des]", villageData.getOrDefault("kode_des", ""));
+//    }
+//
+//    private String loadRTFTemplate(Integer mail_type_id) {
+//        try {
+//            Connection conn = koneksi.getConnection();
+//            PreparedStatement stmt = conn.prepareStatement("SELECT mail_type FROM mail_type WHERE mail_type_id = ?");
+//            stmt.setInt(1, mail_type_id);
+//            ResultSet rs = stmt.executeQuery();
+//            if (rs.next()) {
+//                return rs.getString("mail_type");
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(mailform.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+//    }
 
     private String generateNomorSurat(int mailTypeId) {
         int tahun = LocalDate.now().getYear();
@@ -737,20 +640,20 @@ public class mailform extends javax.swing.JFrame {
         File fileTtdSekdes = new File(ttdSekdesPath);
 
         try {
-            String rtfPath = loadRTFTemplate(mailTypeId);
-            if (rtfPath == null || rtfPath.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "RTF Template not found.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            BodyContentHandler handler = new BodyContentHandler();
-            new RTFParser().parse(new FileInputStream(rtfPath), handler, new org.apache.tika.metadata.Metadata(),
-                    new ParseContext());
+//            String rtfPath = loadRTFTemplate(mailTypeId);
+//            if (rtfPath == null || rtfPath.isEmpty()) {
+//                JOptionPane.showMessageDialog(null, "RTF Template not found.", "Error", JOptionPane.ERROR_MESSAGE);
+//                return;
+//            }
+//            BodyContentHandler handler = new BodyContentHandler();
+//            new RTFParser().parse(new FileInputStream(rtfPath), handler, new org.apache.tika.metadata.Metadata(),
+//                    new ParseContext());
 
             // Ambil data desa
             Map<String, String> villageData = getVillageData();
 
             // Ambil data pemegang surat dari placeholders
-            String pemegangSurat = replacePlaceholders("[nama]", villageData);
+            String pemegangSurat = text_nama.getText() != null ? text_nama.getText() : "";
 
             // Ambil mail_id dan type_name
             String query = "SELECT mail_id, type_name FROM mail_content mc "
@@ -927,7 +830,7 @@ public class mailform extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "File PDF berhasil disimpan di: " + pdfPath, "Sukses",
                         JOptionPane.INFORMATION_MESSAGE);
             }
-        } catch (SQLException | IOException | SAXException | TikaException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(mailform.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
