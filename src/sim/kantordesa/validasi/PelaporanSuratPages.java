@@ -2,12 +2,10 @@ package sim.kantordesa.validasi;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
@@ -16,30 +14,20 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.swing.AbstractCellEditor;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import sim.kantordesa.config.koneksi;
-import java.awt.HeadlessException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 //import javax.swing.text.Document;
 import org.jfree.chart.ChartFactory;
@@ -260,145 +248,6 @@ public class PelaporanSuratPages extends javax.swing.JFrame {
             document.add(pdfTable);
         } catch (DocumentException e) {
             System.out.println("Error saat menambahkan JTable ke PDF: " + e.getMessage());
-        }
-    }
-
-    class ButtonPanelRenderer extends ButtonPanel implements TableCellRenderer {
-
-        public ButtonPanelRenderer() {
-            setBackground(Color.white);
-            setOpaque(true);
-        }
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-                int row, int column) {
-            boolean statusValidation = "Accept".equals(table.getValueAt(row, 5));
-            boolean statusLead = "Accept".equals(table.getValueAt(row, 6));
-            Object mailComment = table.getValueAt(row, 7);
-            boolean hasMailComment = (mailComment != null && !mailComment.toString().isEmpty() && statusValidation
-                    && statusLead);
-
-            // boolean hasMailComment = ((table.getValueAt(row, 7) != null) &&
-            // (table.getValueAt(row, 5) != false) && (table.getValueAt(row, 6) != false);
-            // // Assuming mail_comment is at index 7
-            downloadButton.setVisible(hasMailComment);
-            if (isSelected) {
-                setBackground(table.getSelectionBackground());
-                setForeground(table.getSelectionForeground());
-            } else {
-                setBackground(table.getBackground());
-                setForeground(table.getForeground());
-            }
-            return this;
-        }
-
-    }
-
-    class ButtonPanelEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
-
-        ButtonPanel panel;
-        JTable table;
-
-        // public ButtonPanelEditor(JButton editButton, JButton deleteButton, JButton
-        // downloadButton) {
-        public ButtonPanelEditor(JTable table) {
-            this.table = table;
-            panel = new ButtonPanel();
-
-            panel.editButton.addActionListener(e -> handleEditButtonAction());
-            panel.deleteButton.addActionListener(e -> handleDeleteButtonAction());
-            panel.downloadButton.addActionListener(e -> handleDownloadButtonAction());
-
-        }
-
-        private void handleEditButtonAction() {
-            System.out.println("Edit Button diklik");
-        }
-
-        private void handleDeleteButtonAction() {
-            System.out.println("Delete Button diklik");
-            int row = table.getSelectedRow();
-            if (row == -1) {
-                JOptionPane.showMessageDialog(table, "Silahkan pilih baris terlebih dahulu");
-                return;
-            }
-
-            String mailId = (String) table.getValueAt(row, 8);
-
-            int confirm = JOptionPane.showConfirmDialog(
-                    null,
-                    "Apakah anda yakin ingin menghapus pengajuan surat ini?",
-                    "Konfirmasi Hapus",
-                    JOptionPane.YES_NO_OPTION);
-
-            if (confirm == JOptionPane.YES_OPTION) {
-                String query = "DELETE FROM mail_content WHERE mail_id = ?";
-                try {
-                    boolean hasil = koneksi.delete(query, mailId);
-                    if (hasil) {
-                        setTableAction();
-                        JOptionPane.showMessageDialog(
-                                null,
-                                "Data Pengajuan Berhasil Dihapus");
-                    }
-                } catch (HeadlessException e) {
-                    System.out.println("Error, " + e);
-                }
-            }
-        }
-
-        private void handleDownloadButtonAction() {
-            System.out.println("Download Button diklik");
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            return "";
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
-                int column) {
-            boolean statusValidation = "Accept".equals(table.getValueAt(row, 5));
-            boolean statusLead = "Accept".equals(table.getValueAt(row, 6));
-            Object mailComment = table.getValueAt(row, 7);
-
-            boolean hasMailComment = (mailComment != null && !mailComment.toString().isEmpty() && statusValidation
-                    && statusLead);
-            panel.downloadButton.setVisible(hasMailComment);
-            return panel;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            throw new UnsupportedOperationException("Not supported yet."); // Generated from
-                                                                           // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-        }
-
-        @Override
-        protected void fireEditingStopped() {
-            super.fireEditingStopped();
-        }
-    }
-
-    static class ButtonPanel extends javax.swing.JPanel {
-
-        public javax.swing.JButton editButton;
-        public javax.swing.JButton deleteButton;
-        public javax.swing.JButton downloadButton;
-
-        public ButtonPanel() {
-            FlowLayout layout = new FlowLayout(FlowLayout.CENTER);
-            setLayout(layout);
-            editButton = new JButton("Edit");
-            deleteButton = new JButton("Delete");
-            downloadButton = new JButton("Download");
-
-            add(editButton);
-            add(deleteButton);
-            add(downloadButton);
-
         }
     }
 
@@ -648,61 +497,9 @@ public class PelaporanSuratPages extends javax.swing.JFrame {
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat membuat laporan: " + e.getMessage());
-        } // TODO add your handling code here:
-    }// GEN-LAST:event_UnduhLaporanActionPerformed
-    // private void initComponents() {
-    // chartContainer = new javax.swing.JPanel();
-    // setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-    // setTitle("Line Chart");
-    //
-    // chartContainer.setLayout(new java.awt.BorderLayout());
-    // javax.swing.GroupLayout layout = new
-    // javax.swing.GroupLayout(getContentPane());
-    // getContentPane().setLayout(layout);
-    // layout.setHorizontalGroup(
-    // layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-    // .addComponent(chartContainer, javax.swing.GroupLayout.DEFAULT_SIZE,
-    // javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-    // );
-    // layout.setVerticalGroup(
-    // layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-    // .addComponent(chartContainer, javax.swing.GroupLayout.DEFAULT_SIZE,
-    // javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-    // );
-    //
-    // pack();
-    // }
-
-    // public static void main(String args[]) {
-    // java.awt.EventQueue.invokeLater(() -> {
-    // new PelaporanSuratPages().setVisible(true);
-    // });
-    // }
-    //
+        }
+    }
     private javax.swing.JPanel chartContainer;
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-        ValidationPages.main(null);
-        dispose();
-    }// GEN-LAST:event_jButton6ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton2ActionPerformed
-
     /**
      * @param args the command line arguments
      */

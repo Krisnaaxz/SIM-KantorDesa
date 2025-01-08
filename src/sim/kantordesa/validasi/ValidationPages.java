@@ -86,15 +86,15 @@ public class ValidationPages extends javax.swing.JFrame {
                 tableContent[2] = r.getString("applicant_name");
                 tableContent[3] = r.getString("created_at");
                 tableContent[4] = r.getString("type_name");
-                tableContent[5] = r.getBoolean("status_validation") == false ? "Reject" : "Accept";
-                tableContent[6] = r.getBoolean("status_lead") == false ? "Reject" : "Accept";
+                tableContent[5] = r.getInt("status_validation") == 0 ? "Reject" : r.getInt("status_validation") == 1 ? "Accept" : "Baru";
+                tableContent[6] = r.getInt("status_lead") == 0 ? "Reject" : r.getInt("status_lead") == 1 ? "Accept" : "Baru";
                 tableContent[7] = "Periksa";
                 tableContent[8] = r.getString("mail_comment");
                 tableContent[9] = r.getString("mail_id");
                 
-                if (currentUser.getIdRole() == 1 && (r.getBoolean("status_validation") == true && r.getBoolean("status_lead") == false)) {
+                if (currentUser.getIdRole() == 1 && (r.getInt("status_validation") == 1 && r.getInt("status_lead") == 2)) {
                     model.addRow(tableContent);
-                } else if (currentUser.getIdRole() == 2 && (r.getBoolean("status_validation") == false && r.getBoolean("status_lead") == false)) {
+                } else if (currentUser.getIdRole() == 2 && (r.getInt("status_validation") == 2 && r.getInt("status_lead") == 2)) {
                     model.addRow(tableContent);
                 } else if (currentUser.getIdRole() == 0) {
                     model.addRow(tableContent);
@@ -243,26 +243,6 @@ public class ValidationPages extends javax.swing.JFrame {
         // TODO add your handling code here:
         Dashboard.switchPanel("History Surat Keluar");
     }// GEN-LAST:event_historybtnActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
