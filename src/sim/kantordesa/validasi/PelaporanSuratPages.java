@@ -38,9 +38,17 @@ import java.awt.HeadlessException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 //import javax.swing.text.Document;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -53,7 +61,7 @@ import org.jfree.data.general.DefaultPieDataset;
 
 /**
  *
- * @author krisna 
+ * @author krisna
  */
 public class PelaporanSuratPages extends javax.swing.JFrame { //kelas membuat antarmuka GUI
 
@@ -62,8 +70,8 @@ public class PelaporanSuratPages extends javax.swing.JFrame { //kelas membuat an
 
     public PelaporanSuratPages() { //konstraktor
         initComponents(); //GUI
-        showLineChart(); //line chart
-        createPieChart(); //pie chart
+//        showLineChart(dataset); //line chart
+        
 
         model = new javax.swing.table.DefaultTableModel() {
             @Override
@@ -76,124 +84,220 @@ public class PelaporanSuratPages extends javax.swing.JFrame { //kelas membuat an
 
         model.addColumn("No."); //menambahkan kolom baru
         model.addColumn("Tipe Surat");
-        model.addColumn("Total Pengajuan");
+        model.addColumn("Semua");
+        model.addColumn("Diterima");
+        model.addColumn("Diproses");
+        model.addColumn("Ditolak");
 
-        setTableAction();
+//        TableColumnModel columnModel = tbHistory.getColumnModel(); //mengambil model kolom dari jtabel1
+//        TableColumn statusKades = columnModel.getColumn(tbHistory.convertColumnIndexToView(6)); //mengambil data dari kolom dengan index ke 8 (mail comment)
+//        TableColumn statusSekdes = columnModel.getColumn(tbHistory.convertColumnIndexToView(7));
+//        
+//        columnModel.removeColumn(statusKades); //tidak ditampilkan untuk pengguna di hlmn validasi
+//        columnModel.removeColumn(statusSekdes); //tidak ditampilkan untuk pengguna di hlmn validasi
+        // Tambahkan dropdown untuk filter
+//        cbFilterSurat = new JComboBox<>(new String[]{"Semua", "Diproses", "Ditolak", "Selesai"});
+//        cbFilterSurat.addActionListener(e -> filter(cbFilterSurat.getSelectedItem().toString()));
+        setTableAction(); //memanggil method
         adjustColumnWidths(tbHistory);
+        
+        createPieChart("Semua"); //pie chart
+        showLineChart("Semua");
 
     }
 
-    private JFreeChart showLineChart() {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+    private JFreeChart showLineChart(String query) {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset(); //membuat dataset untuk line chart
 
         try {
-            Statement s = c.createStatement();
-            String sql = "SELECT DATE_FORMAT(created_at, '%Y-%m') AS bulan, COUNT(*) AS jumlah_surat FROM mail_content GROUP BY DATE_FORMAT(created_at, '%Y-%m') ORDER BY bulan;";
-            ResultSet r = s.executeQuery(sql);
+            Statement s = c.createStatement(); //membuat objek statement untuk menjalankan oerintah di database dengan koneksi c
+            String sql = "SELECT mail_id, DATE_FORMAT(created_at, '%Y-%m') AS bulan, c.status_validation, c.status_lead, COUNT(*) AS jumlah_surat FROM mail_content AS c";
+            
+            String sqlDiproses = sql + " WHERE (c.status_validation = 1 AND c.status_lead = 2) OR (c.status_validation = 2 AND c.status_lead = 2) GROUP BY DATE_FORMAT(created_at, '%Y-%m') ORDER BY bulan ";
+            String sqlDitolak = sql + " WHERE (c.status_validation = 0 AND c.status_lead = 0) "
+                    + "OR (c.status_validation = 0 AND c.status_lead = 2) "
+                    + "OR (c.status_validation = 1 AND c.status_lead = 0) "
+                    + "GROUP BY DATE_FORMAT(created_at, '%Y-%m') ORDER BY bulan;";
+            String sqlDiterima = sql + " WHERE c.status_validation = 1 AND c.status_lead = 1 GROUP BY DATE_FORMAT(created_at, '%Y-%m') ORDER BY bulan; ";
+            
+            String selectedSql;
 
-            while (r.next()) {
-                String bulan = r.getString("bulan");
-                int jumlahSurat = r.getInt("jumlah_surat");
-                dataset.addValue(jumlahSurat, "Jumlah Surat", bulan);
+            if ("Diproses".equals(query)) {
+                selectedSql = sqlDiproses;
+            } else if ("Ditolak".equals(query)) {
+                selectedSql = sqlDitolak;
+            } else if ("Diterima".equals(query)) {
+                selectedSql = sqlDiterima;
+            } else {
+                selectedSql = sql + " GROUP BY DATE_FORMAT(created_at, '%Y-%m') ORDER BY bulan;";
+            }
+//       
+//            if ("Diproses".equals(query)) {
+//                sql += " WHERE (c.status_validation = 1 AND c.status_lead = 2) OR (c.status_validation = 2 AND c.status_lead = 2)";
+//            } else if ("Ditolak".equals(query)) {
+//                sql += " WHERE (c.status_validation = 0 AND c.status_lead = 0) "
+//                        + "OR (c.status_validation = 0 AND c.status_lead = 2) "
+//                        + "OR (c.status_validation = 1 AND c.status_lead = 0) ";
+//            } else if ("Diterima".equals(query)) {
+//                sql += " WHERE c.status_validation = 1 AND c.status_lead = 1 ";
+//            }
+            ResultSet r = s.executeQuery(selectedSql); //menjalankan query dan menyimpannya di resultset
+
+            while (r.next()) { //mengambil hasil query sql per baris 
+                String bulan = r.getString("bulan"); //mengambil data bulan
+                int jumlahSurat = r.getInt("jumlah_surat"); //mengambil data jumlah surat
+                System.out.println(jumlahSurat + " " + bulan + " " + r.getString("mail_id") );
+                dataset.addValue(jumlahSurat, "Jumlah Surat", bulan); //nilai, label bari, label kolom
             }
 
             r.close();
             s.close();
         } catch (SQLException e) {
-            System.out.println("Error, " + e);
+            System.out.println("Error, " + e); //menampilkan pesan eror
         }
-        
-        System.out.println("Dataset size: " + dataset.getRowCount());
 
-
-        JFreeChart lineChart = ChartFactory.createLineChart(
-                "Surat Masuk per Bulan",
-                "Bulan",
-                "Jumlah Surat",
-                dataset
+        System.out.println("Dataset size: " + dataset.getRowCount()); //menampilkan jumlah baris data yang ada di dataset
+        JFreeChart lineChart = ChartFactory.createLineChart( //membuat line chart
+                "Surat Masuk per Bulan", //judul
+                "Bulan", //judul sumbu x
+                "Jumlah Surat", //judul sumbu y
+                dataset //dataset yang ditampilkan pada line chart
         );
-        
 
-            CategoryPlot plot = lineChart.getCategoryPlot();
-            NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-            rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        CategoryPlot plot = lineChart.getCategoryPlot(); //mengatur tampilan grafik
+        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis(); //mendapatkan sumbu Y 
+        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits()); //mengubah sumbu Y menjadi integer atau bilangan bulat
 
-        ChartPanel chartPanel = new ChartPanel(lineChart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(800,600));
-        chartPanel1.removeAll();
-        chartPanel1.setLayout(new BorderLayout());
-        chartPanel1.add(chartPanel, BorderLayout.CENTER);
-        chartPanel1.revalidate();
-        chartPanel1.repaint();
-        
-        return lineChart;
+        ChartPanel chartPanel = new ChartPanel(lineChart); //membuat gui panel tempat line chart akan ditampilkan
+        chartPanel.setPreferredSize(new java.awt.Dimension(800, 600)); //dimensi panel 
+        chartPanel1.removeAll(); //menghapus semua komponen yang ada pada panel tempat line chart akan ditambahkan
+        chartPanel1.setLayout(new BorderLayout()); //mengaturnya menjadi border layout
+        chartPanel1.add(chartPanel, BorderLayout.CENTER); //menambahkan chart panel ke chart panel 1 dengan border layout centered
+        chartPanel1.revalidate(); //memastikan tata letak diperbarui 
+        chartPanel1.repaint(); //mengambar ulang agar yg terbaru
+
+        return lineChart; //mengembalikan line chart
     }
-    
-    
-    private JFreeChart createPieChart() {
-        DefaultPieDataset dataset = new DefaultPieDataset();
+
+    private JFreeChart createPieChart(String query) {
+        DefaultPieDataset dataset = new DefaultPieDataset(); //membat dataset untuk pie chart
+//        ResultSet r;
+        Integer rowCount = tbHistory.getRowCount();
+        TableModel datamodel = tbHistory.getModel();
 
         // Mengambil data dari database
-        try {
-            Statement s = c.createStatement();
-            String sql = "SELECT t.type_name, COUNT(*) AS jumlah_surat FROM mail_content c JOIN mail_type t ON c.mail_type_id = t.mail_type_id GROUP BY t.type_name;";
-            ResultSet r = s.executeQuery(sql);
+//        try {
+//            Statement s = c.createStatement();
+//            String sql = "SELECT t.type_name, COUNT(*) AS jumlah_surat FROM mail_content c JOIN mail_type t ON c.mail_type_id = t.mail_type_id GROUP BY t.type_name";
+//
+//            String sqlDiproses = sql + " WHERE (c.status_validation = 1 AND c.status_lead = 2) OR (c.status_validation = 2 AND c.status_lead = 2)";
+//            String sqlDitolak = sql + " WHERE (c.status_validation = 0 AND c.status_lead = 0) "
+//                    + "OR (c.status_validation = 0 AND c.status_lead = 2) "
+//                    + "OR (c.status_validation = 1 AND c.status_lead = 0) ";
+//            String sqlDiterima = sql + " WHERE c.status_validation = 1 AND c.status_lead = 1 ";
+            // Menyesuaikan query berdasarkan filter
+//            if ("Diproses".equals(query)) {
+//                sql += " WHERE (c.status_validation = 1 AND c.status_lead = 2) OR (c.status_validation = 2 AND c.status_lead = 2)";
+//            } else if ("Ditolak".equals(query)) {
+//                sql += " WHERE (c.status_validation = 0 AND c.status_lead = 0) "
+//                        + "OR (c.status_validation = 0 AND c.status_lead = 2) "
+//                        + "OR (c.status_validation = 1 AND c.status_lead = 0) ";
+//            } else if ("Diterima".equals(query)) {
+//                sql += " WHERE c.status_validation = 1 AND c.status_lead = 1 ";
+//            }
 
-            while (r.next()) {
-                String category = r.getString("type_name");
-                int jumlahSurat = r.getInt("jumlah_surat");
-                dataset.setValue(category, jumlahSurat);
+            if ("Diproses".equals(query)) {
+                dataset.clear();
+//                r=s.executeQuery(sqlDiproses + "GROUP BY t.type_name");
+                for (int i = 0; i < rowCount; i++) {
+                    String category = (String) datamodel.getValueAt(i, 1);
+                    dataset.setValue(category, (Integer) datamodel.getValueAt(i, 4));
+                }
+            } else if ("Ditolak".equals(query)) {
+                dataset.clear();
+//                r=s.executeQuery(sqlDitolak + "GROUP BY t.type_name");
+                for (int i = 0; i < rowCount; i++) {
+                    String category = (String) datamodel.getValueAt(i, 1);
+                    dataset.setValue(category, (Integer) datamodel.getValueAt(i, 5));
+                }
+            } else if ("Diterima".equals(query)) {
+                dataset.clear();
+//                r=s.executeQuery(sqlDiterima + "GROUP BY t.type_name");
+                for (int i = 0; i < rowCount; i++) {
+                    String category = (String) datamodel.getValueAt(i, 1);
+                    dataset.setValue(category, (Integer) datamodel.getValueAt(i, 3));
+                }
+            } else {
+                dataset.clear();
+//                r=s.executeQuery(sql + ";");
+                for (int i=0; i < rowCount; i++) {
+                   String category = (String) datamodel.getValueAt(i, 1);
+                   dataset.setValue(category, (Integer) datamodel.getValueAt(i, 2));
+                }
             }
+
+//            sql += "GROUP BY t.type_name";
+//            ResultSet rSemua = s.executeQuery(sql);
+//            while (r.next()) {
+//                String category = r.getString("type_name"); //mengambil tipe surat
+//                int jumlahSurat = rSemua.getInt("jumlah_surat"); //mengambil jumlah surat 
+//                dataset.setValue(category, jumlahSurat); //menambahkan kategori dan jumlah surat ke dataset
+//            }
             System.out.println(dataset.getValue(0));
-            r.close();
-            s.close();
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        
+//            r.close();
+//            s.close();
+//        } catch (SQLException e) {
+//            System.out.println("Error: " + e.getMessage());
+//        }
+
         System.out.println(dataset.getItemCount());
 
         // Membuat Pie Chart
         JFreeChart pieChart = ChartFactory.createPieChart(
                 "Jumlah Surat Masuk per Kategori", // Judul chart
-                dataset,                          // Data untuk chart
-                true,                             // Legend
-                true,                             // Tooltip
-                false                             // URLs
+                dataset, // Data untuk chart
+                true, // Legend
+                true, // Tooltip
+                false // URLs
         );
-        
 
         // Membungkus chart dalam ChartPanel
         ChartPanel chartPanel = new ChartPanel(pieChart);
         chartPanel2.setPreferredSize(new java.awt.Dimension(400, 400));
-        chartPanel2.removeAll();
         chartPanel2.setLayout(new BorderLayout());
+        chartPanel2.removeAll();
         chartPanel2.add(chartPanel, BorderLayout.CENTER);
         chartPanel2.revalidate();
         chartPanel2.repaint();
-        
+
         return pieChart;
     }
-    
-    
+
     public void setTableAction() {
         model.getDataVector().removeAllElements();
         model.fireTableDataChanged();
 
         try {
             Statement s = c.createStatement();
-            String sql = "SELECT mail_type.type_name, COUNT(mail_content.mail_id) AS total_pengajuan " +
-                     "FROM mail_content " +
-                     "INNER JOIN mail_type ON mail_content.mail_type_id = mail_type.mail_type_id " +
-                     "GROUP BY mail_type.type_name " +
-                     "ORDER BY mail_type.type_name ASC;";
+            String sql = "SELECT mt.type_name, "
+                    + "COUNT(mc.mail_id) AS Semua, "
+                    + "SUM(CASE WHEN mc.status_validation = 1 AND mc.status_lead = 1 THEN 1 ELSE 0 END) AS Diterima, "
+                    + "SUM(CASE WHEN mc.status_validation = 1 AND mc.status_lead = 2 OR mc.status_validation = 2 AND mc.status_lead = 2 THEN 1 ELSE 0 END) AS Diproses, "
+                    + "SUM(CASE WHEN mc.status_validation = 0 AND mc.status_lead = 0 OR mc.status_validation = 0 AND mc.status_lead = 2 OR mc.status_validation = 1 AND mc.status_lead = 0 THEN 1 ELSE 0 END) AS Ditolak "
+                    + "FROM mail_content mc "
+                    + "INNER JOIN mail_type mt ON mc.mail_type_id = mt.mail_type_id "
+                    + "GROUP BY mt.type_name "
+                    + "ORDER BY mt.type_name ASC;";
             ResultSet r = s.executeQuery(sql);
             int i = 1;
             while (r.next()) {
                 model.addRow(new Object[]{
                     i++,
                     r.getString("type_name"),
-                    r.getInt("total_pengajuan")
+                    r.getInt("Semua"),
+                    r.getInt("Diterima"),
+                    r.getInt("Diproses"),
+                    r.getInt("Ditolak")
                 });
 
             }
@@ -204,9 +308,11 @@ public class PelaporanSuratPages extends javax.swing.JFrame { //kelas membuat an
         }
         tbHistory.getColumnModel().getColumn(0).setHeaderValue("No");
         tbHistory.getColumnModel().getColumn(1).setHeaderValue("Tipe Surat");
-        tbHistory.getColumnModel().getColumn(2).setHeaderValue("Total Pengajuan");
-        
-        
+        tbHistory.getColumnModel().getColumn(2).setHeaderValue("Semua");
+        tbHistory.getColumnModel().getColumn(3).setHeaderValue("Diterima");
+        tbHistory.getColumnModel().getColumn(4).setHeaderValue("Diproses");
+        tbHistory.getColumnModel().getColumn(5).setHeaderValue("Ditolak");
+
     }
 
     public static void adjustColumnWidths(JTable table) {
@@ -233,169 +339,87 @@ public class PelaporanSuratPages extends javax.swing.JFrame { //kelas membuat an
             maxWidth = Math.max(comp.getPreferredSize().width, maxWidth);
         }
 
-        return maxWidth + 10; 
+        return maxWidth + 10;
     }
-    
+
+    // Metode filter
+    private void filter(String query) {
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(model);
+        tbHistory.setRowSorter(tr);
+
+        RowFilter<DefaultTableModel, Object> filter = null;
+//        List<String> filteredData = new ArrayList<>(); // Menyimpan data yang difilter untuk chart
+
+        if ("Diproses".equals(query)) {
+            filter = new RowFilter<>() {
+                @Override
+                public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
+                    String diproses = (String) entry.getValue(4);
+                    return "Diproses".equalsIgnoreCase(diproses);
+                }
+            };
+        } else if ("Ditolak".equals(query)) {
+            filter = new RowFilter<>() {
+                @Override
+                public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
+                    String ditolak = (String) entry.getValue(5);
+                    return "Ditolak".equalsIgnoreCase(ditolak);
+                }
+            };
+        } else if ("Diterima".equals(query)) {
+            filter = new RowFilter<>() {
+                @Override
+                public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
+                    String diterima = (String) entry.getValue(3);
+                    return "Diterima".equalsIgnoreCase(diterima);
+                }
+            };
+        } else if ("Semua".equals(query)) {
+            tr.setRowFilter(null); // Tidak ada filter
+            createPieChart("Semua"); // Perbarui pie chart dengan semua data
+            return;
+        }
+        if (filter != null) {
+            tr.setRowFilter(filter);
+            createPieChart(query); // Perbarui pie chart sesuai filter
+        }
+    }
+
+//    private void updateCharts(List<String> filteredData) {
+//        if (filteredData == null) {
+//            filteredData = new ArrayList<>();
+//            for (int i = 0; i < model.getRowCount(); i++) {
+//                filteredData.add((String) model.getValueAt(i, 1));
+//            }
+//        }
+//        
+//        
+//    }
     public void addJTableToPDF(JTable table, Document document) {
-    try {
-        // Membuat tabel PDF dengan jumlah kolom sesuai JTable
-        PdfPTable pdfTable = new PdfPTable(table.getColumnCount());
-        pdfTable.setWidthPercentage(100);
+        try {
+            // Membuat tabel PDF dengan jumlah kolom sesuai JTable
+            PdfPTable pdfTable = new PdfPTable(table.getColumnCount());
+            pdfTable.setWidthPercentage(100);
 
-        // Menambahkan header dari JTable
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            PdfPCell cell = new PdfPCell(new Phrase(table.getColumnName(i)));
-            cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
-            pdfTable.addCell(cell);
-        }
-
-        // Menambahkan isi tabel dari JTable
-        for (int row = 0; row < table.getRowCount(); row++) {
-            for (int col = 0; col < table.getColumnCount(); col++) {
-                Object value = table.getValueAt(row, col);
-                pdfTable.addCell(value != null ? value.toString() : "");
-            }
-        }
-
-        // Menambahkan tabel ke dokumen PDF
-        document.add(pdfTable);
-    } catch (DocumentException e) {
-        System.out.println("Error saat menambahkan JTable ke PDF: " + e.getMessage());
-    }
- }
-    
-    
-    class ButtonPanelRenderer extends ButtonPanel implements TableCellRenderer {
-
-        public ButtonPanelRenderer() {
-            setBackground(Color.white);
-            setOpaque(true);
-        }
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-                int row, int column) {
-            boolean statusValidation = "Accept".equals(table.getValueAt(row, 5));
-            boolean statusLead = "Accept".equals(table.getValueAt(row, 6));
-            Object mailComment = table.getValueAt(row, 7);
-            boolean hasMailComment = (mailComment != null && !mailComment.toString().isEmpty() && statusValidation && statusLead);
-
-//              boolean hasMailComment = ((table.getValueAt(row, 7) != null) && (table.getValueAt(row, 5) != false) && (table.getValueAt(row, 6) != false); // Assuming mail_comment is at index 7
-            downloadButton.setVisible(hasMailComment);
-            if (isSelected) {
-                setBackground(table.getSelectionBackground());
-                setForeground(table.getSelectionForeground());
-            } else {
-                setBackground(table.getBackground());
-                setForeground(table.getForeground());
-            }
-            return this;
-        }
-
-    }
-
-    class ButtonPanelEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
-
-        ButtonPanel panel;
-        JTable table;
-
-//        public ButtonPanelEditor(JButton editButton, JButton deleteButton, JButton downloadButton) {
-        public ButtonPanelEditor(JTable table) {
-            this.table = table;
-            panel = new ButtonPanel();
-
-            panel.editButton.addActionListener(e -> handleEditButtonAction());
-            panel.deleteButton.addActionListener(e -> handleDeleteButtonAction());
-            panel.downloadButton.addActionListener(e -> handleDownloadButtonAction());
-
-        }
-
-        private void handleEditButtonAction() {
-            System.out.println("Edit Button diklik");
-        }
-
-        private void handleDeleteButtonAction() {
-            System.out.println("Delete Button diklik");
-            int row = table.getSelectedRow();
-            if (row == -1) {
-                JOptionPane.showMessageDialog(table, "Silahkan pilih baris terlebih dahulu");
-                return;
+            // Menambahkan header dari JTable
+            for (int i = 0; i < table.getColumnCount(); i++) {
+                PdfPCell cell = new PdfPCell(new Phrase(table.getColumnName(i)));
+                cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                pdfTable.addCell(cell);
             }
 
-            String mailId = (String) table.getValueAt(row, 8);
-
-            int confirm = JOptionPane.showConfirmDialog(
-                    null,
-                    "Apakah anda yakin ingin menghapus pengajuan surat ini?",
-                    "Konfirmasi Hapus",
-                    JOptionPane.YES_NO_OPTION
-            );
-
-            if (confirm == JOptionPane.YES_OPTION) {
-                String query = "DELETE FROM mail_content WHERE mail_id = ?";
-                try {
-                    boolean hasil = koneksi.delete(query, mailId);
-                    if (hasil) {
-                        setTableAction();
-                        JOptionPane.showMessageDialog(
-                                null,
-                                "Data Pengajuan Berhasil Dihapus");
-                    }
-                } catch (HeadlessException e) {
-                    System.out.println("Error, " + e);
+            // Menambahkan isi tabel dari JTable
+            for (int row = 0; row < table.getRowCount(); row++) {
+                for (int col = 0; col < table.getColumnCount(); col++) {
+                    Object value = table.getValueAt(row, col);
+                    pdfTable.addCell(value != null ? value.toString() : "");
                 }
             }
-        }
 
-        private void handleDownloadButtonAction() {
-            System.out.println("Download Button diklik");
-        }
-        
-        @Override
-        public Object getCellEditorValue() {
-            return "";
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
-                int column) {
-            boolean statusValidation = "Accept".equals(table.getValueAt(row, 5));
-            boolean statusLead = "Accept".equals(table.getValueAt(row, 6));
-            Object mailComment = table.getValueAt(row, 7);
-
-            boolean hasMailComment = (mailComment != null && !mailComment.toString().isEmpty() && statusValidation && statusLead);
-            panel.downloadButton.setVisible(hasMailComment);
-            return panel;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-        }
-
-        @Override
-        protected void fireEditingStopped() {
-            super.fireEditingStopped();
-        }
-    }
-
-    static class ButtonPanel extends javax.swing.JPanel {
-
-        public javax.swing.JButton editButton;
-        public javax.swing.JButton deleteButton;
-        public javax.swing.JButton downloadButton;
-
-        public ButtonPanel() {
-            FlowLayout layout = new FlowLayout(FlowLayout.CENTER);
-            setLayout(layout);
-            editButton = new JButton("Edit");
-            deleteButton = new JButton("Delete");
-            downloadButton = new JButton("Download");
-
-            add(editButton);
-            add(deleteButton);
-            add(downloadButton);
-
+            // Menambahkan tabel ke dokumen PDF
+            document.add(pdfTable);
+        } catch (DocumentException e) {
+            System.out.println("Error saat menambahkan JTable ke PDF: " + e.getMessage());
         }
     }
 
@@ -403,15 +427,15 @@ public class PelaporanSuratPages extends javax.swing.JFrame { //kelas membuat an
         // TODO add your handling code here:
         setTableAction();
     }
-    
+
     private void exportChartAsImage(JFreeChart chart, File file) {
-    try {
-        ChartUtilities.saveChartAsPNG(file, chart, 800, 600);
-    } catch (IOException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat menyimpan grafik: " + e.getMessage());
+        try {
+            ChartUtilities.saveChartAsPNG(file, chart, 800, 600);
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat menyimpan grafik: " + e.getMessage());
+        }
     }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -431,6 +455,8 @@ public class PelaporanSuratPages extends javax.swing.JFrame { //kelas membuat an
         chartPanel1 = new javax.swing.JPanel();
         chartPanel2 = new javax.swing.JPanel();
         UnduhLaporan = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        filterBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1291, 634));
@@ -524,6 +550,23 @@ public class PelaporanSuratPages extends javax.swing.JFrame { //kelas membuat an
             }
         });
 
+        jLabel1.setText("Filter : ");
+
+        filterBox.setBackground(new java.awt.Color(19, 128, 97));
+        filterBox.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        filterBox.setForeground(new java.awt.Color(255, 255, 255));
+        filterBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Semua", "Diproses", "Ditolak", "Diterima" }));
+        filterBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                filterBoxItemStateChanged(evt);
+            }
+        });
+        filterBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelTbLayout = new javax.swing.GroupLayout(panelTb);
         panelTb.setLayout(panelTbLayout);
         panelTbLayout.setHorizontalGroup(
@@ -534,6 +577,10 @@ public class PelaporanSuratPages extends javax.swing.JFrame { //kelas membuat an
                     .addGroup(panelTbLayout.createSequentialGroup()
                         .addComponent(labelHistory)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(filterBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)
                         .addComponent(UnduhLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -541,7 +588,7 @@ public class PelaporanSuratPages extends javax.swing.JFrame { //kelas membuat an
                     .addGroup(panelTbLayout.createSequentialGroup()
                         .addGap(15, 15, 15)
                         .addComponent(chartPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 523, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 174, Short.MAX_VALUE)
                         .addComponent(chartPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(36, 36, 36))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTbLayout.createSequentialGroup()
@@ -556,7 +603,9 @@ public class PelaporanSuratPages extends javax.swing.JFrame { //kelas membuat an
                 .addGroup(panelTbLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelHistory)
-                    .addComponent(UnduhLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(UnduhLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(filterBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(52, 52, 52)
                 .addGroup(panelTbLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(chartPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
@@ -586,54 +635,56 @@ public class PelaporanSuratPages extends javax.swing.JFrame { //kelas membuat an
     }// </editor-fold>//GEN-END:initComponents
 
     private void UnduhLaporanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UnduhLaporanActionPerformed
-        try{
+        try {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Simpan Laporan Sebagai");
             fileChooser.setSelectedFile(new File("LaporanSurat.pdf"));
             int userSelection = fileChooser.showSaveDialog(this);
-            
-            if(userSelection == JFileChooser.APPROVE_OPTION) {
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
                 File fileToSave = fileChooser.getSelectedFile();
                 String filePath = fileToSave.getAbsolutePath();
-                
-                com.itextpdf.text.Document document = new com.itextpdf.text.Document(PageSize.A4.rotate()); 
+
+                com.itextpdf.text.Document document = new com.itextpdf.text.Document(PageSize.A4.rotate());
                 PdfWriter.getInstance(document, new FileOutputStream(filePath));
                 document.open();
-                
+
                 Font tittleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
                 Paragraph title = new Paragraph("Laporan Surat Masuk", tittleFont);
                 title.setAlignment(Element.ALIGN_CENTER);
                 document.add(title);
                 document.add(new Paragraph("\n"));
-                
+
                 // Ekspor Line Chart sebagai gambar
                 File lineChartFile = new File("line_chart_temp.png");
-                exportChartAsImage(showLineChart(), lineChartFile);
-                
+                String selectedFilterLine = filterBox.getSelectedItem().toString();
+                exportChartAsImage(showLineChart(selectedFilterLine), lineChartFile);
+
                 File pieChartFile = new File("pie_chart_temp.png");
-                exportChartAsImage(createPieChart(), pieChartFile);
-                
+                String selectedFilter = filterBox.getSelectedItem().toString();
+                exportChartAsImage(createPieChart(selectedFilter), pieChartFile);
+
                 // Tambahkan grafik Line Chart ke PDF dengan ukuran disesuaikan
                 Image lineChartImage = Image.getInstance(lineChartFile.getAbsolutePath());
-                lineChartImage.scaleToFit(675, 475); 
+                lineChartImage.scaleToFit(675, 475);
                 lineChartImage.setAlignment(Element.ALIGN_CENTER);
                 document.add(lineChartImage);
-                
+
                 document.newPage(); // Jarak antar grafik
-                
+
                 // Tambahkan grafik Pie Chart ke PDF dengan ukuran disesuaikan
                 Image pieChartImage = Image.getInstance(pieChartFile.getAbsolutePath());
-                pieChartImage.scaleToFit(700, 500); 
+                pieChartImage.scaleToFit(700, 500);
                 pieChartImage.setAlignment(Element.ALIGN_CENTER);
                 document.add(pieChartImage);
-                
+
                 document.newPage(); // Jarak antar elemen
-                
+
                 // Menyisipkan tabel dari JTable ke PDF
                 addJTableToPDF(tbHistory, document);
-                
+
                 document.close();
-                
+
                 // Hapus file sementara
                 lineChartFile.delete();
                 pieChartFile.delete();
@@ -646,6 +697,20 @@ public class PelaporanSuratPages extends javax.swing.JFrame { //kelas membuat an
             JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat membuat laporan: " + e.getMessage());
         }// TODO add your handling code here:
     }//GEN-LAST:event_UnduhLaporanActionPerformed
+
+    private void filterBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_filterBoxActionPerformed
+
+    private void filterBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_filterBoxItemStateChanged
+        // TODO add your handlin        
+        String query = filterBox.getSelectedItem().toString();
+
+//        filter(query);
+        setTableAction();
+        createPieChart(query);
+        showLineChart(query);
+    }//GEN-LAST:event_filterBoxItemStateChanged
 //    private void initComponents() {
 //        chartContainer = new javax.swing.JPanel();
 //        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -714,6 +779,8 @@ public class PelaporanSuratPages extends javax.swing.JFrame { //kelas membuat an
     private javax.swing.JButton UnduhLaporan;
     private javax.swing.JPanel chartPanel1;
     private javax.swing.JPanel chartPanel2;
+    private javax.swing.JComboBox<String> filterBox;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel labelHistory;
     private javax.swing.JScrollPane panelScrollTb;
     private javax.swing.JPanel panelTb;
