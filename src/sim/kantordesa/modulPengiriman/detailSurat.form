@@ -145,7 +145,7 @@
                                               </Group>
                                           </Group>
                                       </Group>
-                                      <EmptySpace min="-2" pref="97" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="88" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -300,7 +300,6 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="j_perihal" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="t_perihal" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="j_tanggalDisposisi" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
@@ -332,9 +331,12 @@
                                   <Component id="j_pesanDisposisi" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="t_pesanDisposisi" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="t_tanggalDisposisi" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="t_tanggalDisposisi" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="j_tanggalDisposisi" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
                               <Component id="t_instruksi" min="-2" pref="80" max="-2" attributes="0"/>
                           </Group>
                       </Group>

@@ -406,7 +406,7 @@ public class registrasiNaskah extends javax.swing.JFrame {
                 if (rowInserted > 0) {
                     JOptionPane.showMessageDialog(this, "Surat Berhasil Ditambahkan dan Dikirim Ke Akun Kepala Desa");
                     historySuratMasuk detail = new historySuratMasuk();
-                    detail.setVisible(true);
+                    Dashboard.switchPanel("History Surat Masuk");
                     resetForm();
                 }
             }
@@ -437,8 +437,8 @@ public class registrasiNaskah extends javax.swing.JFrame {
                 return; // Menghentikan proses jika bukan file PDF
             }
 
-            String dir = selectedFile.getAbsolutePath(); // Dapatkan path file
-            t_pathFile.setText(dir); // Tampilkan path file di text field
+            String dir = selectedFile.getAbsolutePath(); 
+            t_pathFile.setText(dir); 
             JOptionPane.showMessageDialog(null, "File berhasil dipilih: " + selectedFile.getName());
         } else {
             JOptionPane.showMessageDialog(null, "Tidak ada file yang dipilih.");

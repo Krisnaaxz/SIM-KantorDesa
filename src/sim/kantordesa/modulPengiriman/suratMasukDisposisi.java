@@ -1,15 +1,11 @@
 package sim.kantordesa.modulPengiriman;
 
 import java.awt.Container;
-import java.awt.Desktop;
-import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import sim.kantordesa.config.AppContext;
 import sim.kantordesa.config.koneksi;
@@ -21,10 +17,11 @@ public class suratMasukDisposisi extends javax.swing.JFrame {
 
     public suratMasukDisposisi() {
         initComponents();
-
+        int idRole = (int) AppContext.get("idRole");
+        
         DefaultTableModel model = new DefaultTableModel();
 
-        tbl_historySuratMasuk.setModel(model);
+        tbl_historySuratDisposisi.setModel(model);
 
         model.addColumn("ID Penerimaan Surat");
         model.addColumn("Tanggal Penerimaan Surat");
@@ -41,7 +38,6 @@ public class suratMasukDisposisi extends javax.swing.JFrame {
 
         conn = koneksi.getConnection();
         loadData();
-
     }
 
     public Container getContentPanel() {
@@ -49,11 +45,13 @@ public class suratMasukDisposisi extends javax.swing.JFrame {
     }
 
     private void loadData() {
-        DefaultTableModel model = (DefaultTableModel) tbl_historySuratMasuk.getModel();
+        DefaultTableModel model = (DefaultTableModel) tbl_historySuratDisposisi.getModel();
         model.setRowCount(0);
 
         try {
-            String sql = "Select * From mail_received JOIN mail_disposition WHERE disposition_destination = 3 ";
+            String sql = "Select DISTINCT * From mail_received JOIN mail_disposition WHERE disposition_destination = 3 "
+                    + "GROUP BY mail_received.mail_received_id "
+                    + "ORDER BY mail_received.mail_received_id DESC";
             try (java.sql.PreparedStatement st = conn.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
 
                 while (rs.next()) {
@@ -80,7 +78,7 @@ public class suratMasukDisposisi extends javax.swing.JFrame {
         }
 
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -88,19 +86,18 @@ public class suratMasukDisposisi extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tbl_historySuratMasuk = new javax.swing.JTable();
+        tbl_historySuratDisposisi = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         j_petunjukPimpinan = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1300, 640));
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(1300, 640));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(1300, 640));
 
-        tbl_historySuratMasuk.setModel(new javax.swing.table.DefaultTableModel(
+        tbl_historySuratDisposisi.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -111,12 +108,12 @@ public class suratMasukDisposisi extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbl_historySuratMasuk.addMouseListener(new java.awt.event.MouseAdapter() {
+        tbl_historySuratDisposisi.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbl_historySuratMasukMouseClicked(evt);
+                tbl_historySuratDisposisiMouseClicked(evt);
             }
         });
-        jScrollPane2.setViewportView(tbl_historySuratMasuk);
+        jScrollPane2.setViewportView(tbl_historySuratDisposisi);
 
         jPanel5.setBackground(new java.awt.Color(0, 102, 51));
 
@@ -148,7 +145,7 @@ public class suratMasukDisposisi extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
@@ -181,9 +178,9 @@ public class suratMasukDisposisi extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tbl_historySuratMasukMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_historySuratMasukMouseClicked
-        int selectedRow = tbl_historySuratMasuk.getSelectedRow();
-        String mail_received_id = tbl_historySuratMasuk.getValueAt(selectedRow, 0).toString();
+    private void tbl_historySuratDisposisiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_historySuratDisposisiMouseClicked
+        int selectedRow = tbl_historySuratDisposisi.getSelectedRow();
+        String mail_received_id = tbl_historySuratDisposisi.getValueAt(selectedRow, 0).toString();
 
         detailSurat detail = new detailSurat(mail_received_id);
         AppContext.put("historymasuk_mailRcvId", mail_received_id);
@@ -191,7 +188,7 @@ public class suratMasukDisposisi extends javax.swing.JFrame {
         Dashboard.card.revalidate();
         Dashboard.card.repaint();
         Dashboard.switchPanel("Detail Surat");
-    }//GEN-LAST:event_tbl_historySuratMasukMouseClicked
+    }//GEN-LAST:event_tbl_historySuratDisposisiMouseClicked
 
     /**
      * @param args the command line arguments
@@ -234,6 +231,6 @@ public class suratMasukDisposisi extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel j_petunjukPimpinan;
-    private javax.swing.JTable tbl_historySuratMasuk;
+    private javax.swing.JTable tbl_historySuratDisposisi;
     // End of variables declaration//GEN-END:variables
 }
