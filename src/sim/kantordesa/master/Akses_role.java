@@ -140,7 +140,7 @@ public class Akses_role extends javax.swing.JFrame {
             // ActionListener untuk combobox cmb_role
             cmb_role.addActionListener((ActionEvent e) -> {
                 String selectedRole = cmb_role.getSelectedItem() != null ? cmb_role.getSelectedItem().toString() : "";
-                
+
                 if (selectedRole.equals("Baru")) {
                     // Menampilkan komponen untuk input role baru
                     getAllData();
@@ -148,39 +148,39 @@ public class Akses_role extends javax.swing.JFrame {
                     txt_roleBaru.setVisible(true);
                     txt_id.setText("");
                     btn_tambahRole.setVisible(true);
-                    
+
                     // Set roleId ke -1 untuk role baru
                     roleId = -1;
-                    
+
                     // Sembunyikan semua checkbox
                     hideAkses();
-                    
+
                     // Nonaktifkan tombol aksi lainnya
                     nonAktifButton();
-                    
+
                 } else if (roleMap.containsKey(selectedRole)) {
                     // Reset label input role baru
                     getData();
                     lbl_roleBaru.setVisible(false);
                     txt_roleBaru.setVisible(false);
                     btn_tambahRole.setVisible(false);
-                    
+
                     // Dapatkan ID role dari roleMap
                     roleId = roleMap.get(selectedRole); // Perbarui roleId dengan ID role yang dipilih
                     txt_id.setText(String.valueOf(roleId)); // Tampilkan ID role
-                    
+
                     // Muat akses untuk role yang dipilih
                     loadRoleAccess(roleId);
-                    
+
                     // Inisialisasi toggle berdasarkan role yang dipilih
                     initializeToggleButtons(roleId);
-                    
+
                     // Tampilkan semua checkbox
                     showAkses();
-                    
+
                     // Aktifkan tombol aksi
                     aktifButton();
-                    
+
                 } else {
                     // Jika "Pilih Role" dipilih atau kondisi lainnya
                     getAllData();
@@ -222,6 +222,7 @@ public class Akses_role extends javax.swing.JFrame {
             configureToggleButton(tog_HistorySuratKeluar, lbl_HistorySuratKeluar, "History Surat Keluar", true);
             configureToggleButton(tog_Disposisi, lbl_Disposisi, "Disposisi", true);
             configureToggleButton(tog_Validasi, lbl_Validasi, "Validasi", true);
+            configureToggleButton(tog_Pelaporan, lbl_Pelaporan, "Pelaporan", true);
             configureToggleButton(tog_DaftarAkun, lbl_DaftarAkun, "Daftar Akun", true);
             configureToggleButton(tog_AksesRole, lbl_AksesRole, "Akses Role", true);
 
@@ -257,6 +258,7 @@ public class Akses_role extends javax.swing.JFrame {
         configureToggleButton(tog_HistorySuratKeluar, lbl_HistorySuratKeluar, "History Surat Keluar", false);
         configureToggleButton(tog_Disposisi, lbl_Disposisi, "Disposisi", false);
         configureToggleButton(tog_Validasi, lbl_Validasi, "Validasi", false);
+        configureToggleButton(tog_Pelaporan, lbl_Pelaporan, "Pelaporan", false);
         configureToggleButton(tog_DaftarAkun, lbl_DaftarAkun, "Daftar Akun", false);
         configureToggleButton(tog_AksesRole, lbl_AksesRole, "Akses Role", false);
     }
@@ -328,6 +330,10 @@ public class Akses_role extends javax.swing.JFrame {
                     tog_Validasi.setSelected(true);
                     lbl_Validasi.setText("ON");
                 }
+                if (accessName.equals("Pelaporan")) {
+                    tog_Pelaporan.setSelected(true);
+                    lbl_Pelaporan.setText("ON");
+                }
                 if (accessName.equals("Daftar Akun")) {
                     tog_DaftarAkun.setSelected(true);
                     lbl_DaftarAkun.setText("ON");
@@ -395,6 +401,10 @@ public class Akses_role extends javax.swing.JFrame {
         tog_Validasi.setVisible(false);
         Status6.setVisible(false);
         lbl_Validasi.setVisible(false);
+        Pelaporan.setVisible(false);
+        tog_Pelaporan.setVisible(false);
+        Status9.setVisible(false);
+        lbl_Pelaporan.setVisible(false);
         DaftarAkun.setVisible(false);
         tog_DaftarAkun.setVisible(false);
         Status7.setVisible(false);
@@ -431,6 +441,10 @@ public class Akses_role extends javax.swing.JFrame {
         tog_Validasi.setVisible(true);
         Status6.setVisible(true);
         lbl_Validasi.setVisible(true);
+        Pelaporan.setVisible(true);
+        tog_Pelaporan.setVisible(true);
+        Status9.setVisible(true);
+        lbl_Pelaporan.setVisible(true);
         DaftarAkun.setVisible(true);
         tog_DaftarAkun.setVisible(true);
         Status7.setVisible(true);
@@ -504,6 +518,10 @@ public class Akses_role extends javax.swing.JFrame {
         lbl_AksesRole = new javax.swing.JLabel();
         tog_AksesRole = new javax.swing.JToggleButton();
         AksesRole = new javax.swing.JLabel();
+        Pelaporan = new javax.swing.JLabel();
+        tog_Pelaporan = new javax.swing.JToggleButton();
+        Status9 = new javax.swing.JLabel();
+        lbl_Pelaporan = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -719,44 +737,61 @@ public class Akses_role extends javax.swing.JFrame {
         AksesRole.setText("Akses Role");
         AksesRole.setPreferredSize(new java.awt.Dimension(102, 16));
 
+        Pelaporan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        Pelaporan.setText("Pelaporan");
+        Pelaporan.setPreferredSize(new java.awt.Dimension(102, 16));
+
+        tog_Pelaporan.setText("ON");
+        tog_Pelaporan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tog_PelaporanActionPerformed(evt);
+            }
+        });
+
+        Status9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Status9.setText("STATUS :");
+
+        lbl_Pelaporan.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbl_Pelaporan.setText("ON");
+
         javax.swing.GroupLayout User_accessLayout = new javax.swing.GroupLayout(User_access);
         User_access.setLayout(User_accessLayout);
         User_accessLayout.setHorizontalGroup(
             User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(User_accessLayout.createSequentialGroup()
                 .addGap(31, 31, 31)
-                .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, User_accessLayout.createSequentialGroup()
+                .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(User_accessLayout.createSequentialGroup()
                         .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(btn_tambah, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tog_SuratKeluar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tog_HistorySuratMasuk, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tog_HistorySuratKeluar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btn_tambah, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tog_SuratKeluar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tog_HistorySuratMasuk, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tog_HistorySuratKeluar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(tog_SuratMasuk, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(User_accessLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btn_hapus))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, User_accessLayout.createSequentialGroup()
-                                .addGap(20, 20, 20)
+                                .addGap(23, 23, 23)
                                 .addComponent(Status1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(User_accessLayout.createSequentialGroup()
-                                .addGap(20, 20, 20)
+                                .addGap(23, 23, 23)
                                 .addComponent(Status2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(User_accessLayout.createSequentialGroup()
-                                .addGap(20, 20, 20)
+                                .addGap(23, 23, 23)
                                 .addComponent(Status3, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(User_accessLayout.createSequentialGroup()
-                                .addGap(20, 20, 20)
+                                .addGap(23, 23, 23)
                                 .addComponent(Status4, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
+                        .addGap(0, 0, 0)
                         .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lbl_SuratMasuk, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lbl_SuratKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lbl_HistorySuratMasuk, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lbl_HistorySuratKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(76, 76, 76)
-                        .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(101, 101, 101)
+                        .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(User_accessLayout.createSequentialGroup()
                                 .addComponent(tog_AksesRole, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(23, 23, 23)
@@ -765,27 +800,27 @@ public class Akses_role extends javax.swing.JFrame {
                                 .addComponent(lbl_AksesRole, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(User_accessLayout.createSequentialGroup()
                                 .addComponent(tog_DaftarAkun, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(23, 23, 23)
+                                .addGap(15, 15, 15)
                                 .addComponent(Status7, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addGap(26, 26, 26)
                                 .addComponent(lbl_DaftarAkun, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(User_accessLayout.createSequentialGroup()
                                 .addComponent(tog_Disposisi, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(23, 23, 23)
+                                .addGap(15, 15, 15)
                                 .addComponent(Status5, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addGap(26, 26, 26)
                                 .addComponent(lbl_Disposisi, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(User_accessLayout.createSequentialGroup()
                                 .addComponent(tog_Validasi, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(23, 23, 23)
+                                .addGap(15, 15, 15)
                                 .addComponent(Status6, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addGap(26, 26, 26)
                                 .addComponent(lbl_Validasi, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(AksesRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(DaftarAkun, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(Validasi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(Disposisi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, User_accessLayout.createSequentialGroup()
+                    .addGroup(User_accessLayout.createSequentialGroup()
                         .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmb_role, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -793,27 +828,33 @@ public class Akses_role extends javax.swing.JFrame {
                         .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txt_id, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, User_accessLayout.createSequentialGroup()
+                    .addGroup(User_accessLayout.createSequentialGroup()
                         .addComponent(lbl_roleBaru, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txt_roleBaru, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31)
+                        .addGap(92, 92, 92)
                         .addComponent(btn_tambahRole, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(lbl_akses, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
-                        .addComponent(FormSuratMasuk, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(FormSuratKeluar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(HistorySuratMasuk, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(HistorySuratKeluar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbl_akses, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(FormSuratMasuk, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(FormSuratKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(HistorySuratMasuk, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(HistorySuratKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(User_accessLayout.createSequentialGroup()
+                        .addComponent(tog_Pelaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(Status9, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(lbl_Pelaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Pelaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
                 .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(User_accessLayout.createSequentialGroup()
                         .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btn_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(152, Short.MAX_VALUE))
+                .addContainerGap(188, Short.MAX_VALUE))
         );
         User_accessLayout.setVerticalGroup(
             User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -826,10 +867,9 @@ public class Akses_role extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_cari))
-                .addGap(8, 8, 8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(User_accessLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txt_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmb_role, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -840,27 +880,27 @@ public class Akses_role extends javax.swing.JFrame {
                             .addComponent(btn_tambahRole))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lbl_akses)
-                        .addGap(18, 18, 18)
+                        .addGap(18, 18, Short.MAX_VALUE)
                         .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(User_accessLayout.createSequentialGroup()
                                 .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(User_accessLayout.createSequentialGroup()
                                         .addComponent(FormSuratMasuk)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(tog_SuratMasuk)
                                             .addComponent(Status1)
                                             .addComponent(lbl_SuratMasuk)))
                                     .addGroup(User_accessLayout.createSequentialGroup()
                                         .addComponent(Disposisi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(tog_Disposisi)
                                             .addComponent(Status5)
                                             .addComponent(lbl_Disposisi))))
-                                .addGap(18, 18, 18)
+                                .addGap(18, 18, Short.MAX_VALUE)
                                 .addComponent(FormSuratKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(tog_SuratKeluar)
                                     .addComponent(Status2)
@@ -872,32 +912,39 @@ public class Akses_role extends javax.swing.JFrame {
                                     .addComponent(tog_Validasi)
                                     .addComponent(Status6)
                                     .addComponent(lbl_Validasi))))
-                        .addGap(18, 18, 18)
+                        .addGap(18, 18, Short.MAX_VALUE)
                         .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(User_accessLayout.createSequentialGroup()
                                 .addComponent(HistorySuratMasuk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(tog_HistorySuratMasuk)
                                     .addComponent(Status3)
                                     .addComponent(lbl_HistorySuratMasuk)))
                             .addGroup(User_accessLayout.createSequentialGroup()
                                 .addComponent(DaftarAkun, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(tog_DaftarAkun)
                                     .addComponent(Status7)
                                     .addComponent(lbl_DaftarAkun))))
-                        .addGap(18, 18, 18)
+                        .addGap(18, 18, Short.MAX_VALUE)
                         .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(User_accessLayout.createSequentialGroup()
                                 .addComponent(HistorySuratKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(tog_HistorySuratKeluar)
                                     .addComponent(Status4)
                                     .addComponent(lbl_HistorySuratKeluar))
-                                .addGap(100, 100, 100)
+                                .addGap(18, 18, Short.MAX_VALUE)
+                                .addComponent(Pelaporan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(tog_Pelaporan)
+                                    .addComponent(Status9)
+                                    .addComponent(lbl_Pelaporan))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
                                 .addGroup(User_accessLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(btn_tambah)
                                     .addComponent(btn_hapus)))
@@ -1151,6 +1198,10 @@ public class Akses_role extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_idActionPerformed
 
+    private void tog_PelaporanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tog_PelaporanActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tog_PelaporanActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1197,6 +1248,7 @@ public class Akses_role extends javax.swing.JFrame {
     private javax.swing.JLabel FormSuratMasuk;
     private javax.swing.JLabel HistorySuratKeluar;
     private javax.swing.JLabel HistorySuratMasuk;
+    private javax.swing.JLabel Pelaporan;
     private javax.swing.JLabel Status1;
     private javax.swing.JLabel Status2;
     private javax.swing.JLabel Status3;
@@ -1205,6 +1257,7 @@ public class Akses_role extends javax.swing.JFrame {
     private javax.swing.JLabel Status6;
     private javax.swing.JLabel Status7;
     private javax.swing.JLabel Status8;
+    private javax.swing.JLabel Status9;
     private javax.swing.JPanel User_access;
     private javax.swing.JLabel Validasi;
     private javax.swing.JButton btn_cari;
@@ -1221,6 +1274,7 @@ public class Akses_role extends javax.swing.JFrame {
     private javax.swing.JLabel lbl_Disposisi;
     private javax.swing.JLabel lbl_HistorySuratKeluar;
     private javax.swing.JLabel lbl_HistorySuratMasuk;
+    private javax.swing.JLabel lbl_Pelaporan;
     private javax.swing.JLabel lbl_SuratKeluar;
     private javax.swing.JLabel lbl_SuratMasuk;
     private javax.swing.JLabel lbl_Validasi;
@@ -1232,6 +1286,7 @@ public class Akses_role extends javax.swing.JFrame {
     private javax.swing.JToggleButton tog_Disposisi;
     private javax.swing.JToggleButton tog_HistorySuratKeluar;
     private javax.swing.JToggleButton tog_HistorySuratMasuk;
+    private javax.swing.JToggleButton tog_Pelaporan;
     private javax.swing.JToggleButton tog_SuratKeluar;
     private javax.swing.JToggleButton tog_SuratMasuk;
     private javax.swing.JToggleButton tog_Validasi;

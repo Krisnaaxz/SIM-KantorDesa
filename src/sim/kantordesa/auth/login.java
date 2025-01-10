@@ -4,11 +4,10 @@
  */
 package sim.kantordesa.auth;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import sim.kantordesa.config.User;
 import sim.kantordesa.config.koneksi;
 import sim.kantordesa.dashboard.Dashboard;
@@ -19,6 +18,7 @@ public class login extends javax.swing.JFrame {
      * Creates new form login
      */
     public login() {
+        FlatLightLaf.setup();
         initComponents();
         showpass.setVisible(false);
     }
@@ -35,6 +35,7 @@ public class login extends javax.swing.JFrame {
         body = new javax.swing.JPanel();
         PanelKiri = new javax.swing.JPanel();
         judul = new javax.swing.JLabel();
+        logodesa = new javax.swing.JLabel();
         PanelKanan = new javax.swing.JPanel();
         LOGIN = new javax.swing.JLabel();
         username = new javax.swing.JLabel();
@@ -65,6 +66,9 @@ public class login extends javax.swing.JFrame {
         judul.setForeground(new java.awt.Color(255, 255, 255));
         judul.setText("SIM-Desa");
 
+        logodesa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        logodesa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sim/kantordesa/auth/icon/logorandom.png"))); // NOI18N
+
         javax.swing.GroupLayout PanelKiriLayout = new javax.swing.GroupLayout(PanelKiri);
         PanelKiri.setLayout(PanelKiriLayout);
         PanelKiriLayout.setHorizontalGroup(
@@ -72,12 +76,15 @@ public class login extends javax.swing.JFrame {
             .addGroup(PanelKiriLayout.createSequentialGroup()
                 .addGap(116, 116, 116)
                 .addComponent(judul)
-                .addContainerGap(123, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(logodesa, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
         PanelKiriLayout.setVerticalGroup(
             PanelKiriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelKiriLayout.createSequentialGroup()
-                .addContainerGap(319, Short.MAX_VALUE)
+                .addContainerGap(94, Short.MAX_VALUE)
+                .addComponent(logodesa, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(judul)
                 .addGap(133, 133, 133))
         );
@@ -221,12 +228,11 @@ public class login extends javax.swing.JFrame {
                             while (resultSet.next()) {
                                 userAccess.add(resultSet.getString("access_name"));
                             }
-
+                            
                             Dashboard dashboardFrame = new Dashboard(currentUser, userAccess);
                             dashboardFrame.setVisible(true);
                             this.dispose();
                         } catch (SQLException e) {
-                            e.printStackTrace();
                         }
 
                     } else {
@@ -289,6 +295,7 @@ public class login extends javax.swing.JFrame {
     private javax.swing.JLabel hidepass;
     private javax.swing.JLabel judul;
     private javax.swing.JButton login;
+    private javax.swing.JLabel logodesa;
     private javax.swing.JLabel password;
     private javax.swing.JButton register;
     private javax.swing.JLabel registertext;

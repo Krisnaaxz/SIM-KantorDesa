@@ -5,23 +5,33 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import javax.swing.JPanel;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableColumn;
+import sim.kantordesa.config.User;
 import sim.kantordesa.config.koneksi;
+import sim.kantordesa.dashboard.Dashboard;
 
 /**
  *
  * @author rika
  */
 public class ValidationPages extends javax.swing.JFrame {
-    Object[] tableContent = new Object[9];
+
+    Object[] tableContent = new Object[10];
     private final javax.swing.table.DefaultTableModel model;
+    private User currentUser;
 
     /**
      * Creates new form sekdes
+     * @param currentUser
      */
-    public ValidationPages() {
+    
+    public ValidationPages(User currentUser) {
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
-
+        
+        this.currentUser = currentUser;
 
         model = new javax.swing.table.DefaultTableModel() {
             @Override
@@ -34,7 +44,6 @@ public class ValidationPages extends javax.swing.JFrame {
 
         // "No", "Status", "Diterima tgl.", "Nama Pemohon", "Perihal", "Val. Sekdes",
         // "Val. Kades", "Aksi"
-
         model.addColumn("No.");
         model.addColumn("Nomor Surat");
         model.addColumn("Nama Pemohon");
@@ -43,9 +52,22 @@ public class ValidationPages extends javax.swing.JFrame {
         model.addColumn("Status Validasi Sekdes");
         model.addColumn("Status Validasi Kades");
         model.addColumn("Aksi");
-        
+        model.addColumn("mail_comment");
+        model.addColumn("mail_id");
+
         loadData();
-        
+
+        TableColumnModel columnModel = jTable1.getColumnModel();
+        TableColumn mailCommentCol = columnModel.getColumn(jTable1.convertColumnIndexToView(8));
+        TableColumn mailIdCol = columnModel.getColumn(jTable1.convertColumnIndexToView(9));
+
+        columnModel.removeColumn(mailCommentCol);
+        columnModel.removeColumn(mailIdCol);
+
+    }
+
+    public JPanel getContentPanel() {
+        return (JPanel) this.getContentPane();
     }
 
     public void loadData() {
@@ -55,51 +77,51 @@ public class ValidationPages extends javax.swing.JFrame {
         try {
             Connection c = koneksi.getConnection();
             Statement s = c.createStatement();
-            String sql = "select mail_id, mail_number, applicant_name, created_at, status_validation, status_lead, mail_comment, mail_type.type_name from mail_content inner join mail_type on mail_content.mail_type_id = mail_type.mail_type_id;";
+            String sql = "select mail_id, mail_number, applicant_name, created_at, status_validation, status_lead, mail_comment, mail_type.type_name from mail_content inner join mail_type on mail_content.mail_type_id = mail_type.mail_type_id ORDER BY mail_id";
             ResultSet r = s.executeQuery(sql);
             int i = 1;
             while (r.next()) {
-                model.addRow(new Object[]{//crate row on table and get data from db
-                i++,
-                r.getString("mail_number"),
-                r.getString("applicant_name"),
-                r.getString("created_at"),
-                r.getString("type_name"),
-                r.getBoolean("status_validation") == false ? "Reject" : "Accept",
-                r.getBoolean("status_lead") == false ? "Reject" : "Accept",
-                r.getString("mail_comment"),
-                r.getString("mail_id"),
-              });
+                tableContent[0] = i++;
+                tableContent[1] = r.getString("mail_number");
+                tableContent[2] = r.getString("applicant_name");
+                tableContent[3] = r.getString("created_at");
+                tableContent[4] = r.getString("type_name");
+                tableContent[5] = r.getInt("status_validation") == 0 ? "Reject" : r.getInt("status_validation") == 1 ? "Accept" : "Baru";
+                tableContent[6] = r.getInt("status_lead") == 0 ? "Reject" : r.getInt("status_lead") == 1 ? "Accept" : "Baru";
+                tableContent[7] = "Periksa";
+                tableContent[8] = r.getString("mail_comment");
+                tableContent[9] = r.getString("mail_id");
+                
+                if (currentUser.getIdRole() == 1 && (r.getInt("status_validation") == 1 && r.getInt("status_lead") == 2)) {
+                    model.addRow(tableContent);
+                } else if (currentUser.getIdRole() == 2 && (r.getInt("status_validation") == 2 && r.getInt("status_lead") == 2)) {
+                    model.addRow(tableContent);
+                } else if (currentUser.getIdRole() == 0) {
+                    model.addRow(tableContent);
+                }
+                
+                
+ 
             }
-//                tableContent[0] = i;
-//                tableContent[1] = r.getString("mail_number");
-//                tableContent[2] = r.getString("applicant_name");
-//                tableContent[3] = r.getString("created_at");
-//                tableContent[4] = r.getString("type_name");
-//                tableContent[5] = r.getBoolean("status_validation") == false ? "Reject" : "Accept";
-//                tableContent[6] = r.getBoolean("status_lead") == false ? "Reject" : "Accept";
-//                i++;
-//                model.addRow(tableContent);
-//                r.getString("mail_comment");
-//                r.getString("mail_id");
-//                
-//            }
             r.close();
             s.close();
             jTable1.getColumn("Status Validasi Sekdes").setCellRenderer(new StatusCellRenderer());
             jTable1.getColumn("Status Validasi Kades").setCellRenderer(new StatusCellRenderer());
             jTable1.getColumn("Aksi").setCellRenderer(new ButtonRenderer());
-            jTable1.getColumn("Aksi").setCellEditor(new ButtonEditor(jTable1));
+            jTable1.getColumn("Aksi").setCellEditor(new ButtonEditor(jTable1, currentUser));
+
         } catch (SQLException e) {
             System.out.println("Error, " + e);
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -212,36 +234,15 @@ public class ValidationPages extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
+    private void refreshActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_refreshActionPerformed
         // TODO add your handling code here:
         loadData();
-    }//GEN-LAST:event_refreshActionPerformed
+    }// GEN-LAST:event_refreshActionPerformed
 
     private void historybtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_historybtnActionPerformed
         // TODO add your handling code here:
-        HistoryPage.main(null);
-        dispose();
+        Dashboard.switchPanel("History Surat Keluar");
     }// GEN-LAST:event_historybtnActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -250,11 +251,11 @@ public class ValidationPages extends javax.swing.JFrame {
         FlatLightLaf.setup();
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ValidationPages().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new ValidationPages().setVisible(true);
+//            }
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

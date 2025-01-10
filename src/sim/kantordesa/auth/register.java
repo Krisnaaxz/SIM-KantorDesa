@@ -4,6 +4,12 @@
  */
 package sim.kantordesa.auth;
 
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import sim.kantordesa.config.koneksi;
+
 /**
  *
  * @author manii
@@ -13,8 +19,28 @@ public class register extends javax.swing.JFrame {
     /**
      * Creates new form register
      */
+    private final Connection conn;
+
     public register() {
         initComponents();
+        showpass.setVisible(false);
+        conn = koneksi.getConnection();
+
+    }
+
+    public void role() {
+        try {
+            String sql = "SELECT * FROM role";
+            PreparedStatement st = conn.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                id_role.addItem(rs.getString("role_name"));
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(register.class.getName()).log(Level.SEVERE, null, e);
+        }
     }
 
     /**
@@ -26,22 +52,306 @@ public class register extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        Body = new javax.swing.JPanel();
+        PanelKiri = new javax.swing.JPanel();
+        logodesa = new javax.swing.JLabel();
+        judul = new javax.swing.JLabel();
+        PanelKanan = new javax.swing.JPanel();
+        REGISTER = new javax.swing.JLabel();
+        Email = new javax.swing.JLabel();
+        text_email = new javax.swing.JTextField();
+        NamaLengkap = new javax.swing.JLabel();
+        full_name = new javax.swing.JTextField();
+        Jabatan1 = new javax.swing.JLabel();
+        id_role = new javax.swing.JComboBox<>();
+        tanggalLahir = new javax.swing.JLabel();
+        birth_date = new com.toedter.calendar.JDateChooser();
+        Username = new javax.swing.JLabel();
+        text_username = new javax.swing.JTextField();
+        Password = new javax.swing.JLabel();
+        text_password = new javax.swing.JPasswordField();
+        showpass = new javax.swing.JLabel();
+        hidepass = new javax.swing.JLabel();
+        Submit = new javax.swing.JButton();
+        logintext = new javax.swing.JLabel();
+        login = new javax.swing.JButton();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("REGISTER");
+        setMaximumSize(new java.awt.Dimension(1920, 1080));
+        setPreferredSize(new java.awt.Dimension(800, 730));
+
+        Body.setLayout(null);
+
+        PanelKiri.setBackground(new java.awt.Color(19, 128, 97));
+
+        logodesa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        logodesa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sim/kantordesa/auth/icon/logorandom.png"))); // NOI18N
+
+        judul.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        judul.setForeground(new java.awt.Color(255, 255, 255));
+        judul.setText("SIM-Desa");
+
+        javax.swing.GroupLayout PanelKiriLayout = new javax.swing.GroupLayout(PanelKiri);
+        PanelKiri.setLayout(PanelKiriLayout);
+        PanelKiriLayout.setHorizontalGroup(
+            PanelKiriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelKiriLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(PanelKiriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(logodesa, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                    .addComponent(judul))
+                .addContainerGap())
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+        PanelKiriLayout.setVerticalGroup(
+            PanelKiriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelKiriLayout.createSequentialGroup()
+                .addGap(180, 180, 180)
+                .addComponent(logodesa, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(judul)
+                .addContainerGap(247, Short.MAX_VALUE))
         );
+
+        Body.add(PanelKiri);
+        PanelKiri.setBounds(0, 0, 400, 700);
+
+        PanelKanan.setBackground(new java.awt.Color(255, 255, 255));
+        PanelKanan.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        REGISTER.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        REGISTER.setForeground(new java.awt.Color(19, 128, 97));
+        REGISTER.setText("REGISTER");
+        PanelKanan.add(REGISTER, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, -1, -1));
+
+        Email.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Email.setText("Email");
+        PanelKanan.add(Email, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, -1, -1));
+
+        text_email.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        PanelKanan.add(text_email, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 130, 300, 35));
+
+        NamaLengkap.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        NamaLengkap.setText("Nama Lengkap");
+        PanelKanan.add(NamaLengkap, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, -1, -1));
+
+        full_name.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        PanelKanan.add(full_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, 300, 35));
+
+        Jabatan1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Jabatan1.setText("Pilih Jabatan");
+        PanelKanan.add(Jabatan1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 250, -1, -1));
+
+        id_role.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        id_role.setMaximumRowCount(5);
+        id_role.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "Kepala Desa", "Sekretaris Desa", "Kepala Bidang", "Staff" }));
+        id_role.setToolTipText("");
+        id_role.setMinimumSize(new java.awt.Dimension(64, 35));
+        id_role.setPreferredSize(new java.awt.Dimension(200, 35));
+        PanelKanan.add(id_role, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 270, 300, 35));
+
+        tanggalLahir.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        tanggalLahir.setText("Tanggal Lahir");
+        PanelKanan.add(tanggalLahir, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, -1, -1));
+
+        birth_date.setMaximumSize(new java.awt.Dimension(1920, 1080));
+        birth_date.setMinSelectableDate(new java.util.Date(-62135794710000L));
+        birth_date.setOpaque(false);
+        birth_date.setPreferredSize(new java.awt.Dimension(800, 650));
+        PanelKanan.add(birth_date, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 340, 300, 35));
+
+        Username.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Username.setText("Username");
+        PanelKanan.add(Username, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 390, -1, -1));
+
+        text_username.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        PanelKanan.add(text_username, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 410, 300, 35));
+
+        Password.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Password.setText("Password");
+        PanelKanan.add(Password, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 460, -1, -1));
+
+        text_password.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        PanelKanan.add(text_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 480, 260, 35));
+
+        showpass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sim/kantordesa/auth/icon/eye_opened.png"))); // NOI18N
+        showpass.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                showpassMouseClicked(evt);
+            }
+        });
+        PanelKanan.add(showpass, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 490, -1, -1));
+
+        hidepass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sim/kantordesa/auth/icon/eye_closed.png"))); // NOI18N
+        hidepass.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                hidepassMouseClicked(evt);
+            }
+        });
+        PanelKanan.add(hidepass, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 490, -1, -1));
+
+        Submit.setBackground(new java.awt.Color(19, 128, 97));
+        Submit.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Submit.setForeground(new java.awt.Color(255, 255, 255));
+        Submit.setText("Submit");
+        Submit.setPreferredSize(new java.awt.Dimension(100, 35));
+        Submit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SubmitActionPerformed(evt);
+            }
+        });
+        PanelKanan.add(Submit, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 540, -1, -1));
+
+        logintext.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        logintext.setText("Saya sudah memiliki akun?");
+        PanelKanan.add(logintext, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 620, -1, -1));
+
+        login.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        login.setForeground(new java.awt.Color(19, 128, 97));
+        login.setText("Login");
+        login.setPreferredSize(new java.awt.Dimension(100, 35));
+        login.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginActionPerformed(evt);
+            }
+        });
+        PanelKanan.add(login, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 610, -1, -1));
+
+        Body.add(PanelKanan);
+        PanelKanan.setBounds(400, 0, 400, 700);
+
+        getContentPane().add(Body, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void hidepassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_hidepassMouseClicked
+        hidepass.setVisible(false);
+        showpass.setVisible(true);
+        text_password.setEchoChar((char) 0);
+    }//GEN-LAST:event_hidepassMouseClicked
+
+    private void showpassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_showpassMouseClicked
+        hidepass.setVisible(true);
+        showpass.setVisible(false);
+        text_password.setEchoChar('*');
+    }//GEN-LAST:event_showpassMouseClicked
+
+    private void SubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitActionPerformed
+        String email = text_email.getText();
+        String namaLengkap = full_name.getText();
+        String username = text_username.getText().trim();
+        String password = new String(text_password.getPassword());
+        java.util.Date tanggalLahir = birth_date.getDate();
+        java.sql.Date sqlTanggalLahir = (tanggalLahir != null) ? new java.sql.Date(tanggalLahir.getTime()) : null;
+        String selectedRole = id_role.getSelectedItem().toString();
+
+        int roleId = -1;
+
+        // Mengambil ID Role berdasarkan nama role
+        try {
+            String sql = "SELECT id_role FROM role WHERE role_name = ?";
+            PreparedStatement st = koneksi.getConnection().prepareStatement(sql);
+            st.setString(1, selectedRole);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                roleId = rs.getInt("id_role");
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Gagal mengambil data role!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (email.isEmpty() || namaLengkap.isEmpty() || username.isEmpty() || password.isEmpty() || sqlTanggalLahir == null || roleId == -1) {
+            JOptionPane.showMessageDialog(this, "Semua field harus diisi!", "Validasi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (username.length() > 150) {
+            JOptionPane.showMessageDialog(this, "Username tidak boleh lebih dari 150 karakter!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (password.length() > 255) {
+            JOptionPane.showMessageDialog(this, "Password tidak boleh lebih dari 255 karakter!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (email.length() > 64) {
+            JOptionPane.showMessageDialog(this, "Email tidak boleh lebih dari 64 karakter!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (namaLengkap.length() > 150) {
+            JOptionPane.showMessageDialog(this, "Nama Lengkap tidak boleh lebih dari 150 karakter!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Menambahkan data ke tabel users
+        try {
+            String sql = "INSERT INTO users (email, full_name, username, password, birth_date, id_role) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = koneksi.getConnection().prepareStatement(sql);
+
+            ps.setString(1, email);
+            ps.setString(2, namaLengkap);
+            ps.setString(3, username);
+            ps.setString(4, password);
+            ps.setDate(5, sqlTanggalLahir);
+            ps.setInt(6, roleId);
+
+            int rowInserted = ps.executeUpdate();
+            if (rowInserted > 0) {
+                JOptionPane.showMessageDialog(this, "Data berhasil ditambahkan!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
+            }
+            login LoginFrame = new login();
+            LoginFrame.setVisible(true);
+            LoginFrame.pack();
+            LoginFrame.setLocationRelativeTo(null);
+            this.dispose();
+            ps.close();
+        } catch (SQLException e) {
+            Logger.getLogger(register.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat menyimpan data!", "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            text_password.setText(""); // Membersihkan password
+        }
+    }//GEN-LAST:event_SubmitActionPerformed
+
+    private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
+        login LoginFrame = new login();
+        LoginFrame.setVisible(true);
+        LoginFrame.pack();
+        LoginFrame.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_loginActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel Body;
+    private javax.swing.JLabel Email;
+    private javax.swing.JLabel Jabatan1;
+    private javax.swing.JLabel NamaLengkap;
+    private javax.swing.JPanel PanelKanan;
+    private javax.swing.JPanel PanelKiri;
+    private javax.swing.JLabel Password;
+    private javax.swing.JLabel REGISTER;
+    private javax.swing.JButton Submit;
+    private javax.swing.JLabel Username;
+    private com.toedter.calendar.JDateChooser birth_date;
+    private javax.swing.JTextField full_name;
+    private javax.swing.JLabel hidepass;
+    private javax.swing.JComboBox<String> id_role;
+    private javax.swing.JLabel judul;
+    private javax.swing.JButton login;
+    private javax.swing.JLabel logintext;
+    private javax.swing.JLabel logodesa;
+    private javax.swing.JLabel showpass;
+    private javax.swing.JLabel tanggalLahir;
+    private javax.swing.JTextField text_email;
+    private javax.swing.JPasswordField text_password;
+    private javax.swing.JTextField text_username;
     // End of variables declaration//GEN-END:variables
 }

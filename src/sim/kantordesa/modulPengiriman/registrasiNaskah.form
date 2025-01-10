@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <NonVisualComponents>
+    <Container class="javax.swing.JPanel" name="jPanel7">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="33" green="66" red="0" type="rgb"/>
+        </Property>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="1276" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <EmptySpace min="0" pref="33" max="32767" attributes="0"/>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+    </Container>
+  </NonVisualComponents>
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+      <Dimension value="[32767, 32767]"/>
+    </Property>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder/>
+          </Border>
+        </Property>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[0, 0]"/>
+        </Property>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[1300, 640]"/>
+        </Property>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Container class="javax.swing.JPanel" name="jPanel1">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                <TitledBorder/>
+              </Border>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[1200, 640]"/>
+            </Property>
+          </Properties>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
+                      <Component id="j_registrasiNaskah" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="b_kembali" min="-2" pref="100" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="220" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="t_tglSurat" pref="165" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="428" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="j_halSurat" min="-2" max="-2" attributes="0"/>
+                                  <Component id="t_hal" alignment="0" min="-2" pref="430" max="-2" attributes="0"/>
+                                  <Component id="j_isiRingkasSurat" min="-2" max="-2" attributes="0"/>
+                                  <Component id="t_isiRingkasSurat" alignment="0" min="-2" pref="430" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="j_detailIsiSurat" min="-2" max="-2" attributes="0"/>
+                                  <Component id="j_identitasSurat" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="j_instansiPengirim" min="-2" max="-2" attributes="0"/>
+                                      <Component id="j_namaPengirim" min="-2" max="-2" attributes="0"/>
+                                      <Component id="t_namaPengirim" max="32767" attributes="0"/>
+                                      <Component id="j_jabatanPengirim" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="t_jabatanPengirim" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="t_asalInstansi" alignment="0" min="-2" pref="350" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="j_unggahFileSurat" min="-2" max="-2" attributes="0"/>
+                                  <Component id="j_tipeSurat" min="-2" max="-2" attributes="0"/>
+                                  <Component id="t_jenisSurat" min="-2" pref="280" max="-2" attributes="0"/>
+                                  <Component id="j_nomorSurat" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="j_tanggalSurat" min="-2" max="-2" attributes="0"/>
+                                  <Component id="t_nomorSurat" min="-2" pref="350" max="-2" attributes="0"/>
+                                  <Component id="j_sifatSurat" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="j_urgensiSurat" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="j_tanggalSuratDiterima" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                      <Component id="t_tglSuratDiterima" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="t_urgensi" alignment="0" pref="138" max="32767" attributes="0"/>
+                                      <Component id="t_sifatSurat" alignment="0" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="t_pathFile" min="-2" pref="397" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="b_tambahFile" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="102" max="-2" attributes="0"/>
+                                      <Component id="b_kirim" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="0" pref="101" max="32767" attributes="0"/>
+                  </Group>
+                  <Component id="jPanel8" alignment="0" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="b_kembali" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="j_registrasiNaskah" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                      <Component id="jPanel8" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="j_identitasSurat" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="j_namaPengirim" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="t_namaPengirim" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="j_jabatanPengirim" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="t_jabatanPengirim" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="j_instansiPengirim" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="t_asalInstansi" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="j_detailIsiSurat" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="j_tipeSurat" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="j_halSurat" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="t_jenisSurat" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="j_nomorSurat" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="t_hal" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="t_nomorSurat" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="j_tanggalSurat" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                              <Component id="t_tglSurat" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="j_sifatSurat" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="t_sifatSurat" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="j_urgensiSurat" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="t_urgensi" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="j_isiRingkasSurat" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="t_isiRingkasSurat" min="-2" pref="128" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="j_tanggalSuratDiterima" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="t_tglSuratDiterima" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="j_unggahFileSurat" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="t_pathFile" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="b_tambahFile" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="b_kirim" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="j_registrasiNaskah">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="24" style="1"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Registrasi Naskah"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="b_kembali">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Kembali"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="b_kembaliActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="j_identitasSurat">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="12" style="1"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="IDENTITAS SURAT"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="j_namaPengirim">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Nama Pengirim"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="t_namaPengirim">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="t_namaPengirimActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="j_jabatanPengirim">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Jabatan Pengirim"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="t_jabatanPengirim">
+            </Component>
+            <Component class="javax.swing.JLabel" name="j_instansiPengirim">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Instansi Pengirim"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="t_asalInstansi">
+            </Component>
+            <Component class="javax.swing.JLabel" name="j_detailIsiSurat">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="12" style="1"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Detail Isi Surat"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="j_tipeSurat">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Tipe Surat"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="t_jenisSurat">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="8">
+                    <StringItem index="0" value="- Pilih - "/>
+                    <StringItem index="1" value="Surat Undangan"/>
+                    <StringItem index="2" value="Surat Pemberitahuan"/>
+                    <StringItem index="3" value="Surat Edaran"/>
+                    <StringItem index="4" value="Surat Keputusan"/>
+                    <StringItem index="5" value="Surat Panggilan"/>
+                    <StringItem index="6" value="Surat Permohonan"/>
+                    <StringItem index="7" value="Surat&#xa0;Pengantar"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="t_jenisSuratActionPerformed"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JLabel" name="j_nomorSurat">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Nomor Surat"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="t_nomorSurat">
+            </Component>
+            <Component class="javax.swing.JLabel" name="j_tanggalSurat">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Tanggal Surat"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="j_sifatSurat">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Sifat Surat"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="t_sifatSurat">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="3">
+                    <StringItem index="0" value="-Pilih-"/>
+                    <StringItem index="1" value="Rahasia"/>
+                    <StringItem index="2" value="Biasa"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JLabel" name="j_urgensiSurat">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Urgensi Surat"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="t_urgensi">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="5">
+                    <StringItem index="0" value="-Pilih-"/>
+                    <StringItem index="1" value="Segera"/>
+                    <StringItem index="2" value="Sangat Segera"/>
+                    <StringItem index="3" value="Normal"/>
+                    <StringItem index="4" value=" "/>
+                  </StringArray>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="t_urgensiActionPerformed"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JLabel" name="j_tanggalSuratDiterima">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Tanggal Surat Diterima"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="t_tglSuratDiterima">
+            </Component>
+            <Component class="javax.swing.JLabel" name="j_halSurat">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Hal Surat"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="t_hal">
+            </Component>
+            <Component class="javax.swing.JLabel" name="j_isiRingkasSurat">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Isi Ringkas Surat"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="t_isiRingkasSurat">
+            </Component>
+            <Component class="javax.swing.JButton" name="b_kirim">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Kirim"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="b_kirimActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="b_tambahFile">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Tambah File"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="b_tambahFileActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JTextField" name="t_pathFile">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="t_pathFileActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="j_unggahFileSurat">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="12" style="1"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Unggah File Surat"/>
+              </Properties>
+            </Component>
+            <Container class="javax.swing.JPanel" name="jPanel8">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="33" green="66" red="0" type="rgb"/>
+                </Property>
+              </Properties>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <EmptySpace min="0" pref="33" max="32767" attributes="0"/>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+            </Container>
+            <Component class="com.toedter.calendar.JDateChooser" name="t_tglSurat">
+            </Component>
+          </SubComponents>
+        </Container>
+      </SubComponents>
+    </Container>
+  </SubComponents>
+</Form>

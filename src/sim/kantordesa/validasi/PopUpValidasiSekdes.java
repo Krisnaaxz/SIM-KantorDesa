@@ -16,9 +16,10 @@ import sim.kantordesa.config.koneksi;
  * @author Krisna
  */
 public final class PopUpValidasiSekdes extends javax.swing.JFrame {
-    private int roleId;
     JDialog popup;
     boolean allChecked = false;
+    Integer role;
+    Integer mailId;
     JCheckBox[] checkboxes = {
         new JCheckBox(), new JCheckBox(), new JCheckBox(), new JCheckBox(), new JCheckBox(), new JCheckBox(), new JCheckBox(), new JCheckBox(), new JCheckBox()
     };
@@ -31,9 +32,10 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
     /**
      * Creates new form PopUpValidasiSekdes
      * @param value
+     * @param role
      */
-    public PopUpValidasiSekdes(String value) {
-        this.roleId = roleId;
+    public PopUpValidasiSekdes(String value, String role) {
+        this.role = Integer.valueOf(role);
         initComponents();
         
         setDefaultCloseOperation(HIDE_ON_CLOSE);
@@ -70,7 +72,7 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
         try {
             Connection c = koneksi.getConnection();
             Statement s = c.createStatement();
-            String sql = "SELECT m.applicant_name, m.mail_number, t.type_name, m.mail_date, m.status_validation, m.status_lead, m.created_at, m.no_ktp, c.nama, c.tempat_tanggal_lahir, c.warga_negara, c.agama, c.jenis_kelamin, c.pekerjaan, c.alamat, c.gol_darah FROM mail_content AS m JOIN civil_registry AS c ON m.no_ktp = c.no_ktp JOIN mail_type AS t ON m.mail_type_id = t.mail_type_id WHERE mail_number = \"" + value + "\";";
+            String sql = "SELECT m.mail_id, m.applicant_name, m.mail_number, t.type_name, m.mail_date, m.status_validation, m.status_lead, m.created_at, m.no_ktp, c.nama, c.tempat_tanggal_lahir, c.warga_negara, c.agama, c.jenis_kelamin, c.pekerjaan, c.alamat, c.gol_darah FROM mail_content AS m JOIN civil_registry AS c ON m.no_ktp = c.no_ktp JOIN mail_type AS t ON m.mail_type_id = t.mail_type_id WHERE mail_id = \"" + value + "\";";
             ResultSet r = s.executeQuery(sql);
             
             while (r.next()) {
@@ -78,8 +80,8 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
                 NomorSurat.setText(r.getString("mail_number"));
                 Perihal.setText(r.getString("type_name"));
                 TanggalSurat.setText(r.getString("mail_date"));
-                StatusSekdes.setText(r.getBoolean("status_validation") == false ? "Reject" : "Accept");
-                StatusKades.setText(r.getBoolean("status_lead") == false ? "Reject" : "Accept");
+                StatusSekdes.setText(r.getInt("status_validation") == 0 ? "Reject" : r.getInt("status_validation") == 1 ? "Accept" : "Baru");
+                StatusKades.setText(r.getInt("status_lead") == 0 ? "Reject" : r.getInt("status_lead") == 1 ? "Accept" : "Baru");
                 TanggalPengajuan.setText(r.getString("created_at"));
                 DataNik.setText(r.getString("no_ktp"));
                 DataNama.setText(r.getString("nama"));
@@ -90,6 +92,7 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
                 DataPekerjaan.setText(r.getString("pekerjaan"));
                 DataALamat.setText(r.getString("alamat"));
                 DataGD.setText(r.getString("gol_darah"));
+                this.mailId = r.getInt("mail_id");
             }
             
             r.close();
@@ -708,17 +711,17 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
             String sql;
             
             // Determine which status to update based on role ID
-            if (roleId == 2) { // Assuming 2 is for Sekdes
-                sql = "UPDATE mail_content SET status_validation = true, mail_comment = 'Data Tervalidasi' WHERE mail_number = ?";
-            } else if (roleId == 1) { // Assuming 1 is for Kades
-                sql = "UPDATE mail_content SET status_lead = true WHERE mail_number = ?";
+            if (role == 2) { // Assuming 2 is for Sekdes
+                sql = "UPDATE mail_content SET status_validation = true, mail_comment = 'Data Tervalidasi' WHERE mail_id = ?";
+            } else if (role == 1) { // Assuming 1 is for Kades
+                sql = "UPDATE mail_content SET status_lead = true WHERE mail_id = ?";
             } else {
                 JOptionPane.showMessageDialog(this, "Role tidak valid!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             try (java.sql.PreparedStatement ps = c.prepareStatement(sql)) {
-                ps.setString(1, NomorSurat.getText());
+                ps.setInt(1, mailId);
                 
                 int result = ps.executeUpdate();
                 if (result > 0) {
@@ -787,9 +790,9 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
             String sql;
             
             // Determine which status to update based on role ID
-            if (roleId == 2) { // Assuming 2 is for Sekdes
+            if (role == 2) { // Assuming 2 is for Sekdes
                 sql = "UPDATE mail_content SET status_validation = false, reject_note = ? WHERE mail_number = ?";
-            } else if (roleId == 1) { // Assuming 1 is for Kades
+            } else if (role == 1) { // Assuming 1 is for Kades
                 sql = "UPDATE mail_content SET status_lead = false, reject_note = ? WHERE mail_number = ?";
             } else {
                 JOptionPane.showMessageDialog(this, "Role tidak valid!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -835,7 +838,7 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PopUpValidasiSekdes(args[0]).setVisible(true);
+                new PopUpValidasiSekdes(args[0], args[1]).setVisible(true);
             }
         });
     }

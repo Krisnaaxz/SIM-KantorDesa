@@ -69,46 +69,54 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="Beranda" max="32767" attributes="0"/>
-                      <Component id="FormSuratMasuk" max="32767" attributes="0"/>
-                      <Component id="HistorySuratMasuk" alignment="0" max="32767" attributes="0"/>
-                      <Component id="HistorySuratKeluar" max="32767" attributes="0"/>
-                      <Component id="FormSuratKeluar" alignment="0" max="32767" attributes="0"/>
-                      <Component id="Disposisi" max="32767" attributes="0"/>
-                      <Component id="Validasi" max="32767" attributes="0"/>
-                      <Component id="DaftarAkun" max="32767" attributes="0"/>
-                      <Component id="AksesRole" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="Keluar" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="Beranda" max="32767" attributes="0"/>
+                              <Component id="FormSuratMasuk" max="32767" attributes="0"/>
+                              <Component id="HistorySuratMasuk" alignment="0" max="32767" attributes="0"/>
+                              <Component id="HistorySuratKeluar" max="32767" attributes="0"/>
+                              <Component id="FormSuratKeluar" alignment="0" max="32767" attributes="0"/>
+                              <Component id="Disposisi" max="32767" attributes="0"/>
+                              <Component id="Validasi" max="32767" attributes="0"/>
+                              <Component id="DaftarAkun" max="32767" attributes="0"/>
+                              <Component id="AksesRole" max="32767" attributes="0"/>
+                              <Component id="Pelaporan" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   <Component id="Beranda" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" pref="30" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="FormSuratMasuk" max="32767" attributes="0"/>
-                  <EmptySpace type="separate" pref="30" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="FormSuratKeluar" max="32767" attributes="0"/>
-                  <EmptySpace type="separate" pref="30" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="HistorySuratMasuk" max="32767" attributes="0"/>
-                  <EmptySpace type="separate" pref="30" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="HistorySuratKeluar" max="32767" attributes="0"/>
-                  <EmptySpace type="separate" pref="30" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="Disposisi" max="32767" attributes="0"/>
-                  <EmptySpace type="separate" pref="30" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="Validasi" max="32767" attributes="0"/>
-                  <EmptySpace type="separate" pref="31" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="Pelaporan" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="DaftarAkun" max="32767" attributes="0"/>
-                  <EmptySpace pref="30" max="32767" attributes="0"/>
-                  <Component id="AksesRole" max="32767" attributes="0"/>
-                  <EmptySpace pref="121" max="32767" attributes="0"/>
-                  <Component id="Keluar" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="AksesRole" pref="29" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="182" max="-2" attributes="0"/>
+                  <Component id="Keluar" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -144,6 +152,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Form Surat Masuk"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="FormSuratMasukMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="FormSuratKeluar">
           <Properties>
@@ -158,6 +169,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Form Surat Keluar"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="FormSuratKeluarMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="HistorySuratMasuk">
           <Properties>
@@ -173,6 +187,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="History Surat Masuk"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="HistorySuratMasukMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="HistorySuratKeluar">
           <Properties>
@@ -187,6 +204,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="History Surat Keluar"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="HistorySuratKeluarMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="Disposisi">
           <Properties>
@@ -204,6 +224,9 @@
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value=""/>
           </AccessibilityProperties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="DisposisiMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="Validasi">
           <Properties>
@@ -218,6 +241,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Validasi"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="ValidasiMouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="DaftarAkun">
           <Properties>
@@ -265,6 +291,23 @@
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="KeluarMouseClicked"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="Pelaporan">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="14" style="1"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="61" green="80" red="13" type="rgb"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/sim/kantordesa/dashboard/icon/pelaporan.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Pelaporan"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="PelaporanMouseClicked"/>
           </Events>
         </Component>
       </SubComponents>

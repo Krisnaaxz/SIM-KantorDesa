@@ -29,20 +29,23 @@ import java.awt.GridBagLayout;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import sim.kantordesa.mailtemplate.MailData;
+import sim.kantordesa.mailtemplate.edit_mailform;
+import sim.kantordesa.mailtemplate.mailform;
 
 /**
  *
  * @author krisna
  */
 public class HistoryPage extends javax.swing.JFrame {
-    private javax.swing.table.DefaultTableModel model; 
+
+    private javax.swing.table.DefaultTableModel model;
     Connection c = koneksi.getConnection();
 
-    
     public HistoryPage() {
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
-        
+
         model = new javax.swing.table.DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -63,49 +66,51 @@ public class HistoryPage extends javax.swing.JFrame {
         model.addColumn("Status Validasi Kades");
         model.addColumn("Comment");
         model.addColumn("Aksi");
-        
 
         setTableAction(); //call function setTableAction()
         adjustColumnWidths(tbHistory); //call function adjustColumnWidths()
-        
-         // Set the preferred width for the "Comment" column 
+
+        // Set the preferred width for the "Comment" column 
         TableColumn commentColumn = tbHistory.getColumnModel().getColumn(7);
         commentColumn.setPreferredWidth(250);
         commentColumn.setMaxWidth(250);
-        commentColumn.setMinWidth(250); 
-   
+        commentColumn.setMinWidth(250);
+
         // Set the preferred width for the "No." column 
         TableColumn noColumn = tbHistory.getColumnModel().getColumn(0);
         noColumn.setMaxWidth(50);
         noColumn.setMinWidth(50);
-    
+
         // Set the custom cell renderer for the "Comment" column
         commentColumn.setCellRenderer(new TextAreaRenderer());
+    }
+
+    public JPanel getContentPanel() {
+        return (JPanel) this.getContentPane();
     }
 
     public void setTableAction() { //function query get data from db
         model.getDataVector().removeAllElements();//remove value on table
         model.fireTableDataChanged();
-        
+
         try {
             Statement s = c.createStatement();
-            String sql = "select mail_id, mail_number, created_at, applicant_name, mail_comment, status_validation, status_lead, mail_comment, mail_type.type_name from mail_content inner join mail_type on mail_content.mail_type_id = mail_type.mail_type_id;";
+            String sql = "select mail_id, mail_number, created_at, applicant_name, mail_comment, status_validation, status_lead, mail_comment, mail_type.type_name from mail_content inner join mail_type on mail_content.mail_type_id = mail_type.mail_type_id ORDER BY mail_id";
             ResultSet r = s.executeQuery(sql);
             int i = 1;
-            while (r.next()){
-                
-              model.addRow(new Object[]{//crate row on table and get data from db
-                i++,
-                r.getString("mail_number"),
-                r.getString("applicant_name"),
-                r.getString("created_at"),
-                r.getString("type_name"),
-                r.getBoolean("status_validation") == false ? "Reject" : "Accept",
-                r.getBoolean("status_lead") == false ? "Reject" : "Accept",
-                r.getString("mail_comment"),
-                r.getString("mail_id"),
-              });
-              
+            while (r.next()) {
+
+                model.addRow(new Object[]{//crate row on table and get data from db
+                    i++,
+                    r.getString("mail_number"),
+                    r.getString("applicant_name"),
+                    r.getString("created_at"),
+                    r.getString("type_name"),
+                    r.getInt("status_validation") == 0 ? "Reject" : r.getInt("status_validation") == 1 ? "Accept" : "Baru",
+                    r.getInt("status_lead") == 0 ? "Reject" : r.getInt("status_lead") == 1 ? "Accept" : "Baru",
+                    r.getString("mail_comment"),
+                    r.getString("mail_id"),});
+
             }
             r.close();
             s.close();
@@ -119,61 +124,61 @@ public class HistoryPage extends javax.swing.JFrame {
         tbHistory.getColumn("Aksi").setCellRenderer(new ButtonPanelRenderer());
         tbHistory.getColumn("Aksi").setCellEditor(new ButtonPanelEditor(tbHistory));
     }
-    
-    
+
     // Custom cell renderer for text wrapping
     public class TextAreaRenderer extends JTextArea implements TableCellRenderer {
-       private static final int FIXED_WIDTH = 200; // Fixed width in pixels
 
-       public TextAreaRenderer() {
-           setLineWrap(true);
-           setWrapStyleWord(true);
-       }
+        private static final int FIXED_WIDTH = 200; // Fixed width in pixels
 
-       @Override
-       public Component getTableCellRendererComponent(JTable table, Object value, 
-               boolean isSelected, boolean hasFocus, int row, int column) {
-           setText(value != null ? value.toString() : "");
-           setSize(FIXED_WIDTH, Short.MAX_VALUE);
+        public TextAreaRenderer() {
+            setLineWrap(true);
+            setWrapStyleWord(true);
+        }
 
-           // Calculate the preferred height based on the fixed width
-           int preferredHeight = getPreferredSize().height;
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            setText(value != null ? value.toString() : "");
+            setSize(FIXED_WIDTH, Short.MAX_VALUE);
 
-           // Set minimum height to avoid very small rows
-           preferredHeight = Math.max(preferredHeight, 40);
+            // Calculate the preferred height based on the fixed width
+            int preferredHeight = getPreferredSize().height;
 
-           // Update the row height if necessary
-           if (table.getRowHeight(row) != preferredHeight) {
-               table.setRowHeight(row, preferredHeight);
-           }
-           
-           //adding border
+            // Set minimum height to avoid very small rows
+            preferredHeight = Math.max(preferredHeight, 40);
+
+            // Update the row height if necessary
+            if (table.getRowHeight(row) != preferredHeight) {
+                table.setRowHeight(row, preferredHeight);
+            }
+
+            //adding border
             setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(0, 0, 1, 0, Color.lightGray),  // Border hitam
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)  // Padding
+                    BorderFactory.createMatteBorder(0, 0, 1, 0, Color.lightGray), // Border hitam
+                    BorderFactory.createEmptyBorder(5, 5, 5, 5) // Padding
             ));
-           
-           // Handle selection highlighting
-           if (isSelected) {
-               setBackground(table.getSelectionBackground());
-               setForeground(table.getSelectionForeground());
-           } else {
-               setBackground(table.getBackground());
-               setForeground(table.getForeground());
-           }
 
-           return this;
-       }
+            // Handle selection highlighting
+            if (isSelected) {
+                setBackground(table.getSelectionBackground());
+                setForeground(table.getSelectionForeground());
+            } else {
+                setBackground(table.getBackground());
+                setForeground(table.getForeground());
+            }
 
-       // Override getPreferredSize to maintain fixed width
-       @Override
-       public Dimension getPreferredSize() {
-           Dimension d = super.getPreferredSize();
-           d.width = FIXED_WIDTH;
-           return d;
-       }
-   }
-    
+            return this;
+        }
+
+        // Override getPreferredSize to maintain fixed width
+        @Override
+        public Dimension getPreferredSize() {
+            Dimension d = super.getPreferredSize();
+            d.width = FIXED_WIDTH;
+            return d;
+        }
+    }
+
     public static void adjustColumnWidths(JTable table) {
         for (int column = 0; column < table.getColumnCount(); column++) {
             TableColumn tableColumn = table.getColumnModel().getColumn(column);
@@ -181,7 +186,7 @@ public class HistoryPage extends javax.swing.JFrame {
             tableColumn.setPreferredWidth(preferredWidth);
         }
     }
-    
+
     private static int getMaxPreferredWidth(JTable table, int column) { //width adjusting with comparing max widht on header and value
         int maxWidth = 0;
         TableColumn tableColumn = table.getColumnModel().getColumn(column);
@@ -202,90 +207,153 @@ public class HistoryPage extends javax.swing.JFrame {
     }
 
     class ButtonPanelRenderer extends ButtonPanel implements TableCellRenderer {
+
         public ButtonPanelRenderer() { //action button style
             setBackground(Color.white);
-                setOpaque(true);
+            setOpaque(true);
         }
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            
+
             //checking condition where accepted mail will rendering download button
             boolean statusValidation = "Accept".equals(table.getValueAt(row, 5));
             boolean statusLead = "Accept".equals(table.getValueAt(row, 6));
-                    Object mailComment = table.getValueAt(row, 7);
+            Object mailComment = table.getValueAt(row, 7);
             boolean hasMailComment = (mailComment != null && !mailComment.toString().isEmpty() && statusValidation && statusLead);
 
-                downloadButton.setVisible(hasMailComment);
-                editButton.setVisible(!hasMailComment);
-                
-                setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createMatteBorder(0, 1, 1, 0, Color.lightGray),  // Border hitam
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)  // Padding
-                ));
-                
-                if (isSelected) {
-                    setBackground(table.getSelectionBackground());
-                    setForeground(table.getSelectionForeground());
-                } else {
-                    setBackground(table.getBackground());
-                    setForeground(table.getForeground());
-                }
-                return this;
+            downloadButton.setVisible(hasMailComment);
+            editButton.setVisible(!hasMailComment);
+
+            setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createMatteBorder(0, 1, 1, 0, Color.lightGray), // Border hitam
+                    BorderFactory.createEmptyBorder(5, 5, 5, 5) // Padding
+            ));
+
+            if (isSelected) {
+                setBackground(table.getSelectionBackground());
+                setForeground(table.getSelectionForeground());
+            } else {
+                setBackground(table.getBackground());
+                setForeground(table.getForeground());
+            }
+            return this;
         }
 
     }
 
     class ButtonPanelEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
+
         ButtonPanel panel;
         JTable table;
 
 //        public ButtonPanelEditor(JButton editButton, JButton deleteButton, JButton downloadButton) {
         public ButtonPanelEditor(JTable table) { //constructor 
-              this.table = table;
-              panel = new ButtonPanel();
-              
-              panel.editButton.addActionListener(e -> handleEditButtonAction());
-              panel.deleteButton.addActionListener(e -> handleDeleteButtonAction());
-              panel.downloadButton.addActionListener(e -> handleDownloadButtonAction());
-              
-              
+            this.table = table;
+            panel = new ButtonPanel();
+
+            panel.editButton.addActionListener(e -> handleEditButtonAction());
+            panel.deleteButton.addActionListener(e -> handleDeleteButtonAction());
+            panel.downloadButton.addActionListener(e -> handleDownloadButtonAction());
+
         }
-        
+
         private void handleEditButtonAction() {
             System.out.println("Edit Button diklik");
+            int row = table.getSelectedRow();
+            if (row != -1) {
+                String mailId = (String) table.getValueAt(row, 8);
+                edit_mailform editForm = new edit_mailform(Integer.parseInt(mailId));
+                editForm.setVisible(true);
+            }
         }
+
         private void handleDeleteButtonAction() {
             System.out.println("Delete Button diklik");
             int row = table.getSelectedRow();
 
             //get mailID on selected row
-            String mailId =(String) table.getValueAt(row, 8);
+            String mailId = (String) table.getValueAt(row, 8);
             //option panel to confirm delete
             int confirm = JOptionPane.showConfirmDialog(
-                    null, 
-                    "Apakah anda yakin ingin menghapus pengajuan surat ini?", 
-                    "Konfirmasi Hapus", 
+                    null,
+                    "Apakah anda yakin ingin menghapus pengajuan surat ini?",
+                    "Konfirmasi Hapus",
                     JOptionPane.YES_NO_OPTION
             );
-            
-            if(confirm == JOptionPane.YES_OPTION){
+
+            if (confirm == JOptionPane.YES_OPTION) {
                 String query = "DELETE FROM mail_content WHERE mail_id = ?";
                 try {
                     boolean hasil = koneksi.delete(query, mailId);
-                    if(hasil){
+                    if (hasil) {
                         setTableAction();
                         JOptionPane.showMessageDialog(
-                                null, 
+                                null,
                                 "Data Pengajuan Berhasil Dihapus");
                     }
-                } catch(HeadlessException e){
-                   System.out.println("Error, " + e);
+                } catch (HeadlessException e) {
+                    System.out.println("Error, " + e);
                 }
             }
         }
+
         private void handleDownloadButtonAction() {
             System.out.println("Download Button diklik");
+            mailform mf = new mailform();
+
+            int row = table.getSelectedRow();
+            String mailTypeString = (String) table.getValueAt(row, 4);
+            String mailId = (String) table.getValueAt(row, 8);
+            Integer mailTypeId = null;
+            
+            System.out.println(mailId);
+
+            try {
+                Connection conn = koneksi.getConnection();
+
+                String getMailTypeIdQuery = "SELECT mail_type_id FROM `mail_type` where type_name = \"" + mailTypeString + "\";";
+                Statement s = conn.createStatement();
+                ResultSet rs1 = s.executeQuery(getMailTypeIdQuery);
+                while (rs1.next()) {
+                    mailTypeId = rs1.getInt("mail_type_id");
+                }
+
+
+                String getMailDataQuery = "SELECT c.applicant_name, c.mulai_berlaku, c.tgl_akhir, c.mail_number, c.keperluan, cr.tempat_tanggal_lahir, cr.usia, cr.warga_negara, cr.agama, cr.jenis_kelamin, cr.pekerjaan, cr.alamat, cr.no_ktp, cr.no_kk, cr.gol_darah, t.mail_type_id  FROM mail_content as c INNER JOIN civil_registry cr ON c.no_ktp = cr.no_ktp INNER JOIN mail_type t ON c.mail_type_id = t.mail_type_id WHERE mail_id = \"" + mailId + "\";";
+                ResultSet rs2 = s.executeQuery(getMailDataQuery);
+
+                while (rs2.next()) {
+//                    System.out.println("hello world");
+//                    System.out.println("nama pemohon : " + rs2.getString("applicant_name"));
+                    MailData.put("nama", rs2.getString("applicant_name"));
+                    MailData.put("ttl", rs2.getString("tempat_tanggal_lahir"));
+                    MailData.put("umur", rs2.getString("usia"));
+                    MailData.put("warga_negara", rs2.getString("warga_negara"));
+                    MailData.put("agama", rs2.getString("agama"));
+                    MailData.put("sex", rs2.getString("jenis_kelamin"));
+                    MailData.put("pekerjaan", rs2.getString("pekerjaan"));
+                    MailData.put("alamat", rs2.getString("alamat"));
+                    MailData.put("no_ktp", rs2.getString("no_ktp"));
+                    MailData.put("no_kk", rs2.getString("no_kk"));
+                    MailData.put("keperluan", rs2.getString("keperluan"));
+                    MailData.put("mulai_berlaku", rs2.getString("mulai_berlaku"));
+                    MailData.put("tgl_akhir", rs2.getString("tgl_akhir"));
+                    MailData.put("gol_darah", rs2.getString("gol_darah"));
+                    MailData.put("mail_number", rs2.getString("mail_number"));
+                }
+                
+                System.out.println(mailTypeId + " 2");
+
+                mf.generatePDF(mailTypeId, conn, mailTypeString, true);
+                
+                rs1.close();
+                rs2.close();
+                s.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
         }
 
         @Override //make can't edit table value
@@ -298,12 +366,12 @@ public class HistoryPage extends javax.swing.JFrame {
                 int column) {
             boolean statusValidation = "Accept".equals(table.getValueAt(row, 5));
             boolean statusLead = "Accept".equals(table.getValueAt(row, 6));
-                    Object mailComment = table.getValueAt(row, 7);
-                    
+            Object mailComment = table.getValueAt(row, 7);
+
             boolean hasMailComment = (mailComment != null && !mailComment.toString().isEmpty() && statusValidation && statusLead);
             panel.downloadButton.setVisible(hasMailComment);
             panel.editButton.setVisible(!hasMailComment);
-            
+
             return panel;
         }
 
@@ -311,100 +379,97 @@ public class HistoryPage extends javax.swing.JFrame {
         public void actionPerformed(ActionEvent e) {
             throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
         }
-        
+
         @Override
         protected void fireEditingStopped() {
             super.fireEditingStopped();
         }
     }
-    
+
     static class ButtonPanel extends javax.swing.JPanel {
+
         public javax.swing.JButton editButton;
         public javax.swing.JButton deleteButton;
         public javax.swing.JButton downloadButton;
-        
+
         public ButtonPanel() {
             // Use GridBagLayout for better centering control
-        setLayout(new GridBagLayout());
-        // Use BoxLayout for vertical alignment
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        
-        // Create inner panel for buttons with FlowLayout
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
-        buttonPanel.setOpaque(false);
-        
-        // Create buttons
-        editButton = new JButton("Edit");
-        deleteButton = new JButton("Delete");
-        downloadButton = new JButton("Download");
-        
-        // Add buttons to inner panel
-        buttonPanel.add(editButton);
-        buttonPanel.add(deleteButton);
-        buttonPanel.add(downloadButton);
-        
-        // Add vertical glue for centering
-        add(Box.createVerticalGlue());
-        // Add button panel
-        add(buttonPanel);
-        // Add vertical glue for centering
-        add(Box.createVerticalGlue());
-       
+            setLayout(new GridBagLayout());
+            // Use BoxLayout for vertical alignment
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+            // Create inner panel for buttons with FlowLayout
+            JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
+            buttonPanel.setOpaque(false);
+
+            // Create buttons
+            editButton = new JButton("Edit");
+            deleteButton = new JButton("Delete");
+            downloadButton = new JButton("Download");
+
+            // Add buttons to inner panel
+            buttonPanel.add(editButton);
+            buttonPanel.add(deleteButton);
+            buttonPanel.add(downloadButton);
+
+            // Add vertical glue for centering
+            add(Box.createVerticalGlue());
+            // Add button panel
+            add(buttonPanel);
+            // Add vertical glue for centering
+            add(Box.createVerticalGlue());
+
         }
     }
 
     //filtering history 
     private void filter(String query) {
-    TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(model);
-    tbHistory.setRowSorter(tr);
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(model);
+        tbHistory.setRowSorter(tr);
 
-    RowFilter<DefaultTableModel, Object> filter = null; //no filter
+        RowFilter<DefaultTableModel, Object> filter = null; //no filter
 
-    if ("Diproses".equals(query)) {//filter by surat diproses
-        filter = new RowFilter<>() {
-            @Override
-            public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
-                String statusSekdes = (String) entry.getValue(5);
-                String statusKades = (String) entry.getValue(6);
-                String mailComment = (String) entry.getValue(7);
+        if ("Diproses".equals(query)) {//filter by surat diproses
+            filter = new RowFilter<>() {
+                @Override
+                public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
+                    String statusSekdes = (String) entry.getValue(5);
+                    String statusKades = (String) entry.getValue(6);
 
-                return "Reject".equals(statusSekdes) && "Reject".equals(statusKades) && 
-                       (mailComment == null || mailComment.isEmpty());
-            }
-        };
-    } else if ("Ditolak".equals(query)) {//filter by surat ditolak
-        filter = new RowFilter<>() {
-            @Override
-            public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
-                String statusSekdes = (String) entry.getValue(5);
-                String statusKades = (String) entry.getValue(6);
-                String mailComment = (String) entry.getValue(7);
+                    return ("Baru".equals(statusSekdes) || "Accept".equals(statusSekdes)) && "Baru".equals(statusKades);
+                }
+            };
+        } else if ("Ditolak".equals(query)) {//filter by surat ditolak
+            filter = new RowFilter<>() {
+                @Override
+                public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
+                    String statusSekdes = (String) entry.getValue(5);
+                    String statusKades = (String) entry.getValue(6);
 
-                return "Reject".equals(statusSekdes) && "Reject".equals(statusKades) && 
-                       (mailComment != null && !mailComment.isEmpty());
-            }
-        };
-    } else if ("Selesai".equals(query)) {//filter by surat selesai
-        filter = new RowFilter<>() {
-            @Override
-            public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
-                String statusSekdes = (String) entry.getValue(5);
-                String statusKades = (String) entry.getValue(6);
-                String mailComment = (String) entry.getValue(7);
+                    return "Reject".equals(statusSekdes) || "Reject".equals(statusKades);
+                }
+            };
+        } else if ("Selesai".equals(query)) {//filter by surat selesai
+            filter = new RowFilter<>() {
+                @Override
+                public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
+                    String statusSekdes = (String) entry.getValue(5);
+                    String statusKades = (String) entry.getValue(6);
+                    String mailComment = (String) entry.getValue(7);
 
-                return "Accept".equals(statusSekdes) && "Accept".equals(statusKades) && 
-                       (mailComment != null && !mailComment.isEmpty());
-            }
-        };
-    } else if ("Semua".equals(query)) {
-        tr.setRowFilter(null); // no filter
-        return;
+                    return "Accept".equals(statusSekdes) && "Accept".equals(statusKades)
+                            && (mailComment != null && !mailComment.isEmpty());
+                }
+            };
+        } else if ("Semua".equals(query)) {
+            tr.setRowFilter(null); // no filter
+            return;
+        }
+
+        if (filter != null) {
+            tr.setRowFilter(filter);
+        }
     }
-
-    if (filter != null) {
-        tr.setRowFilter(filter);
-    }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -490,7 +555,7 @@ public class HistoryPage extends javax.swing.JFrame {
         }
 
         labelHistory.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        labelHistory.setText("History Surat Masuk");
+        labelHistory.setText("History Surat Keluar");
 
         refresh.setBackground(new java.awt.Color(19, 128, 97));
         refresh.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -581,28 +646,6 @@ public class HistoryPage extends javax.swing.JFrame {
         // TODO add your handling code here:
         setTableAction();
     }//GEN-LAST:event_refreshActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-          ValidationPages.main(null);
-        dispose();
-    }// GEN-LAST:event_jButton6ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

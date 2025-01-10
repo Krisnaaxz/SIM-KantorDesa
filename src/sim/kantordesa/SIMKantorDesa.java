@@ -5,8 +5,6 @@
 package sim.kantordesa;
 import sim.kantordesa.auth.login;
 
-import sim.kantordesa.validasi.ValidationPages;
-
 /**
  *
  * @author Krisna

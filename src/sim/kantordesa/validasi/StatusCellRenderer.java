@@ -25,7 +25,7 @@ public class StatusCellRenderer extends DefaultTableCellRenderer {
             } else switch (status) {
                 case "Reject" -> cell.setForeground(Color.RED);
                 case "Accept" -> cell.setForeground(Color.GREEN);
-                default -> cell.setForeground(Color.BLACK);
+                default -> cell.setForeground(Color.BLUE);
             }
         }
 
