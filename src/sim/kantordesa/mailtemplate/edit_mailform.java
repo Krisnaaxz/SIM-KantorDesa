@@ -386,7 +386,6 @@ public class edit_mailform extends javax.swing.JFrame {
         String sql2 = "UPDATE mail_content SET no_ktp = ?, mulai_berlaku = ?, tgl_akhir = ?, keperluan = ? WHERE mail_id = ?";
             try (PreparedStatement stmt1 = conn.prepareStatement(sql1);
                 PreparedStatement stmt2 = conn.prepareStatement(sql2)) {
-                
                 stmt1.setString(1, text_nama.getText());
                 stmt1.setString(2, text_noktp.getText());
                 stmt1.setString(3, text_nokk.getText());
@@ -458,7 +457,6 @@ public class edit_mailform extends javax.swing.JFrame {
                 this.title = rs.getString("type_name");
                 updateTitle(this.title);
 
-                // Additional fields
                 MailData.getMap().put("mail_id", String.valueOf(rs.getInt("mail_id")));
                 MailData.getMap().put("mail_date", rs.getString("mail_date"));
                 MailData.getMap().put("status", rs.getString("status"));
