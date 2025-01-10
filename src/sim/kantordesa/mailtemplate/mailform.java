@@ -727,38 +727,38 @@ public class mailform extends javax.swing.JFrame {
 
                     // Main Content
                     Paragraph mainContent = new Paragraph().addTabStops(tabStops)
-                            .add(new Text("Nama\t\t\t\t\t\t\t: "
+                            .add(new Text("Nama\t\t\t\t\t\t\t\t: "
                                     + (mailData.getOrDefault("nama", text_nama.getText() != null ? text_nama.getText() : ""))).setFontSize(12))
-                            .add(new Text("\nTempat/tanggal lahir\t : "
+                            .add(new Text("\nTempat/tanggal lahir\t\t : "
                                     + (mailData.getOrDefault("ttl", text_tgl_lahir.getText() != null ? text_tgl_lahir.getText() : "")))
                                     .setFontSize(12))
-                            .add(new Text("\nUsia\t\t\t\t\t\t\t\t: "
+                            .add(new Text("\nUsia\t\t\t\t\t\t\t\t   : "
                                     + (mailData.getOrDefault("umur", jUmur.getValue() != null ? jUmur.getValue().toString() : ""))).setFontSize(12))
-                            .add(new Text("\nWarga negara\t\t\t\t\t: " + (mailData.getOrDefault("warga_negara", wni.isSelected() ? "WNI" : "WNA")))
+                            .add(new Text("\nWarga negara\t\t\t\t   : " + (mailData.getOrDefault("warga_negara", wni.isSelected() ? "WNI" : "WNA")))
                                     .setFontSize(12))
-                            .add(new Text("\nAgama\t\t\t\t\t\t: "
+                            .add(new Text("\nAgama\t\t\t\t\t\t\t  : "
                                     + (mailData.getOrDefault("agama", box_agama.getSelectedItem() != null ? box_agama.getSelectedItem().toString()
                                     : "")))
                                     .setFontSize(12))
                             .add(new Text(
-                                    "\nJenis Kelamin          : " + (mailData.getOrDefault("sex", lakilaki.isSelected() ? "Laki-laki" : "Perempuan")))
+                                    "\nJenis Kelamin\t\t\t\t   : " + (mailData.getOrDefault("sex", lakilaki.isSelected() ? "Laki-laki" : "Perempuan")))
                                     .setFontSize(12))
-                            .add(new Text("\nPekerjaan              : "
+                            .add(new Text("\nPekerjaan\t\t\t\t\t\t : "
                                     + (mailData.getOrDefault("pekerjaan", text_pekerjaan.getText() != null ? text_pekerjaan.getText() : "")))
                                     .setFontSize(12))
-                            .add(new Text("\nTempat Tinggal         : "
+                            .add(new Text("\nTempat Tinggal\t\t\t\t: "
                                     + (mailData.getOrDefault("alamat", text_ttinggal.getText() != null ? text_ttinggal.getText() : ""))).setFontSize(12))
                             .add(new Text("\n\nSurat bukti diri").setFontSize(12))
-                            .add(new Text("\nKTP                    : "
+                            .add(new Text("\nNo. KTP\t\t\t\t\t\t  : "
                                     + (mailData.getOrDefault("no_ktp", text_noktp.getText() != null ? text_noktp.getText() : ""))).setFontSize(12))
-                            .add(new Text("\nKK                     : "
+                            .add(new Text("\nNo. KK\t\t\t\t\t\t\t: "
                                     + (mailData.getOrDefault("no_kk", text_nokk.getText() != null ? text_nokk.getText() : ""))).setFontSize(12))
-                            .add(new Text("\nKeperluan              :"
+                            .add(new Text("\nKeperluan\t\t\t\t\t   : "
                                     + (mailData.getOrDefault("keperluan", text_keperluan.getText() != null ? text_keperluan.getText() : "")))
                                     .setFontSize(12))
-                            .add(new Text("\nBerlaku                : " + dariTanggal + " s/d " + sampaiTanggal)
+                            .add(new Text("\nBerlaku\t\t\t\t\t\t   : " + dariTanggal + " s/d " + sampaiTanggal)
                                     .setFontSize(12))
-                            .add(new Text("\nGolongan Darah         : "
+                            .add(new Text("\nGolongan Darah\t\t\t : "
                                     + (mailData.getOrDefault("gol_darah", box_goldar.getSelectedItem() != null ? box_goldar.getSelectedItem().toString()
                                     : "")))
                                     .setFontSize(12))
@@ -782,7 +782,7 @@ public class mailform extends javax.swing.JFrame {
 
                         // Pemegang Surat
                         signatureTable.addCell(new Cell()
-                                .add(new Paragraph("Pemegang Surat\n\n\n\n\n" + pemegangSurat)
+                                .add(new Paragraph(" \n\n\n" + "Pemegang Surat\n\n\n\n\n" + pemegangSurat)
                                         .setTextAlignment(TextAlignment.CENTER).setFontSize(12))
                                 .setBorder(Border.NO_BORDER));
 
