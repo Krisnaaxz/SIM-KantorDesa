@@ -80,8 +80,8 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
                 NomorSurat.setText(r.getString("mail_number"));
                 Perihal.setText(r.getString("type_name"));
                 TanggalSurat.setText(r.getString("mail_date"));
-                StatusSekdes.setText(r.getBoolean("status_validation") == false ? "Reject" : "Accept");
-                StatusKades.setText(r.getBoolean("status_lead") == false ? "Reject" : "Accept");
+                StatusSekdes.setText(r.getInt("status_validation") == 0 ? "Reject" : r.getInt("status_validation") == 1 ? "Accept" : "Baru");
+                StatusKades.setText(r.getInt("status_lead") == 0 ? "Reject" : r.getInt("status_lead") == 1 ? "Accept" : "Baru");
                 TanggalPengajuan.setText(r.getString("created_at"));
                 DataNik.setText(r.getString("no_ktp"));
                 DataNama.setText(r.getString("nama"));
@@ -105,7 +105,6 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
         
     }
     
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -183,6 +182,7 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
         Catatan = new javax.swing.JTextField();
         TolakPengajuan = new javax.swing.JButton();
         Validasi = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -623,6 +623,18 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("✓ Check Semua");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -641,13 +653,17 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
                                 .addGap(567, 567, 567)
                                 .addComponent(Validasi, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel34)
@@ -658,7 +674,7 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
                         .addComponent(TolakPengajuan, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Validasi, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 5, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -712,9 +728,9 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
             
             // Determine which status to update based on role ID
             if (role == 2) { // Assuming 2 is for Sekdes
-                sql = "UPDATE mail_content SET status_validation = true, mail_comment = 'Data Tervalidasi' WHERE mail_id = ?";
+                sql = "UPDATE mail_content SET status_validation = 1, mail_comment = 'Data Tervalidasi' WHERE mail_id = ?";
             } else if (role == 1) { // Assuming 1 is for Kades
-                sql = "UPDATE mail_content SET status_lead = true WHERE mail_id = ?";
+                sql = "UPDATE mail_content SET status_lead = 1 WHERE mail_id = ?";
             } else {
                 JOptionPane.showMessageDialog(this, "Role tidak valid!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -791,9 +807,9 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
             
             // Determine which status to update based on role ID
             if (role == 2) { // Assuming 2 is for Sekdes
-                sql = "UPDATE mail_content SET status_validation = false, reject_note = ? WHERE mail_number = ?";
+                sql = "UPDATE mail_content SET status_validation = 0, mail_comment = ? WHERE mail_id = ?";
             } else if (role == 1) { // Assuming 1 is for Kades
-                sql = "UPDATE mail_content SET status_lead = false, reject_note = ? WHERE mail_number = ?";
+                sql = "UPDATE mail_content SET status_lead = 0, mail_comment = ? WHERE mail_id = ?";
             } else {
                 JOptionPane.showMessageDialog(this, "Role tidak valid!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -801,7 +817,7 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
 
             try (java.sql.PreparedStatement ps = c.prepareStatement(sql)) {
                 ps.setString(1, note);
-                ps.setString(2, NomorSurat.getText());
+                ps.setInt(2, mailId);
                 
                 int result = ps.executeUpdate();
                 if (result > 0) {
@@ -828,6 +844,37 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
     private void PerihalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PerihalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_PerihalActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+       if(!allChecked){
+        cb1.setSelected(true);
+        cb2.setSelected(true);
+        cb3.setSelected(true);
+        cb4.setSelected(true);
+        cb5.setSelected(true);
+        cb6.setSelected(true);
+        cb7.setSelected(true);
+        cb8.setSelected(true);
+        cb9.setSelected(true);
+        allChecked = true;
+       }
+       else{  
+        cb1.setSelected(false);
+        cb2.setSelected(false);
+        cb3.setSelected(false);
+        cb4.setSelected(false);
+        cb5.setSelected(false);
+        cb6.setSelected(false);
+        cb7.setSelected(false);
+        cb8.setSelected(false);
+        cb9.setSelected(false);
+        allChecked = false;
+       }
+    }//GEN-LAST:event_jButton1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -872,6 +919,7 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
     private javax.swing.JCheckBox cb7;
     private javax.swing.JCheckBox cb8;
     private javax.swing.JCheckBox cb9;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

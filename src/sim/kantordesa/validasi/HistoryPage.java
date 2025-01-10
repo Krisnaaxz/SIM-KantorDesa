@@ -106,8 +106,8 @@ public class HistoryPage extends javax.swing.JFrame {
                     r.getString("applicant_name"),
                     r.getString("created_at"),
                     r.getString("type_name"),
-                    r.getBoolean("status_validation") == false ? "Reject" : "Accept",
-                    r.getBoolean("status_lead") == false ? "Reject" : "Accept",
+                    r.getInt("status_validation") == 0 ? "Reject" : r.getInt("status_validation") == 1 ? "Accept" : "Baru",
+                    r.getInt("status_lead") == 0 ? "Reject" : r.getInt("status_lead") == 1 ? "Accept" : "Baru",
                     r.getString("mail_comment"),
                     r.getString("mail_id"),});
 
@@ -435,10 +435,8 @@ public class HistoryPage extends javax.swing.JFrame {
                 public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
                     String statusSekdes = (String) entry.getValue(5);
                     String statusKades = (String) entry.getValue(6);
-                    String mailComment = (String) entry.getValue(7);
 
-                    return "Reject".equals(statusSekdes) && "Reject".equals(statusKades)
-                            && (mailComment == null || mailComment.isEmpty());
+                    return ("Baru".equals(statusSekdes) || "Accept".equals(statusSekdes)) && "Baru".equals(statusKades);
                 }
             };
         } else if ("Ditolak".equals(query)) {//filter by surat ditolak
@@ -447,10 +445,8 @@ public class HistoryPage extends javax.swing.JFrame {
                 public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
                     String statusSekdes = (String) entry.getValue(5);
                     String statusKades = (String) entry.getValue(6);
-                    String mailComment = (String) entry.getValue(7);
 
-                    return "Reject".equals(statusSekdes) && "Reject".equals(statusKades)
-                            && (mailComment != null && !mailComment.isEmpty());
+                    return "Reject".equals(statusSekdes) || "Reject".equals(statusKades);
                 }
             };
         } else if ("Selesai".equals(query)) {//filter by surat selesai
@@ -559,7 +555,7 @@ public class HistoryPage extends javax.swing.JFrame {
         }
 
         labelHistory.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        labelHistory.setText("History Surat Masuk");
+        labelHistory.setText("History Surat Keluar");
 
         refresh.setBackground(new java.awt.Color(19, 128, 97));
         refresh.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -650,28 +646,6 @@ public class HistoryPage extends javax.swing.JFrame {
         // TODO add your handling code here:
         setTableAction();
     }//GEN-LAST:event_refreshActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-        ValidationPages.main(null);
-        dispose();
-    }// GEN-LAST:event_jButton6ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
