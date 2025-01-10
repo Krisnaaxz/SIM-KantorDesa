@@ -125,7 +125,6 @@ public class Akses_role extends javax.swing.JFrame {
             getData();
             getAllData();
 
-            // Tambahkan item "Pilih Role" pertama di combobox
             cmb_role.addItem("Pilih Role");
 
             while (rs.next()) {
@@ -142,50 +141,39 @@ public class Akses_role extends javax.swing.JFrame {
                 String selectedRole = cmb_role.getSelectedItem() != null ? cmb_role.getSelectedItem().toString() : "";
 
                 if (selectedRole.equals("Baru")) {
-                    // Menampilkan komponen untuk input role baru
                     getAllData();
                     lbl_roleBaru.setVisible(true);
                     txt_roleBaru.setVisible(true);
                     txt_id.setText("");
                     btn_tambahRole.setVisible(true);
 
-                    // Set roleId ke -1 untuk role baru
                     roleId = -1;
 
-                    // Sembunyikan semua checkbox
                     hideAkses();
 
-                    // Nonaktifkan tombol aksi lainnya
                     nonAktifButton();
 
                 } else if (roleMap.containsKey(selectedRole)) {
-                    // Reset label input role baru
                     getData();
                     lbl_roleBaru.setVisible(false);
                     txt_roleBaru.setVisible(false);
                     btn_tambahRole.setVisible(false);
 
-                    // Dapatkan ID role dari roleMap
-                    roleId = roleMap.get(selectedRole); // Perbarui roleId dengan ID role yang dipilih
-                    txt_id.setText(String.valueOf(roleId)); // Tampilkan ID role
+                    roleId = roleMap.get(selectedRole); 
+                    txt_id.setText(String.valueOf(roleId)); 
 
-                    // Muat akses untuk role yang dipilih
                     loadRoleAccess(roleId);
 
-                    // Inisialisasi toggle berdasarkan role yang dipilih
                     initializeToggleButtons(roleId);
 
-                    // Tampilkan semua checkbox
                     showAkses();
 
-                    // Aktifkan tombol aksi
                     aktifButton();
 
                 } else {
-                    // Jika "Pilih Role" dipilih atau kondisi lainnya
                     getAllData();
-                    txt_id.setText(""); // Kosongkan ID
-                    roleId = -1; // Reset roleId
+                    txt_id.setText(""); 
+                    roleId = -1; 
                     hideAkses();
                     nonAktifButton();
                 }
@@ -200,7 +188,6 @@ public class Akses_role extends javax.swing.JFrame {
 
     private void initializeToggleButtons(int roleId) {
         try {
-            // Ambil data akses dari database
             String sql = "SELECT access.access_name FROM role_access "
                     + "INNER JOIN access ON role_access.access_id = access.access_id "
                     + "WHERE role_access.role_id = ?";
@@ -212,10 +199,9 @@ public class Akses_role extends javax.swing.JFrame {
 
             while (rs.next()) {
                 String accessName = rs.getString("access_name");
-                accessStatusMap.put(accessName, true); // Set akses aktif
+                accessStatusMap.put(accessName, true); 
             }
 
-            // Inisialisasi toggle button berdasarkan data
             configureToggleButton(tog_SuratMasuk, lbl_SuratMasuk, "Form Surat Masuk", true);
             configureToggleButton(tog_SuratKeluar, lbl_SuratKeluar, "Form Surat Keluar", true);
             configureToggleButton(tog_HistorySuratMasuk, lbl_HistorySuratMasuk, "History Surat Masuk", true);
@@ -235,18 +221,16 @@ public class Akses_role extends javax.swing.JFrame {
 
     private void configureToggleButton(JToggleButton toggleButton, JLabel statusLabel, String accessName, boolean isInitializing) {
         if (isInitializing) {
-            // Inisialisasi status toggle berdasarkan data di accessStatusMap
             boolean isOn = accessStatusMap.getOrDefault(accessName, false);
             toggleButton.setSelected(isOn);
             statusLabel.setText(isOn ? "ON" : "OFF");
             toggleButton.setText(isOn ? "OFF" : "ON");
         } else {
-            // Tambahkan listener aksi pada toggle
             toggleButton.addActionListener(evt -> {
                 boolean isSelected = toggleButton.isSelected();
-                accessStatusMap.put(accessName, isSelected); // Simpan status sementara
-                statusLabel.setText(isSelected ? "ON" : "OFF"); // Perbarui label status
-                toggleButton.setText(isSelected ? "OFF" : "ON"); // Perbarui teks tombol
+                accessStatusMap.put(accessName, isSelected); 
+                statusLabel.setText(isSelected ? "ON" : "OFF"); 
+                toggleButton.setText(isSelected ? "OFF" : "ON"); 
             });
         }
     }
@@ -271,7 +255,7 @@ public class Akses_role extends javax.swing.JFrame {
         ResultSet rs = psCheck.executeQuery();
 
         if (rs.next()) {
-            return rs.getInt("count") > 0; // Jika COUNT > 0, artinya sudah ada
+            return rs.getInt("count") > 0; 
         }
 
         return false; // Tidak ditemukan
@@ -301,11 +285,9 @@ public class Akses_role extends javax.swing.JFrame {
             st.setInt(1, roleId);
             ResultSet rs = st.executeQuery();
 
-            // Loop melalui hasil query dan atur toggle button yang sesuai
             while (rs.next()) {
                 String accessName = rs.getString("access_name");
 
-                // Cocokkan access_name dengan toggle button
                 if (accessName.equals("Form Surat Masuk")) {
                     tog_SuratMasuk.setSelected(true);
                     lbl_SuratMasuk.setText("ON");
@@ -978,32 +960,26 @@ public class Akses_role extends javax.swing.JFrame {
 
         if (!roleBaru.isEmpty()) {
             try {
-                // Tambahkan role baru ke database
                 String sqlInsert = "INSERT INTO role (role_name) VALUES (?)";
                 PreparedStatement ps = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, roleBaru);
                 ps.executeUpdate();
 
-                // Ambil ID role baru yang baru ditambahkan
                 ResultSet generatedKeys = ps.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     int roleId = generatedKeys.getInt(1); // ID role baru
 
-                    // Menambahkan role ke roleMap dan combobox
                     roleMap.put(roleBaru, roleId);
                     cmb_role.addItem(roleBaru);
                     cmb_role.setSelectedItem(roleBaru);
                     txt_id.setText(String.valueOf(roleId));
 
-                    // Sembunyikan input role baru dan tampilkan checkbox
                     lbl_roleBaru.setVisible(false);
                     txt_roleBaru.setVisible(false);
                     btn_tambahRole.setVisible(false);
 
-                    // Tampilkan checkbox untuk akses yang relevan
                     showAkses();
 
-                    // Tampilkan tombol aksi untuk melanjutkan pengaturan akses
                     aktifButton();
 
                     JOptionPane.showMessageDialog(this, "Role baru berhasil ditambahkan dengan ID: " + roleId);

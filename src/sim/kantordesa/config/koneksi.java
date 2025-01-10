@@ -36,32 +36,6 @@ public class koneksi {
         return conn;
     }
 
-    public static boolean insert(String query, Object... params) {
-        try (PreparedStatement statement = getConnection().prepareStatement(query)) {
-            for (int i = 0; i < params.length; i++) {
-                statement.setObject(i + 1, params[i]);
-            }
-            statement.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            Logger.getLogger(koneksi.class.getName()).log(Level.SEVERE, "Gagal melakukan insert", e);
-            return false;
-        }
-    }
-
-    public static boolean update(String query, Object... params) {
-        try (PreparedStatement statement = getConnection().prepareStatement(query)) {
-            for (int i = 0; i < params.length; i++) {
-                statement.setObject(i + 1, params[i]);
-            }
-            statement.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            Logger.getLogger(koneksi.class.getName()).log(Level.SEVERE, "Gagal melakukan update", e);
-            return false;
-        }
-    }
-
     public static boolean delete(String query, Object... params) {
         try (PreparedStatement statement = getConnection().prepareStatement(query)) {
             for (int i = 0; i < params.length; i++) {

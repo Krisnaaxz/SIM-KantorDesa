@@ -447,10 +447,8 @@ public class Create_acc extends javax.swing.JFrame {
             return;
         }
 
-        // Ambil ID dari tabel yang dipilih
         int id = (int) tabel_data.getValueAt(selectedRow, 0);
 
-        // Ambil nilai dari form input
         String nama_lengkap = txt_namaLengkap.getText();
         String username = txt_username.getText();
         String password = new String(txt_password.getPassword()); // Ubah password menjadi String
@@ -459,13 +457,11 @@ public class Create_acc extends javax.swing.JFrame {
         java.sql.Date sqlTanggalLahir = (tanggalLahir != null) ? new java.sql.Date(tanggalLahir.getTime()) : null;
         String selectedRole = cmb_role.getSelectedItem().toString();
 
-        // Validasi input
         if (nama_lengkap.isEmpty() || username.isEmpty() || password.isEmpty() || email.isEmpty() || tanggalLahir == null || selectedRole == null) {
             JOptionPane.showMessageDialog(this, "Semua kolom harus diisi!", "Validasi", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Ambil roleId berdasarkan role_name
         int roleId = -1;
         try {
             String sql = "SELECT id_role FROM role WHERE role_name = ?";
@@ -482,37 +478,35 @@ public class Create_acc extends javax.swing.JFrame {
             e.printStackTrace();
         }
 
-        // Pastikan roleId valid
         if (roleId == -1) {
             JOptionPane.showMessageDialog(this, "Role tidak ditemukan!", "Validasi", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Eksekusi update
         try {
             String sql = "UPDATE users SET full_name = ?, username = ?, password = ?, email = ?, birth_date = ?, id_role = ? WHERE user_id = ?";
             PreparedStatement st = conn.prepareStatement(sql);
 
             st.setString(1, nama_lengkap);
             st.setString(2, username);
-            st.setString(3, password); // Gunakan password yang sudah diubah menjadi String
+            st.setString(3, password); 
             st.setString(4, email);
             st.setDate(5, sqlTanggalLahir);
             st.setInt(6, roleId);
-            st.setInt(7, id); // Set ID untuk data yang akan diperbaharui
+            st.setInt(7, id); 
 
             int rowInserted = st.executeUpdate();
             if (rowInserted > 0) {
                 JOptionPane.showMessageDialog(this, "Data Berhasil Diperbaharui");
-                resetForm();  // Reset form setelah update
-                getData();    // Ambil data terbaru setelah update
+                resetForm();  
+                getData();    
             }
 
             st.close();
         } catch (SQLException e) {
             Logger.getLogger(Create_acc.class.getName()).log(Level.SEVERE, null, e);
         } finally {
-            txt_password.setText(""); // Kosongkan password field
+            txt_password.setText(""); 
         }
     }//GEN-LAST:event_btn_editActionPerformed
 
