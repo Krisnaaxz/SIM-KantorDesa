@@ -261,7 +261,11 @@ public final void updateStatus(String mail_received_id) {
         updateStatus(mail_received_id);
         
         detailSurat detail = new detailSurat(mail_received_id);
-        detail.setVisible(true);
+        AppContext.put("historymasuk_mailRcvId", mail_received_id);
+        detail.updateData();
+        Dashboard.card.revalidate();
+        Dashboard.card.repaint();
+        Dashboard.switchPanel("Detail Surat");
     }//GEN-LAST:event_btn_kirimActionPerformed
 
     private void t_tanggalDisposisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_tanggalDisposisiActionPerformed

@@ -68,6 +68,7 @@ public class Dashboard extends javax.swing.JFrame {
         NamaUser.setText(currentUser.getFullName());
 
         Role.setText(currentUser.getRole());
+        AppContext.put("idRole", currentUser.getIdRole());
         
         String mailform_templateName = (String) AppContext.get("mailform_templateName");
         Integer mailform_mailTypeId = (Integer) AppContext.get("mailform_mailTypeId");

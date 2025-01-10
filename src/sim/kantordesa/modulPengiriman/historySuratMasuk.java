@@ -1,17 +1,11 @@
 package sim.kantordesa.modulPengiriman;
 
-import java.awt.CardLayout;
 import java.awt.Container;
-import java.awt.Desktop;
-import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import sim.kantordesa.config.AppContext;
 import sim.kantordesa.config.koneksi;
@@ -20,9 +14,11 @@ import sim.kantordesa.dashboard.Dashboard;
 public class historySuratMasuk extends javax.swing.JFrame {
 
     Connection conn;
-
+    int idRole = (int) AppContext.get("idRole");
+    
     public historySuratMasuk() {
         initComponents();
+        dataAccess();
 
         DefaultTableModel model = new DefaultTableModel();
 
@@ -55,7 +51,8 @@ public class historySuratMasuk extends javax.swing.JFrame {
         model.setRowCount(0);
 
         try {
-            String sql = "Select * From mail_received";
+            String sql = "Select * From mail_received "
+                    + " ORDER BY mail_received.mail_received_id DESC";
             try (java.sql.PreparedStatement st = conn.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
 
                 while (rs.next()) {
@@ -82,35 +79,17 @@ public class historySuratMasuk extends javax.swing.JFrame {
         }
 
     }
-
-    public void bukaFile(String path_file) throws IOException {
-        String sql = "Select * From mail_received WHERE path_file = ?";
-        try (java.sql.PreparedStatement st = conn.prepareStatement(sql)) {
-
-            st.setString(1, path_file);
-            ResultSet rs = st.executeQuery();
-
-            if (rs.next()) {
-                String pathPdf = rs.getString("path_file");
-                File pdfFile = new File(pathPdf);
-
-                // Cek apakah file ada dan bisa dibuka
-                if (pdfFile.exists()) {
-                    // Jika file ditemukan, buka file PDF menggunakan Desktop
-                    Desktop.getDesktop().open(pdfFile);
-                } else {
-                    JOptionPane.showMessageDialog(null, "File tidak ditemukan!");
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Surat dengan ID tersebut tidak ditemukan!");
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error membuka file: " + ex.getMessage());
+    
+public void dataAccess() {   
+        
+        if (idRole == 1 ){
+            btn_tambahSurat.setVisible(false);
+        }else if (idRole == 2){
+            btn_tambahSurat.setEnabled(true);
+        }else if (idRole>=3){
+            btn_tambahSurat.setVisible(false);
         }
     }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -286,4 +265,6 @@ public class historySuratMasuk extends javax.swing.JFrame {
     private java.awt.Label label1;
     private javax.swing.JTable tbl_historySuratMasuk;
     // End of variables declaration//GEN-END:variables
+
+
 }
