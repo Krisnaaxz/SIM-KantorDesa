@@ -807,9 +807,9 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
             
             // Determine which status to update based on role ID
             if (role == 2) { // Assuming 2 is for Sekdes
-                sql = "UPDATE mail_content SET status_validation = false, mail_comment = ? WHERE mail_number = ?";
+                sql = "UPDATE mail_content SET status_validation = false, mail_comment = ? WHERE mail_id = ?";
             } else if (role == 1) { // Assuming 1 is for Kades
-                sql = "UPDATE mail_content SET status_lead = false, mail_comment = ? WHERE mail_number = ?";
+                sql = "UPDATE mail_content SET status_lead = false, mail_comment = ? WHERE mail_id = ?";
             } else {
                 JOptionPane.showMessageDialog(this, "Role tidak valid!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -817,7 +817,7 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
 
             try (java.sql.PreparedStatement ps = c.prepareStatement(sql)) {
                 ps.setString(1, note);
-                ps.setString(2, NomorSurat.getText());
+                ps.setInt(2, mailId);
                 
                 int result = ps.executeUpdate();
                 if (result > 0) {
