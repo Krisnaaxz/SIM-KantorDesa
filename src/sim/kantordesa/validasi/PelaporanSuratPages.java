@@ -88,7 +88,7 @@ public class PelaporanSuratPages extends javax.swing.JFrame { // kelas membuat a
         return (JPanel) this.getContentPane();
     }
 
-    private JFreeChart showLineChart() {
+    private JFreeChart showLineChart(String query) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         try {
