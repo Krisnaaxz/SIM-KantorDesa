@@ -728,9 +728,9 @@ public final class PopUpValidasiSekdes extends javax.swing.JFrame {
             
             // Determine which status to update based on role ID
             if (role == 2) { // Assuming 2 is for Sekdes
-                sql = "UPDATE mail_content SET status_validation = true, mail_comment = 'Data Tervalidasi' WHERE mail_id = ?";
+                sql = "UPDATE mail_content SET status_validation = true, mail_comment = 'Data Tervalidasi', updated_validation = CURRENT_TIMESTAMP WHERE mail_id = ?";
             } else if (role == 1) { // Assuming 1 is for Kades
-                sql = "UPDATE mail_content SET status_lead = true WHERE mail_id = ?";
+                sql = "UPDATE mail_content SET status_lead = true, updated_lead = CURRENT_TIMESTAMP WHERE mail_id = ?";
             } else {
                 JOptionPane.showMessageDialog(this, "Role tidak valid!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;

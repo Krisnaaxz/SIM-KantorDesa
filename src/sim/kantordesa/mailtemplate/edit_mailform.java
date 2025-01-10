@@ -383,7 +383,7 @@ public class edit_mailform extends javax.swing.JFrame {
         String sql1 = "UPDATE civil_registry SET nama = ?, no_ktp = ?, no_kk = ?, tempat_tanggal_lahir = ?, "
                 + "warga_negara = ?, agama = ?, jenis_kelamin = ?, pekerjaan = ?, alamat = ?, gol_darah = ?, usia = ? "
                 + "WHERE no_ktp = (SELECT no_ktp FROM mail_content WHERE mail_id = ?)";
-        String sql2 = "UPDATE mail_content SET no_ktp = ?, mulai_berlaku = ?, tgl_akhir = ?, keperluan = ? WHERE mail_id = ?";
+        String sql2 = "UPDATE mail_content SET updated_at = CURRENT_TIMESTAMP, status_validation = 2, status_lead = 2, mail_comment = NULL, no_ktp = ?, mulai_berlaku = ?, tgl_akhir = ?, keperluan = ? WHERE mail_id = ?";
             try (PreparedStatement stmt1 = conn.prepareStatement(sql1);
                 PreparedStatement stmt2 = conn.prepareStatement(sql2)) {
                 

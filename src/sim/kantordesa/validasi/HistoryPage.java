@@ -44,7 +44,6 @@ public class HistoryPage extends javax.swing.JFrame {
 
     public HistoryPage() {
         initComponents();
-        setExtendedState(MAXIMIZED_BOTH);
 
         model = new javax.swing.table.DefaultTableModel() {
             @Override
