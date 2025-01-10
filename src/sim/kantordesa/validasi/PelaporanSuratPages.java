@@ -27,8 +27,16 @@ import sim.kantordesa.config.koneksi;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 //import javax.swing.text.Document;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -43,15 +51,14 @@ import org.jfree.data.general.DefaultPieDataset;
  *
  * @author krisna
  */
-public class PelaporanSuratPages extends javax.swing.JFrame {
+public class PelaporanSuratPages extends javax.swing.JFrame { // kelas membuat antarmuka GUI
 
-    private javax.swing.table.DefaultTableModel model;
-    Connection c = koneksi.getConnection();
+    private javax.swing.table.DefaultTableModel model; // Model untuk JTable
+    Connection c = koneksi.getConnection(); // koneksi ke database
 
-    public PelaporanSuratPages() {
-        initComponents();
-        showLineChart();
-        createPieChart();
+    public PelaporanSuratPages() { // konstraktor
+        initComponents(); // GUI
+        // showLineChart(dataset); //line chart
 
         model = new javax.swing.table.DefaultTableModel() {
             @Override
@@ -62,12 +69,18 @@ public class PelaporanSuratPages extends javax.swing.JFrame {
 
         tbHistory.setModel(model);
 
-        model.addColumn("No.");
+        model.addColumn("No."); // menambahkan kolom baru
         model.addColumn("Tipe Surat");
-        model.addColumn("Total Pengajuan");
+        model.addColumn("Semua");
+        model.addColumn("Diterima");
+        model.addColumn("Diproses");
+        model.addColumn("Ditolak");
 
-        setTableAction();
+        setTableAction(); // memanggil method
         adjustColumnWidths(tbHistory);
+
+        createPieChart("Semua"); // pie chart
+        showLineChart("Semua");
 
     }
 
@@ -79,67 +92,107 @@ public class PelaporanSuratPages extends javax.swing.JFrame {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         try {
-            Statement s = c.createStatement();
-            String sql = "SELECT DATE_FORMAT(created_at, '%Y-%m') AS bulan, COUNT(*) AS jumlah_surat FROM mail_content GROUP BY DATE_FORMAT(created_at, '%Y-%m') ORDER BY bulan;";
-            ResultSet r = s.executeQuery(sql);
+            Statement s = c.createStatement(); // membuat objek statement untuk menjalankan oerintah di database dengan
+                                               // koneksi c
+            String sql = "SELECT mail_id, DATE_FORMAT(created_at, '%Y-%m') AS bulan, c.status_validation, c.status_lead, COUNT(*) AS jumlah_surat FROM mail_content AS c";
 
-            while (r.next()) {
-                String bulan = r.getString("bulan");
-                int jumlahSurat = r.getInt("jumlah_surat");
-                dataset.addValue(jumlahSurat, "Jumlah Surat", bulan);
+            String sqlDiproses = sql
+                    + " WHERE (c.status_validation = 1 AND c.status_lead = 2) OR (c.status_validation = 2 AND c.status_lead = 2) GROUP BY DATE_FORMAT(created_at, '%Y-%m') ORDER BY bulan ";
+            String sqlDitolak = sql + " WHERE (c.status_validation = 0 AND c.status_lead = 0) "
+                    + "OR (c.status_validation = 0 AND c.status_lead = 2) "
+                    + "OR (c.status_validation = 1 AND c.status_lead = 0) "
+                    + "GROUP BY DATE_FORMAT(created_at, '%Y-%m') ORDER BY bulan;";
+            String sqlDiterima = sql
+                    + " WHERE c.status_validation = 1 AND c.status_lead = 1 GROUP BY DATE_FORMAT(created_at, '%Y-%m') ORDER BY bulan; ";
+
+            String selectedSql;
+
+            if ("Diproses".equals(query)) {
+                selectedSql = sqlDiproses;
+            } else if ("Ditolak".equals(query)) {
+                selectedSql = sqlDitolak;
+            } else if ("Diterima".equals(query)) {
+                selectedSql = sqlDiterima;
+            } else {
+                selectedSql = sql + " GROUP BY DATE_FORMAT(created_at, '%Y-%m') ORDER BY bulan;";
+            }
+            ResultSet r = s.executeQuery(selectedSql); // menjalankan query dan menyimpannya di resultset
+
+            while (r.next()) { // mengambil hasil query sql per baris
+                String bulan = r.getString("bulan"); // mengambil data bulan
+                int jumlahSurat = r.getInt("jumlah_surat"); // mengambil data jumlah surat
+                System.out.println(jumlahSurat + " " + bulan + " " + r.getString("mail_id"));
+                dataset.addValue(jumlahSurat, "Jumlah Surat", bulan); // nilai, label bari, label kolom
             }
 
             r.close();
             s.close();
         } catch (SQLException e) {
-            System.out.println("Error, " + e);
+            System.out.println("Error, " + e); // menampilkan pesan eror
         }
 
-        System.out.println("Dataset size: " + dataset.getRowCount());
+        System.out.println("Dataset size: " + dataset.getRowCount()); // menampilkan jumlah baris data yang ada di
+                                                                      // dataset
+        JFreeChart lineChart = ChartFactory.createLineChart( // membuat line chart
+                "Surat Masuk per Bulan", // judul
+                "Bulan", // judul sumbu x
+                "Jumlah Surat", // judul sumbu y
+                dataset // dataset yang ditampilkan pada line chart
+        );
 
-        JFreeChart lineChart = ChartFactory.createLineChart(
-                "Surat Masuk per Bulan",
-                "Bulan",
-                "Jumlah Surat",
-                dataset);
+        CategoryPlot plot = lineChart.getCategoryPlot(); // mengatur tampilan grafik
+        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis(); // mendapatkan sumbu Y
+        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits()); // mengubah sumbu Y menjadi integer atau
+                                                                             // bilangan bulat
 
-        CategoryPlot plot = lineChart.getCategoryPlot();
-        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        ChartPanel chartPanel = new ChartPanel(lineChart); // membuat gui panel tempat line chart akan ditampilkan
+        chartPanel.setPreferredSize(new java.awt.Dimension(800, 600)); // dimensi panel
+        chartPanel1.removeAll(); // menghapus semua komponen yang ada pada panel tempat line chart akan
+                                 // ditambahkan
+        chartPanel1.setLayout(new BorderLayout()); // mengaturnya menjadi border layout
+        chartPanel1.add(chartPanel, BorderLayout.CENTER); // menambahkan chart panel ke chart panel 1 dengan border
+                                                          // layout centered
+        chartPanel1.revalidate(); // memastikan tata letak diperbarui
+        chartPanel1.repaint(); // mengambar ulang agar yg terbaru
 
-        ChartPanel chartPanel = new ChartPanel(lineChart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(800, 600));
-        chartPanel1.removeAll();
-        chartPanel1.setLayout(new BorderLayout());
-        chartPanel1.add(chartPanel, BorderLayout.CENTER);
-        chartPanel1.revalidate();
-        chartPanel1.repaint();
-
-        return lineChart;
+        return lineChart; // mengembalikan line chart
     }
 
-    private JFreeChart createPieChart() {
-        DefaultPieDataset dataset = new DefaultPieDataset();
+    private JFreeChart createPieChart(String query) {
+        DefaultPieDataset dataset = new DefaultPieDataset(); // membat dataset untuk pie chart
+        // ResultSet r;
+        Integer rowCount = tbHistory.getRowCount();
+        TableModel datamodel = tbHistory.getModel();
 
-        // Mengambil data dari database
-        try {
-            Statement s = c.createStatement();
-            String sql = "SELECT t.type_name, COUNT(*) AS jumlah_surat FROM mail_content c JOIN mail_type t ON c.mail_type_id = t.mail_type_id GROUP BY t.type_name;";
-            ResultSet r = s.executeQuery(sql);
-
-            while (r.next()) {
-                String category = r.getString("type_name");
-                int jumlahSurat = r.getInt("jumlah_surat");
-                dataset.setValue(category, jumlahSurat);
+        if ("Diproses".equals(query)) {
+            dataset.clear();
+            // r=s.executeQuery(sqlDiproses + "GROUP BY t.type_name");
+            for (int i = 0; i < rowCount; i++) {
+                String category = (String) datamodel.getValueAt(i, 1);
+                dataset.setValue(category, (Integer) datamodel.getValueAt(i, 4));
             }
-            System.out.println(dataset.getValue(0));
-            r.close();
-            s.close();
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
+        } else if ("Ditolak".equals(query)) {
+            dataset.clear();
+            // r=s.executeQuery(sqlDitolak + "GROUP BY t.type_name");
+            for (int i = 0; i < rowCount; i++) {
+                String category = (String) datamodel.getValueAt(i, 1);
+                dataset.setValue(category, (Integer) datamodel.getValueAt(i, 5));
+            }
+        } else if ("Diterima".equals(query)) {
+            dataset.clear();
+            // r=s.executeQuery(sqlDiterima + "GROUP BY t.type_name");
+            for (int i = 0; i < rowCount; i++) {
+                String category = (String) datamodel.getValueAt(i, 1);
+                dataset.setValue(category, (Integer) datamodel.getValueAt(i, 3));
+            }
+        } else {
+            dataset.clear();
+            // r=s.executeQuery(sql + ";");
+            for (int i = 0; i < rowCount; i++) {
+                String category = (String) datamodel.getValueAt(i, 1);
+                dataset.setValue(category, (Integer) datamodel.getValueAt(i, 2));
+            }
         }
-
-        System.out.println(dataset.getItemCount());
 
         // Membuat Pie Chart
         JFreeChart pieChart = ChartFactory.createPieChart(
@@ -153,12 +206,12 @@ public class PelaporanSuratPages extends javax.swing.JFrame {
         // Membungkus chart dalam ChartPanel
         ChartPanel chartPanel = new ChartPanel(pieChart);
         chartPanel2.setPreferredSize(new java.awt.Dimension(400, 400));
-        chartPanel2.removeAll();
         chartPanel2.setLayout(new BorderLayout());
+        chartPanel2.removeAll();
         chartPanel2.add(chartPanel, BorderLayout.CENTER);
         chartPanel2.revalidate();
         chartPanel2.repaint();
-        
+
         return pieChart;
     }
 
@@ -168,18 +221,25 @@ public class PelaporanSuratPages extends javax.swing.JFrame {
 
         try {
             Statement s = c.createStatement();
-            String sql = "SELECT mail_type.type_name, COUNT(mail_content.mail_id) AS total_pengajuan " +
-                    "FROM mail_content " +
-                    "INNER JOIN mail_type ON mail_content.mail_type_id = mail_type.mail_type_id " +
-                    "GROUP BY mail_type.type_name " +
-                    "ORDER BY mail_type.type_name ASC;";
+            String sql = "SELECT mt.type_name, "
+                    + "COUNT(mc.mail_id) AS Semua, "
+                    + "SUM(CASE WHEN mc.status_validation = 1 AND mc.status_lead = 1 THEN 1 ELSE 0 END) AS Diterima, "
+                    + "SUM(CASE WHEN mc.status_validation = 1 AND mc.status_lead = 2 OR mc.status_validation = 2 AND mc.status_lead = 2 THEN 1 ELSE 0 END) AS Diproses, "
+                    + "SUM(CASE WHEN mc.status_validation = 0 AND mc.status_lead = 0 OR mc.status_validation = 0 AND mc.status_lead = 2 OR mc.status_validation = 1 AND mc.status_lead = 0 THEN 1 ELSE 0 END) AS Ditolak "
+                    + "FROM mail_content mc "
+                    + "INNER JOIN mail_type mt ON mc.mail_type_id = mt.mail_type_id "
+                    + "GROUP BY mt.type_name "
+                    + "ORDER BY mt.type_name ASC;";
             ResultSet r = s.executeQuery(sql);
             int i = 1;
             while (r.next()) {
                 model.addRow(new Object[] {
                         i++,
                         r.getString("type_name"),
-                        r.getInt("total_pengajuan")
+                        r.getInt("Semua"),
+                        r.getInt("Diterima"),
+                        r.getInt("Diproses"),
+                        r.getInt("Ditolak")
                 });
 
             }
@@ -190,7 +250,10 @@ public class PelaporanSuratPages extends javax.swing.JFrame {
         }
         tbHistory.getColumnModel().getColumn(0).setHeaderValue("No");
         tbHistory.getColumnModel().getColumn(1).setHeaderValue("Tipe Surat");
-        tbHistory.getColumnModel().getColumn(2).setHeaderValue("Total Pengajuan");
+        tbHistory.getColumnModel().getColumn(2).setHeaderValue("Semua");
+        tbHistory.getColumnModel().getColumn(3).setHeaderValue("Diterima");
+        tbHistory.getColumnModel().getColumn(4).setHeaderValue("Diproses");
+        tbHistory.getColumnModel().getColumn(5).setHeaderValue("Ditolak");
 
     }
 
@@ -221,6 +284,50 @@ public class PelaporanSuratPages extends javax.swing.JFrame {
         }
 
         return maxWidth + 10;
+    }
+
+    // Metode filter
+    private void filter(String query) {
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<>(model);
+        tbHistory.setRowSorter(tr);
+
+        RowFilter<DefaultTableModel, Object> filter = null;
+        // List<String> filteredData = new ArrayList<>(); // Menyimpan data yang
+        // difilter untuk chart
+
+        if ("Diproses".equals(query)) {
+            filter = new RowFilter<>() {
+                @Override
+                public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
+                    String diproses = (String) entry.getValue(4);
+                    return "Diproses".equalsIgnoreCase(diproses);
+                }
+            };
+        } else if ("Ditolak".equals(query)) {
+            filter = new RowFilter<>() {
+                @Override
+                public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
+                    String ditolak = (String) entry.getValue(5);
+                    return "Ditolak".equalsIgnoreCase(ditolak);
+                }
+            };
+        } else if ("Diterima".equals(query)) {
+            filter = new RowFilter<>() {
+                @Override
+                public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
+                    String diterima = (String) entry.getValue(3);
+                    return "Diterima".equalsIgnoreCase(diterima);
+                }
+            };
+        } else if ("Semua".equals(query)) {
+            tr.setRowFilter(null); // Tidak ada filter
+            createPieChart("Semua"); // Perbarui pie chart dengan semua data
+            return;
+        }
+        if (filter != null) {
+            tr.setRowFilter(filter);
+            createPieChart(query); // Perbarui pie chart sesuai filter
+        }
     }
 
     public void addJTableToPDF(JTable table, Document document) {
@@ -273,7 +380,8 @@ public class PelaporanSuratPages extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         panelTb = new javax.swing.JPanel();
@@ -284,6 +392,8 @@ public class PelaporanSuratPages extends javax.swing.JFrame {
         chartPanel1 = new javax.swing.JPanel();
         chartPanel2 = new javax.swing.JPanel();
         UnduhLaporan = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        filterBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1291, 634));
@@ -291,45 +401,46 @@ public class PelaporanSuratPages extends javax.swing.JFrame {
         panelTb.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
 
         tbHistory.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "No.", "No. Surat", "Tanggal Surat Masuk", "Status Validasi Sekdes", "Status Validasi Kades", "Perihal", "Aksi"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                new Object[][] {
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null }
+                },
+                new String[] {
+                        "No.", "No. Surat", "Tanggal Surat Masuk", "Status Validasi Sekdes", "Status Validasi Kades",
+                        "Perihal", "Aksi"
+                }) {
+            Class[] types = new Class[] {
+                    java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,
+                    java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, true
+            boolean[] canEdit = new boolean[] {
+                    false, false, false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+                return types[columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         tbHistory.setRowHeight(30);
@@ -377,62 +488,101 @@ public class PelaporanSuratPages extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Filter : ");
+
+        filterBox.setBackground(new java.awt.Color(19, 128, 97));
+        filterBox.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        filterBox.setForeground(new java.awt.Color(255, 255, 255));
+        filterBox.setModel(
+                new javax.swing.DefaultComboBoxModel<>(new String[] { "Semua", "Diproses", "Ditolak", "Diterima" }));
+        filterBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                filterBoxItemStateChanged(evt);
+            }
+        });
+        filterBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelTbLayout = new javax.swing.GroupLayout(panelTb);
         panelTb.setLayout(panelTbLayout);
         panelTbLayout.setHorizontalGroup(
-            panelTbLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTbLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelTbLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelTbLayout.createSequentialGroup()
-                        .addComponent(labelHistory)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(UnduhLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(panelTbLayout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(chartPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 523, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 174, Short.MAX_VALUE)
-                        .addComponent(chartPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(36, 36, 36))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTbLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(panelScrollTb, javax.swing.GroupLayout.PREFERRED_SIZE, 1155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60))
-        );
+                panelTbLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelTbLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(panelTbLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(panelTbLayout.createSequentialGroup()
+                                                .addComponent(labelHistory)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jLabel1)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(filterBox, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(28, 28, 28)
+                                                .addComponent(UnduhLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 82,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 82,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap())
+                                        .addGroup(panelTbLayout.createSequentialGroup()
+                                                .addGap(15, 15, 15)
+                                                .addComponent(chartPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 523,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                        174, Short.MAX_VALUE)
+                                                .addComponent(chartPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 529,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(36, 36, 36))))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTbLayout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(panelScrollTb, javax.swing.GroupLayout.PREFERRED_SIZE, 1155,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(60, 60, 60)));
         panelTbLayout.setVerticalGroup(
-            panelTbLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTbLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelTbLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelHistory)
-                    .addComponent(UnduhLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(52, 52, 52)
-                .addGroup(panelTbLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(chartPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
-                    .addComponent(chartPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(24, 24, 24)
-                .addComponent(panelScrollTb, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                panelTbLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelTbLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(panelTbLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 34,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(labelHistory)
+                                        .addComponent(UnduhLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, 34,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel1)
+                                        .addComponent(filterBox, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(52, 52, 52)
+                                .addGroup(panelTbLayout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(chartPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 280,
+                                                Short.MAX_VALUE)
+                                        .addComponent(chartPanel2, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(24, 24, 24)
+                                .addComponent(panelScrollTb, javax.swing.GroupLayout.PREFERRED_SIZE, 343,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelTb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(panelTb, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelTb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(panelTb, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         pack();
         setLocationRelativeTo(null);
@@ -461,10 +611,12 @@ public class PelaporanSuratPages extends javax.swing.JFrame {
 
                 // Ekspor Line Chart sebagai gambar
                 File lineChartFile = new File("line_chart_temp.png");
-                exportChartAsImage(showLineChart(), lineChartFile);
+                String selectedFilterLine = filterBox.getSelectedItem().toString();
+                exportChartAsImage(showLineChart(selectedFilterLine), lineChartFile);
 
                 File pieChartFile = new File("pie_chart_temp.png");
-                exportChartAsImage(createPieChart(), pieChartFile);
+                String selectedFilter = filterBox.getSelectedItem().toString();
+                exportChartAsImage(createPieChart(selectedFilter), pieChartFile);
 
                 // Tambahkan grafik Line Chart ke PDF dengan ukuran disesuaikan
                 Image lineChartImage = Image.getInstance(lineChartFile.getAbsolutePath());
@@ -497,9 +649,30 @@ public class PelaporanSuratPages extends javax.swing.JFrame {
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat membuat laporan: " + e.getMessage());
-        }
-    }
+        } // TODO add your handling code here:
+    }// GEN-LAST:event_UnduhLaporanActionPerformed
+
+    private void filterBoxActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_filterBoxActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_filterBoxActionPerformed
+
+    private void filterBoxItemStateChanged(java.awt.event.ItemEvent evt) {// GEN-FIRST:event_filterBoxItemStateChanged
+        // TODO add your handlin
+        String query = filterBox.getSelectedItem().toString();
+
+        setTableAction();
+        createPieChart(query);
+        showLineChart(query);
+    }// GEN-LAST:event_filterBoxItemStateChanged
+
+    // public static void main(String args[]) {
+    // java.awt.EventQueue.invokeLater(() -> {
+    // new PelaporanSuratPages().setVisible(true);
+    // });
+    // }
+    //
     private javax.swing.JPanel chartContainer;
+
     /**
      * @param args the command line arguments
      */
@@ -518,6 +691,8 @@ public class PelaporanSuratPages extends javax.swing.JFrame {
     private javax.swing.JButton UnduhLaporan;
     private javax.swing.JPanel chartPanel1;
     private javax.swing.JPanel chartPanel2;
+    private javax.swing.JComboBox<String> filterBox;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel labelHistory;
     private javax.swing.JScrollPane panelScrollTb;
     private javax.swing.JPanel panelTb;
